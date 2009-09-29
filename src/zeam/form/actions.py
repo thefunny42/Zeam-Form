@@ -57,7 +57,7 @@ class Actions(Collection):
             extractor = component.getMultiAdapter(
                 (action, form, request), interfaces.IWidgetExtractor)
             value, error = extractor.extract()
-            if value:
+            if value is not None:
                 submission = FormSubmission(form, request)
                 if action.validate(submission):
                     action(submission)

@@ -112,9 +112,14 @@ class IFields(ICollection):
     pass
 
 
-class IWidget(interface.Interface):
+class IWidget(IComponent):
     """Display a form component on the page.
     """
+
+    def html_id():
+        """Return the HTML id of the HTML component representing the
+        widget.
+        """
 
     def render():
         """Return the rendered HTML of the widget.
@@ -132,9 +137,8 @@ class IWidgetExtractor(interface.Interface):
         """
 
 
-class IWidgets(interface.Interface):
-
-    widgets = interface.Attribute("Widgets")
+class IWidgets(ICollection):
+    pass
 
 
 class IFormSet(IFieldExtractionValueSetting):
