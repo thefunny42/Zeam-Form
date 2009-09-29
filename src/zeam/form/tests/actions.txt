@@ -1,0 +1,89 @@
+zeam.form
+=========
+
+Actions represent code which is executed when the user submit a form.
+
+Action
+------
+
+An action represent a single action of a form:
+
+   >>> from zeam.form.actions import Action
+   >>> a1 = Action("Apply")
+   >>> a1
+   <Action Apply>
+
+This implement IAction, and IComponent:
+
+   >>> from zope.interface.verify import verifyObject
+   >>> from zeam.form import interfaces
+   >>> verifyObject(interfaces.IAction, a1)
+   True
+   >>> verifyObject(interfaces.IComponent, a1)
+   True
+
+
+FormSubmission
+~~~~~~~~~~~~~~
+
+A FormSubmission is given to an Action to be executed. It contain
+information about the form and the content, let you get the
+information that the user filled in.
+
+
+   >>> from zeam.form.actions import FormSubmission
+
+
+Actions
+-------
+
+Action are added to an Actions collection:
+
+   >>> from zeam.form.actions import Actions
+   >>> s1 = Actions(a1, Action('Cancel'))
+   >>> s1
+   <Actions>
+   >>> list(s1)
+   [<Action Apply>, <Action Cancel>]
+
+Those Actions implement IActions and ICollection:
+
+   >>> verifyObject(interfaces.IActions, s1)
+   True
+   >>> interfaces.IActions.extends(interfaces.ICollection)
+   True
+
+
+Defining actions on a form
+--------------------------
+
+You can define form methods as Action, using the action decortor. This
+will create an action that will executed the method, and register in
+the Actions list located on the form class:
+
+   >>> from zeam.form.actions import action
+   >>> from zeam.form.form import Form
+
+   >>> class MyForm(Form):
+   ...   @action(u"Change")
+   ...   def change(self, submission):
+   ...       submission.status = u"Just kidding"
+
+   >>> MyForm.actions
+   <Actions>
+   >>> list(MyForm.actions)
+   [<DecoratedAction Change>]
+
+This is like a regular action, but run the method when you call it:
+
+   >>> d1 = list(MyForm.actions)[0]
+   >>> d1
+   <DecoratedAction Change>
+
+   >>> verifyObject(interfaces.IAction, d1)
+   True
+
+   >>> submission = FormSubmission(MyForm(None, {}), {})
+   >>> d1(submission)
+   >>> submission.status
+   u'Just kidding'

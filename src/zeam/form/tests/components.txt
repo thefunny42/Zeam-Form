@@ -1,0 +1,132 @@
+
+zeam.form
+=========
+
+The component and component collections are basic objects used to
+implement fields, actions and widgets. Their behavior described here
+apply to those objects.
+
+Components
+----------
+
+First let's see the component:
+
+  >>> from zeam.form.components import Component
+  >>> c1 = Component('The Sun', 'sun')
+  >>> c1
+  <Component The Sun>
+  >>> c1.identifier
+  'sun'
+  >>> c1.title
+  'The Sun'
+
+It correctly implement IComponent:
+
+  >>> from zope.interface.verify import verifyObject
+  >>> from zeam.form import interfaces
+  >>> verifyObject(interfaces.IComponent, c1)
+  True
+
+Actually you can create a component without an id, and even using a
+unicode title:
+
+  >>> c2 = Component(u'Moon')
+  >>> c2
+  <Component Moon>
+  >>> c2.identifier
+  'moon'
+  >>> c2.title
+  u'Moon'
+
+Collection
+----------
+
+Collection are simple objects, implementing ICollection:
+
+  >>> from zeam.form.components import Collection
+  >>> s1 = Collection()
+  >>> s1
+  <Collection>
+  >>> verifyObject(interfaces.ICollection, s1)
+  True
+
+Now we can put components in a collection, and list it back in the
+same order:
+
+  >>> s1.append(c1)
+  >>> list(s1)
+  [<Component The Sun>]
+  >>> s1.append(c2)
+  >>> list(s1)
+  [<Component The Sun>, <Component Moon>]
+
+But you can't add twice the same component:
+
+  >>> s1.append(c1)
+  Traceback (most recent call last):
+    ...
+  ValueError: ('Duplicate identifier', 'sun')
+
+And this need to be a component:
+
+  >>> s1.append('home')
+  Traceback (most recent call last):
+    ...
+  TypeError: ('Invalid type', 'home')
+
+You create a collection with components or collection as argument:
+
+  >>> s2 = Collection(Component('Jupiter'), Component('Saturn'))
+  >>> list(s2)
+  [<Component Jupiter>, <Component Saturn>]
+  >>> list(Collection(s2, Component('Uranus')))
+  [<Component Jupiter>, <Component Saturn>, <Component Uranus>]
+  >>> Collection(42)
+  Traceback (most recent call last):
+    ...
+  TypeError: ('Invalid type', 42)
+
+You can add collections. You will receive a copy with all
+components. Components will ordered as the addition is:
+
+  >>> s3 = s1 + s2
+  >>> s3
+  <Collection>
+  >>> s3 is s1
+  False
+  >>> list(s3)
+  [<Component The Sun>, <Component Moon>,
+   <Component Jupiter>, <Component Saturn>]
+  >>> list(s2 + s1)
+  [<Component Jupiter>, <Component Saturn>,
+   <Component The Sun>, <Component Moon>]
+
+You can extend a collection. It work pretty much like the construtor:
+
+  >>> s3.extend(Component('Venus'), Component('Uranus'))
+  >>> list(s3)
+  [<Component The Sun>, <Component Moon>,
+   <Component Jupiter>, <Component Saturn>,
+   <Component Venus>, <Component Uranus>]
+  >>> s3.extend('Kitty')
+  Traceback (most recent call last):
+    ...
+  TypeError: ('Invalid type', 'Kitty')
+
+You can get a new collection with some of the components of the first
+one:
+
+  >>> s4 = s3.select('venus', 'uranus')
+  >>> s4 is s3
+  False
+  >>> list(s4)
+  [<Component Venus>, <Component Uranus>]
+
+Or the other way around some components of a collection:
+
+  >>> s5 = s3.omit('sun', 'moon')
+  >>> s5 is s3
+  False
+  >>> list(s5)
+  [<Component Jupiter>, <Component Saturn>,
+   <Component Venus>, <Component Uranus>]

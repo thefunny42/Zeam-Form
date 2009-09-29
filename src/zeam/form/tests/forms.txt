@@ -1,0 +1,27 @@
+zeam.form
+=========
+
+Forms are class, registered like views:
+
+   >>> from zeam.form.form import Form
+
+   >>> from zope.publisher.browser import TestRequest
+   >>> request = TestRequest()
+
+   >>> class Context(object):
+   ...     pass
+   >>> context = Context()
+
+   >>> f1 = Form(context, request)
+   >>> f1
+   <zeam.form.form.Form object at ...>
+
+
+They implement IForm:
+
+   >>> from zope.interface.verify import verifyObject
+   >>> from zeam.form import interfaces
+
+
+verifyObject(interfaces.IForm, f1)
+True

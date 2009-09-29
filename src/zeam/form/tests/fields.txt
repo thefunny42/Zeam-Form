@@ -1,0 +1,78 @@
+zeam.form
+=========
+
+Fields represent input fields on the form.
+
+Field
+-----
+
+A field is a simple input on a form:
+
+   >>> from zeam.form.fields import Field
+   >>> f1 = Field('Age')
+   >>> f1
+   <Field Age>
+
+A Field implement IField, and is an IComponent:
+
+   >>> from zope.interface.verify import verifyObject
+   >>> from zeam.form import interfaces
+   >>> verifyObject(interfaces.IField, f1)
+   True
+   >>> interfaces.IField.extends(interfaces.IComponent)
+   True
+
+
+Fields
+------
+
+Fields is a collection component used to contain Field:
+
+   >>> from zeam.form.fields import Fields
+   >>> s1 = Fields(Field('Size'), f1)
+   >>> s1
+   <Fields>
+   >>> list(s1)
+   [<Field Size>, <Field Age>]
+
+They implements IFields and ICollection:
+
+   >>> verifyObject(interfaces.IFields, s1)
+   True
+   >>> interfaces.IFields.extends(interfaces.ICollection)
+   True
+
+
+Creation from a Zope interface
+------------------------------
+
+You can create a full set of fields from a Zope interface:
+
+   >>> from zope import schema, interface
+
+   >>> class IPlanet(interface.Interface):
+   ...     name = schema.TextLine(title=u"Name")
+   ...     size = schema.Int(title=u"Size", description=u"Size in Km")
+
+   >>> s2 = Fields(IPlanet)
+   >>> list(s2)
+   [<SchemaField Name>, <SchemaField Size>]
+
+Those are correct fields, filled with the interface definition
+information:
+
+   >>> f2, f3 = list(s2)
+   >>> f2
+   <SchemaField Name>
+   >>> f2.title
+   u'Name'
+   >>> f2.identifier
+   'name'
+   >>> f2.description
+   u''
+   >>> f3
+   <SchemaField Size>
+   >>> f3.description
+   u'Size in Km'
+   >>> verifyObject(interfaces.IField, f2, f3)
+   True
