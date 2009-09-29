@@ -2,6 +2,11 @@
            xmlns:grok="http://namespaces.zope.org/grok">
 
   <include package="grokcore.component" file="meta.zcml" />
+  <include package="grokcore.view" file="meta-minimal.zcml" />
+  <include package="grokcore.view" />
+
+  <!-- Grok da grokkers -->
+  <grok:grok package=".meta" />
 
   <!-- Grok this package -->
   <grok:grok package=".widgets" />
