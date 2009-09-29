@@ -1,0 +1,141 @@
+zeam.form
+=========
+
+Widgets are responsible to render component as HTML code for the user.
+
+
+Widget
+------
+
+Widgets are multiadapters, which adapts the component they render, for
+a given form, and request. So we need all that:
+
+   >>> from zope.publisher.browser import TestRequest
+   >>> request = TestRequest()
+
+   >>> from zeam.form.form import Form
+   >>> f1 = Form(None, request)
+
+   >>> from zeam.form.actions import Action
+   >>> a1 = Action(u"Do Something")
+   >>> f1.actions += a1
+
+So now we can get a widget for an action for instance:
+
+   >>> from zeam.form import interfaces
+   >>> from zope import component
+   >>> w1 = component.getMultiAdapter(
+   ...         (a1, f1, request), interfaces.IWidget)
+   >>> w1
+   <ActionWidget Do Something>
+
+By default our widget will the same title than the component, and its
+identifier will be composed with the component on and the form prefix:
+
+   >>> a1.identifier
+   'do-something'
+   >>> w1.identifier
+   'form.do-something'
+   >>> a1.title
+   u'Do Something'
+   >>> w1.title
+   u'Do Something'
+
+The method render gives you the HTML to display. Our widget is an
+action, so by default you get a button:
+
+   >>> print w1.render()
+   <input type="submit" id="form-do-something"
+          name="form.do-something" value="Do Something" />
+   <BLANKLINE>
+
+You can get its HTML id as well (to render any label for instance):
+
+   >>> w1.html_id()
+   'form-do-something'
+
+Our widget implements IWidget, and IComponent:
+
+   >>> from zope.interface.verify import verifyObject
+   >>> verifyObject(interfaces.IWidget, w1)
+   True
+   >>> interfaces.IWidget.extends(interfaces.IComponent)
+   True
+
+
+Widgets
+-------
+
+As you can guess, you are not going to build your widgets one by one
+to render them. You can a Widgets collection to create and manage your
+widgets.
+
+Let's a an another action to our form, and let's create widgets for
+them:
+
+   >>> f1.actions += Action("Do Nothing")
+   >>> list(f1.actions)
+   [<Action Do Something>, <Action Do Nothing>]
+
+   >>> from zeam.form.widgets import Widgets
+   >>> ws1 = Widgets(f1.actions, form=f1, request=request)
+   >>> ws1
+   <Widgets>
+   >>> list(ws1)
+   [<ActionWidget Do Something>, <ActionWidget Do Nothing>]
+
+Widgets implements IWidgets and ICollection:
+
+   >>> verifyObject(interfaces.IWidgets, ws1)
+   True
+   >>> interfaces.IWidgets.extends(interfaces.ICollection)
+   True
+
+
+WidgetExtractor
+---------------
+
+Widget can render a component to HTML, but it is not their job to
+extract values from a request back to a component. It's the job of a
+WidgetExtractor, which might be called before the Widget is even
+created.
+
+Widget and WidgetExtractor will often work together, as the extractor
+need to correctly extract the information from the request.
+
+This design prevent widgets to cache the value they are going to
+render when an action might have changed it, like it's done in other
+form frameworks design. To be sure that an action doesn't change any
+value to render, they are all executed before any widget is created
+(even in the case of subforms).
+
+So WidgetExtractor are multiadapters, adapting the component, form and
+request, like a Widget does:
+
+   >>> e1 = component.getMultiAdapter(
+   ...         (a1, f1, request), interfaces.IWidgetExtractor)
+   >>> e1
+   <zeam.form.widgets.WidgetExtractor object at ...>
+
+And you can extract the widget value, and errors from the request:
+
+   >>> e1.extract()
+   (None, None)
+
+But our request was empty here. Let's try with a non-empty one:
+
+   >>> submitted_request = TestRequest(
+   ...         form={'form.do-something': u'Do Something'})
+   >>> e2 = component.getMultiAdapter(
+   ...         (a1, f1, submitted_request), interfaces.IWidgetExtractor)
+   >>> e2.extract()
+   (u'Do Something', None)
+
+WidgetExtractor implements IWidgetExtractor, but inlike Widgets, not
+IComponent:
+
+   >>> verifyObject(interfaces.IWidgetExtractor, e1, e2)
+   True
+   >>> interfaces.IComponent.providedBy(e1)
+   False
+

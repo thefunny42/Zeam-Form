@@ -18,7 +18,7 @@ class WidgetTemplateGrokker(martian.ClassGrokker):
         # Need to store the module info object on the view class so that it
         # can look up the 'static' resource directory.
         factory.module_info = module_info
-        return super(ViewletGrokker, self).grok(
+        return super(WidgetTemplateGrokker, self).grok(
             name, factory, module_info, **kw)
 
     def execute(self, factory, config):
@@ -28,6 +28,8 @@ class WidgetTemplateGrokker(martian.ClassGrokker):
                 discriminator=None,
                 callable=self.checkTemplates,
                 args=(templates, factory.module_info, factory))
+            return True
+        return False
 
     def checkTemplates(self, templates, module_info, factory):
         def has_render(factory):

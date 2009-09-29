@@ -1,6 +1,18 @@
 
+import re
+
 from zeam.form import interfaces
 from zope.interface import implements
+
+_valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
+
+def createId(name):
+    # Create a valid id from any string.
+    id = str(name.encode('utf-8'))
+    id = id.replace(' ', '-')
+    if _valid_identifier.match(id):
+        return id.lower()
+    return id.encode('hex')
 
 
 class Component(object):
@@ -9,8 +21,8 @@ class Component(object):
     def __init__(self, title, identifier=None):
         self.title = title
         if identifier is None:
-            identifier = str(title).lower()
-        self.identifier = identifier
+            identifier = createId(title)
+        self.identifier = str(identifier)
 
     def __repr__(self):
         return "<%s %s>" % (self.__class__.__name__, self.title)
