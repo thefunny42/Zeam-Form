@@ -5,6 +5,7 @@ from zeam.form.widgets import Widgets
 from zeam.form import interfaces
 
 from zope.interface import implements
+from zope.pagetemplate.interfaces import IPageTemplate
 from zope.publisher.publish import mapply
 from zope import component
 
@@ -20,6 +21,8 @@ class FormCanvas(object):
     description = u''
 
     status = u''
+    ignoreRequest = False
+    ignoreContent = False
 
     actions = Actions()
     fields = Fields()
@@ -28,6 +31,8 @@ class FormCanvas(object):
         self.context = context
         self.request = request
         self.errors = []
+        self.action_widgets = Widgets(form=self, request=self.request)
+        self.field_widgets = Widgets(form=self, request=self.request)
         self._data = NOT_EXTRACTED
 
     def getContent(self):
@@ -50,20 +55,36 @@ class FormCanvas(object):
 
         return (data, self.errors)
 
+    def default_namespace(self):
+        return {'view': self,
+                'context': self.context,
+                'request': self.request}
+
+    def namespace(self):
+        return {}
+
     def update(self):
         pass
 
     def updateActions(self):
-        self.submission = self.actions.process(self, self.request)
+        self.actions.process(self, self.request)
 
     def updateWidgets(self):
-        self.field_widgets = Widgets(
-            self.fields, form=self, request=self.request)
-        self.action_widgets = Widgets(
-            self.actions, form=self, request=self.request)
+        self.field_widgets.extend(self.fields)
+        self.action_widgets.extend(self.actions)
+
+        self.fields_widgets.update()
+        self.action_widgets.update()
 
     def render(self):
-        pass
+        # Try grok template first
+        template = getattr(self, 'template', None)
+        if template is not None:
+            return self.template.render(self)
+        # Fallbacl on IPageTemplate
+        template = component.getMultiAdapter(
+            (self, self.request), IPageTemplate)
+        return template()
 
 
 class Form(FormCanvas):
@@ -108,7 +129,6 @@ class ComposedForm(Form):
         for subform in subforms:
             if subform.available():
                 self.subforms.append(subform)
-
 
     def updateForm(self):
         # Set/run actions for all forms

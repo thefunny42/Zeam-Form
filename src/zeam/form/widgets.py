@@ -80,6 +80,10 @@ class Widgets(Collection):
             else:
                 raise TypeError("Unrecognized argument type", cmp)
 
+    def update(self):
+        for widget in self:
+            widget.update()
+
 
 # After follow the implementation of some really generic default
 # widgets

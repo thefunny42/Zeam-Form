@@ -16,12 +16,9 @@ Forms are class, registered like views:
    >>> f1
    <zeam.form.form.Form object at ...>
 
-
-They implement IForm:
+They implements IForm:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form import interfaces
-
-
-verifyObject(interfaces.IForm, f1)
-True
+   >>> verifyObject(interfaces.IForm, f1)
+   True

@@ -5,10 +5,13 @@
   <include package="grokcore.view" file="meta-minimal.zcml" />
   <include package="grokcore.view" />
 
+  <include package="megrok.pagetemplate" file="meta.zcml" />
+
   <!-- Grok da grokkers -->
   <grok:grok package=".meta" />
 
   <!-- Grok this package -->
+  <grok:grok package=".form_templates" />
   <grok:grok package=".widgets" />
   <grok:grok package=".ztk" />
 

@@ -1,5 +1,5 @@
 
-from zope.publisher.interfaces.browser import IBrowserPage
+from zope.publisher.interfaces.browser import IBrowserView
 from zope import interface
 
 
@@ -161,14 +161,11 @@ class IFormCanvas(IFieldExtractionValueSetting, IFormSubmission):
 
     actions = interface.Attribute(u"Form actions")
     fields = interface.Attribute(u"Form fields")
-    widgets = interface.Attribute(u"Form widgets")
+    action_widgets = interface.Attribute(u"Form widgets")
+    field_widgets = interface.Attribute(u"Form widgets")
 
     def update():
         """User defined pre-update.
-        """
-
-    def updateFields():
-        """Set up form fields.
         """
 
     def updateActions():
@@ -190,7 +187,7 @@ class IDisplayFormCanvas(IFormCanvas):
     """
 
 
-class IForm(IBrowserPage, IFormCanvas):
+class IForm(IBrowserView, IFormCanvas):
     """Regular form containing fields and actions.
     """
 

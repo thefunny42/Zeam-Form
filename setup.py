@@ -31,6 +31,7 @@ setup(name='zeam.form',
           'martian',
           'grokcore.component',
           'grokcore.view',
+          'megrok.pagetemplate',
           # Test
           'zope.securitypolicy',
           'zope.app.authentication',
