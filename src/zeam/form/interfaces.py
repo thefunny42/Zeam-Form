@@ -1,4 +1,5 @@
 
+from zope.publisher.interfaces.browser import IBrowserPage
 from zope import interface
 
 
@@ -53,8 +54,6 @@ class IFormSubmission(interface.Interface):
     """Submission of a form.
     """
 
-    form = interface.Attribute("uSubmitted form")
-    request = interface.Attribute(u"Request who submitted the form")
     errors = interface.Attribute(u"List of errors who might occurs")
     status = interface.Attribute(u"Status message")
 
@@ -102,9 +101,17 @@ class IField(IComponent):
 
     description = interface.Attribute("Field description")
 
-    def value(setting):
-        """Extract the field value from the context / request,
-        according to setting.
+    def getContentValue(context):
+        """Extract the value from the context.
+        """
+
+    def getDefaultValue():
+        """Return the default value.
+        """
+
+    def validate(value):
+        """Validate that the given value fullfil the field
+        requirement.
         """
 
 
@@ -116,7 +123,7 @@ class IWidget(IComponent):
     """Display a form component on the page.
     """
 
-    def html_id():
+    def htmlId():
         """Return the HTML id of the HTML component representing the
         widget.
         """
@@ -132,8 +139,13 @@ class IWidgetExtractor(interface.Interface):
     """
 
     def extract():
-        """Return a tuple (value, error). If error is not None, value
-        is discarded.
+        """Return a tuple (value, error). Value must be a valid field
+        value. If error is not None, value is discarded.
+        """
+
+    def extractRaw():
+        """Return request entries needed for the widget to redisplay
+        the same information in case of validation failure.
         """
 
 
@@ -141,7 +153,7 @@ class IWidgets(ICollection):
     pass
 
 
-class IFormSet(IFieldExtractionValueSetting):
+class IFormCanvas(IFieldExtractionValueSetting, IFormSubmission):
 
     prefix = interface.Attribute(u"Prefix to apply on form widgets")
     title = interface.Attribute(u"Form title")
@@ -153,11 +165,6 @@ class IFormSet(IFieldExtractionValueSetting):
 
     def update():
         """User defined pre-update.
-        """
-
-    def getContent():
-        """Content to which the form apply. It's by default the
-        context but the user might choose an other object for it.
         """
 
     def updateFields():
@@ -178,12 +185,12 @@ class IFormSet(IFieldExtractionValueSetting):
         """
 
 
-class IDisplayFormSet(IFormSet):
+class IDisplayFormCanvas(IFormCanvas):
     """Special form set in display only mode.
     """
 
 
-class IForm(IFormSet):
+class IForm(IBrowserPage, IFormCanvas):
     """Regular form containing fields and actions.
     """
 
@@ -197,7 +204,7 @@ class IForm(IFormSet):
         """
 
 
-class ISubForm(IFormSet):
+class ISubForm(IFormCanvas):
     """A form that can be included in an other form.
     """
 

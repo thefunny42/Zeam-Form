@@ -51,7 +51,7 @@ action, so by default you get a button:
 
 You can get its HTML id as well (to render any label for instance):
 
-   >>> w1.html_id()
+   >>> w1.htmlId()
    'form-do-something'
 
 Our widget implements IWidget, and IComponent:
@@ -120,7 +120,7 @@ request, like a Widget does:
 And you can extract the widget value, and errors from the request:
 
    >>> e1.extract()
-   (None, None)
+   (<Marker NO_VALUE>, None)
 
 But our request was empty here. Let's try with a non-empty one:
 

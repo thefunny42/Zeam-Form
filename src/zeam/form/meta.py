@@ -40,24 +40,27 @@ class WidgetTemplateGrokker(martian.ClassGrokker):
             module_info, factory, 'widget', has_render, has_no_render)
 
 
-class TemplateGrokker(martian.ClassGrokker):
+class FormTemplateGrokker(martian.ClassGrokker):
     martian.component(FormCanvas)
 
     def grok(self, name, factory, module_info, **kw):
         # Need to store the module info object on the view class so that it
         # can look up the 'static' resource directory.
-        factory.module_info = module_iself).grok(name, factory,
-                                                 module_info, **kw)
+        factory.module_info = module_info
+        return super(FormTemplateGrokker, self).grok(
+            name, factory, module_info, **kw)
 
-   def execute(self, factory, config, **kw):
+
+    def execute(self, factory, config, **kw):
         # find templates
         templates = factory.module_info.getAnnotation('grok.templates', None)
         if templates is not None:
             config.action(
                 discriminator=None,
                 callable=self.checkTemplates,
-                args=(templates, factory.module_info, factory)
-                )
+                args=(templates, factory.module_info, factory))
+            return True
+        return False
 
     def checkTemplates(self, templates, module_info, factory):
 
@@ -68,10 +71,10 @@ class TemplateGrokker(martian.ClassGrokker):
 
         def has_no_render(factory):
             return not has_render(factory)
-        
-        templates.checkTemplates(module_info, factory, 'view',
-                                 has_render, has_no_render)
-    
+
+        templates.checkTemplates(
+            module_info, factory, 'form', has_render, has_no_render)
+
 
 class FormGrokker(grokcore.view.meta.views.ViewGrokker):
     martian.component(Form)
@@ -96,8 +99,7 @@ class FormGrokker(grokcore.view.meta.views.ViewGrokker):
         config.action(
             discriminator=('adapter', adapts, interface.Interface, name),
             callable=component.provideAdapter,
-            args=(factory, adapts, interface.Interface, name),
-            )
+            args=(factory, adapts, interface.Interface, name))
         return True
 
 
@@ -111,6 +113,5 @@ class FormSecurityGrokker(martian.ClassGrokker):
             config.action(
                 discriminator=('protectName', factory, method_name),
                 callable=protect_getattr,
-                args=(factory, method_name, permission),
-                )
+                args=(factory, method_name, permission))
         return True

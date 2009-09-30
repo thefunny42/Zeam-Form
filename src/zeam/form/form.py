@@ -9,12 +9,17 @@ from zope.publisher.publish import mapply
 from zope import component
 
 
-class FormSet(object):
-    implements(interfaces.IFormSet)
+NOT_EXTRACTED = object()
+
+
+class FormCanvas(object):
+    implements(interfaces.IFormCanvas)
 
     prefix = u'form'
     title = u''
     description = u''
+
+    status = u''
 
     actions = Actions()
     fields = Fields()
@@ -22,10 +27,28 @@ class FormSet(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.submission = None
+        self.errors = []
+        self._data = NOT_EXTRACTED
 
     def getContent(self):
         return self.context
+
+    def extractData(self):
+        if self._data is not NOT_EXTRACTED:
+            return (self._data, self.errors)
+        self._data = data = []
+
+        for field in self.form.fields:
+            extractor = component.getMultiAdapter(
+                (field, self.form, self.request), interfaces.IWidgetExtractor)
+            value, error = extractor.extract()
+            if error is None:
+                error = field.validate(value)
+            if error is not None:
+                self.errors.append((field, error,))
+            data.append({field.identifier: value})
+
+        return (data, self.errors)
 
     def update(self):
         pass
@@ -43,7 +66,7 @@ class FormSet(object):
         pass
 
 
-class Form(FormSet):
+class Form(FormCanvas):
     implements(interfaces.IForm)
 
     def updateForm(self):
@@ -64,7 +87,7 @@ class Form(FormSet):
         return self.render()
 
 
-class SubForm(FormSet):
+class SubForm(FormCanvas):
     implements(interfaces.ISubForm)
 
     def __init__(self, context, parent, request):

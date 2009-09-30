@@ -10,6 +10,6 @@
 
   <!-- Grok this package -->
   <grok:grok package=".widgets" />
-  <grok:grok package=".z3fields" />
+  <grok:grok package=".ztk" />
 
 </configure>

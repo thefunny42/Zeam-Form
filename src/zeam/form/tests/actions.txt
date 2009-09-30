@@ -23,17 +23,6 @@ This implement IAction, and IComponent:
    True
 
 
-FormSubmission
-~~~~~~~~~~~~~~
-
-A FormSubmission is given to an Action to be executed. It contain
-information about the form and the content, let you get the
-information that the user filled in.
-
-
-   >>> from zeam.form.actions import FormSubmission
-
-
 Actions
 -------
 
@@ -66,8 +55,8 @@ the Actions list located on the form class:
 
    >>> class MyForm(Form):
    ...   @action(u"Change")
-   ...   def change(self, submission):
-   ...       submission.status = u"Just kidding"
+   ...   def change(self):
+   ...       self.status = u"Just kidding"
 
    >>> MyForm.actions
    <Actions>
@@ -83,7 +72,7 @@ This is like a regular action, but run the method when you call it:
    >>> verifyObject(interfaces.IAction, d1)
    True
 
-   >>> submission = FormSubmission(MyForm(None, {}), {})
-   >>> d1(submission)
-   >>> submission.status
+   >>> form = MyForm(None, {})
+   >>> d1(form)
+   >>> form.status
    u'Just kidding'

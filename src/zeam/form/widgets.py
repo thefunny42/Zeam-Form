@@ -1,6 +1,7 @@
 
 from zeam.form import interfaces
 from zeam.form.components import Component, Collection
+from zeam.form.markers import NO_VALUE
 
 from zope.interface import Interface
 from zope import component
@@ -20,7 +21,7 @@ class Widget(Component, grok.MultiAdapter):
         self.form = form
         self.request = request
 
-    def html_id(self):
+    def htmlId(self):
         # Return an identifier suitable for CSS usage
         return self.identifier.replace('.', '-')
 
@@ -31,22 +32,33 @@ class Widget(Component, grok.MultiAdapter):
     def namespace(self):
         return {}
 
+    def update(self):
+        pass
+
     def render(self):
         return self.template.render(self)
 
 
 class WidgetExtractor(grok.MultiAdapter):
     grok.provides(interfaces.IWidgetExtractor)
-    grok.adapts(interfaces.IComponent, interfaces.IFormSet, Interface)
+    grok.adapts(interfaces.IComponent, interfaces.IFormCanvas, Interface)
 
     def __init__(self, component, form, request):
+        self.identifier = '%s.%s' % (form.prefix, component.identifier)
         self.component = component
         self.form = form
         self.request = request
 
     def extract(self):
-        identifier = '%s.%s' % (self.form.prefix, self.component.identifier)
-        return (self.request.form.get(identifier, None), None)
+        return (self.request.form.get(self.identifier, NO_VALUE), None)
+
+    def extractRaw(self):
+        entries = {}
+        sub_identifier = self.identifier + '.'
+        for key, value in self.request.form.iteritems():
+            if key.startswith(sub_identifier) or key == self.identifier:
+                entries[key] = value
+        return entries
 
 
 class Widgets(Collection):
@@ -73,4 +85,33 @@ class Widgets(Collection):
 # widgets
 
 class ActionWidget(Widget):
-    grok.adapts(interfaces.IAction, interfaces.IFormSet, Interface)
+    grok.adapts(interfaces.IAction, interfaces.IFormCanvas, Interface)
+
+
+
+class FieldWidget(Widget):
+    grok.adapts(interfaces.IField, interfaces.IFormCanvas, Interface)
+
+    def value(self):
+        # First lookup the request
+        if not self.form.ignoreRequest:
+            extractor = component.getMultiAdapter(
+                (self.component, self.form, self.request),
+                interfaces.IWidgetExtractor)
+            return extractor.extractRaw()
+
+        # After, the context
+        if not self.form.ignoreContext:
+            content = self.form.getContent()
+            value = self.component.getContentValue(content)
+            if value is not None:
+                return self.prepareValue(value)
+
+        # Take any default value
+        value = self.component.getDefaultValue()
+        return self.prepareValue(value)
+
+    def prepareValue(self, value):
+        if value is NO_VALUE:
+            return u''
+        return unicode(value)

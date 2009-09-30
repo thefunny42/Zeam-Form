@@ -1,6 +1,7 @@
 
 from zeam.form import interfaces
 from zeam.form.components import Component, Collection
+from zeam.form.markers import NO_VALUE
 
 from zope.interface import implements
 from zope import component, schema
@@ -13,8 +14,14 @@ class Field(Component):
 
     description = u''
 
-    def value(self, setting):
-        raise ValueError
+    def getContentValue(self, context):
+        return getattr(context, self.identifier, NO_VALUE)
+
+    def getDefaultValue(self):
+        raise NO_VALUE
+
+    def validate(self, value):
+        return None
 
 
 class Fields(Collection):

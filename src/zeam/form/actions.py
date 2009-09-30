@@ -20,31 +20,6 @@ class Action(Component):
         raise NotImplementedError
 
 
-class FormSubmission(object):
-    """Represent a submission of a form.
-    """
-    implements(interfaces.IFormSubmission)
-
-    def __init__(self, form, request):
-        self.form = form
-        self.request = request
-        self.content = form.getContent()
-        self.errors = []
-        self.status = None
-
-    def extractData(self):
-        data = []
-
-        for field in self.form.fields:
-            extractor = component.getMultiAdapter(
-                (field, self.form, self.request), interfaces.IWidgetExtractor)
-            value, error = extractor.extract()
-            if error is not None:
-                self.errors.append((field, error,))
-            data.append({field.identifier: value})
-        return (data, self.errors)
-
-
 class Actions(Collection):
     """A list of form action.
     """
@@ -58,11 +33,10 @@ class Actions(Collection):
                 (action, form, request), interfaces.IWidgetExtractor)
             value, error = extractor.extract()
             if value is not None:
-                submission = FormSubmission(form, request)
-                if action.validate(submission):
-                    action(submission)
-                return submission
-        return None
+                if action.validate(form):
+                    action(form)
+                    return True
+        return False
 
 
 # Convience API, decorator to add action
@@ -76,13 +50,13 @@ class DecoratedAction(Action):
         self._callback = callback
         self._validator = validator
 
-    def validate(self, submission):
+    def validate(self, form):
         if self._validator is not None:
-            self._validator(submission.form, submission)
+            self._validator(form)
 
-    def __call__(self, submission):
+    def __call__(self, form):
         assert self._callback is not None
-        self._callback(submission.form, submission)
+        self._callback(form)
 
 
 def action(title, identifiant=None, validator=None):
