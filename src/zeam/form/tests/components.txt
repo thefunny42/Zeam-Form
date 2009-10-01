@@ -38,6 +38,18 @@ unicode title:
   >>> c2.title
   u'Moon'
 
+If by doing so, the title contain spaces, they will be replaced by
+``-``. If UTF-8 character are included, the identifiant will be
+encoded:
+
+  >>> c3 = Component(u'Some lost planet')
+  >>> c3.identifier
+  'some-lost-planet'
+  >>> c4 = Component(u'État du désir')
+  >>> c4.identifier
+  'c383c2897461742d64752d64c383c2a9736972'
+
+
 Collection
 ----------
 

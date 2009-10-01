@@ -42,6 +42,27 @@ They implements IFields and ICollection:
    >>> interfaces.IFields.extends(interfaces.ICollection)
    True
 
+So it behave like a collection. You can add other Field, and Fields
+using the extend method (or constructor), but if you whish to add an
+another component it need to be a Field:
+
+   >>> from zeam.form.actions import Action, Actions
+
+   >>> s1.extend(Action("Apply"))
+   Traceback (most recent call last):
+      ...
+   TypeError: ('Unrecognized argument type', <Action Apply>)
+
+   >>> s1.extend(Actions(Action("Apply")))
+   Traceback (most recent call last):
+      ...
+   TypeError: ('Unrecognized argument type', <Actions>)
+
+   >>> s1.extend(42)
+   Traceback (most recent call last):
+      ...
+   TypeError: ('Unrecognized argument type', 42)
+
 
 Creation from a Zope interface
 ------------------------------
@@ -76,3 +97,39 @@ information:
    u'Size in Km'
    >>> verifyObject(interfaces.IField, f2, f3)
    True
+
+You can add fields via an interface after:
+
+   >>> class IHabitationSupport(interface.Interface):
+   ...     city = schema.TextLine(title=u"City name")
+   ...     people = schema.TextLine(title=u"Number of people")
+
+   >>> s2.extend(IHabitationSupport)
+   >>> list(s2)
+   [<SchemaField Name>, <SchemaField Size>,
+    <SchemaField City name>, <SchemaField Number of people>]
+
+You can add a field from an interface alone:
+
+   >>> class IFoodSupport(interface.Interface):
+   ...      vegetables = schema.TextLine(title=u"Vegetables kind")
+   ...      meat = schema.TextLine(title=u"Meat kind")
+
+   >>> s2.extend(IFoodSupport['vegetables'])
+   >>> list(s2.select('vegetables'))
+   [<SchemaField Vegetables kind>]
+
+   >>> list(Fields(IFoodSupport['meat']))
+   [<SchemaField Meat kind>]
+
+But it need to belong to an interface:
+
+   >>> Fields(schema.TextLine(title=u"Quality of McDo restaurant"))
+   Traceback (most recent call last):
+      ...
+   ValueError: Field has no interface
+   >>> s2.extend(schema.TextLine(title=u"Quality of McDo restaurant"))
+   Traceback (most recent call last):
+      ...
+   ValueError: Field has no interface
+

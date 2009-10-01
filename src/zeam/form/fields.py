@@ -37,10 +37,10 @@ class Fields(Collection):
                     self.append(interfaces.IField(field))
             # Schema field
             elif zope.schema.interfaces.IField.providedBy(cmp):
-                name = cmp.__name__
-                if not name:
-                    raise ValueError("Field has no name")
-                self.append(interfaces.IField(field))
+                int = cmp.interface
+                if not int:
+                    raise ValueError("Field has no interface")
+                self.append(interfaces.IField(cmp))
             # Form field
             elif interfaces.IField.providedBy(cmp):
                 self.append(cmp)
