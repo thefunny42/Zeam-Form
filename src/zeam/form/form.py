@@ -16,7 +16,7 @@ NOT_EXTRACTED = object()
 class FormCanvas(object):
     implements(interfaces.IFormCanvas)
 
-    prefix = u'form'
+    prefix = 'form'
     title = u''
     description = u''
 

@@ -15,7 +15,7 @@ class Widget(Component, grok.MultiAdapter):
     grok.provides(interfaces.IWidget)
 
     def __init__(self, component, form, request):
-        identifier = '%s.%s' % (form.prefix, component.identifier)
+        identifier = '%s.%s' % (str(form.prefix), component.identifier)
         super(Widget, self).__init__(component.title, identifier)
         self.component = component
         self.form = form
@@ -44,7 +44,7 @@ class WidgetExtractor(grok.MultiAdapter):
     grok.adapts(interfaces.IComponent, interfaces.IFormCanvas, Interface)
 
     def __init__(self, component, form, request):
-        self.identifier = '%s.%s' % (form.prefix, component.identifier)
+        self.identifier = '%s.%s' % (str(form.prefix), component.identifier)
         self.component = component
         self.form = form
         self.request = request

@@ -22,7 +22,7 @@ class Component(object):
         self.title = title
         if identifier is None:
             identifier = createId(title)
-        self.identifier = str(identifier)
+        self.identifier = identifier
 
     def __repr__(self):
         return "<%s %s>" % (self.__class__.__name__, self.title)
