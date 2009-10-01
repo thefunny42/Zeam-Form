@@ -1,4 +1,4 @@
-zeam.form
+zeam.form.base
 =========
 
 Widgets are responsible to render component as HTML code for the user.
@@ -13,16 +13,16 @@ a given form, and request. So we need all that:
    >>> from zope.publisher.browser import TestRequest
    >>> request = TestRequest()
 
-   >>> from zeam.form.form import Form
+   >>> from zeam.form.base.form import Form
    >>> f1 = Form(None, request)
 
-   >>> from zeam.form.actions import Action
+   >>> from zeam.form.base.actions import Action
    >>> a1 = Action(u"Do Something")
    >>> f1.actions += a1
 
 So now we can get a widget for an action for instance:
 
-   >>> from zeam.form import interfaces
+   >>> from zeam.form.base import interfaces
    >>> from zope import component
    >>> w1 = component.getMultiAdapter(
    ...         (a1, f1, request), interfaces.IWidget)
@@ -77,7 +77,7 @@ them:
    >>> list(f1.actions)
    [<Action Do Something>, <Action Do Nothing>]
 
-   >>> from zeam.form.widgets import Widgets
+   >>> from zeam.form.base.widgets import Widgets
    >>> ws1 = Widgets(f1.actions, form=f1, request=request)
    >>> ws1
    <Widgets>
@@ -115,7 +115,7 @@ request, like a Widget does:
    >>> e1 = component.getMultiAdapter(
    ...         (a1, f1, request), interfaces.IWidgetExtractor)
    >>> e1
-   <zeam.form.widgets.WidgetExtractor object at ...>
+   <zeam.form.base.widgets.WidgetExtractor object at ...>
 
 And you can extract the widget value, and errors from the request:
 

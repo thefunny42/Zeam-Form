@@ -1,5 +1,5 @@
 
-from zeam.form import interfaces
+from zeam.form.base import interfaces
 
 
 class ISchemaField(interfaces.IField):

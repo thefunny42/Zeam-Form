@@ -5,8 +5,8 @@ import grokcore.security
 
 from grokcore.security.util import protect_getattr
 
-from zeam.form.widgets import Widget
-from zeam.form.form import Form, FormCanvas
+from zeam.form.base.widgets import Widget
+from zeam.form.base.form import Form, FormCanvas
 
 from zope import interface, component
 from zope.publisher.interfaces.browser import IBrowserPage

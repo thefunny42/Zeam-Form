@@ -6,7 +6,7 @@
   <include package="zope.app.zcmlfiles" file="meta.zcml" />
   <include package="zope.securitypolicy" file="meta.zcml" />
 
-  <include package="zeam.form" />
+  <include package="zeam.form.base" />
 
   <include package="zope.app.zcmlfiles" />
   <include package="zope.app.authentication" />

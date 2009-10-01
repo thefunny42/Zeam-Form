@@ -3,7 +3,7 @@ import os
 
 version = '1.0'
 
-setup(name='zeam.form',
+setup(name='zeam.form.base',
       version=version,
       description="Grok based form framework",
       long_description=open("README.txt").read() + "\n" +

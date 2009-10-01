@@ -1,9 +1,9 @@
-zeam.form
+zeam.form.base
 =========
 
 Forms are class, registered like views:
 
-   >>> from zeam.form.form import Form
+   >>> from zeam.form.base.form import Form
 
    >>> from zope.publisher.browser import TestRequest
    >>> request = TestRequest()
@@ -14,11 +14,11 @@ Forms are class, registered like views:
 
    >>> f1 = Form(context, request)
    >>> f1
-   <zeam.form.form.Form object at ...>
+   <zeam.form.base.form.Form object at ...>
 
 They implements IForm:
 
    >>> from zope.interface.verify import verifyObject
-   >>> from zeam.form import interfaces
+   >>> from zeam.form.base import interfaces
    >>> verifyObject(interfaces.IForm, f1)
    True

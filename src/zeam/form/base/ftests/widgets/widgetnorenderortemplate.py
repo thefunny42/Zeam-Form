@@ -4,18 +4,18 @@ to render himself:
 
 Let's grok our example:
 
-  >>> from zeam.form.testing import grok
-  >>> grok('zeam.form.ftests.widgets.widgetnorenderortemplate')
+  >>> from zeam.form.base.testing import grok
+  >>> grok('zeam.form.base.ftests.widgets.widgetnorenderortemplate')
   Traceback (most recent call last):
     ...
-  ConfigurationExecutionError: <class 'martian.error.GrokError'>: Widget <class 'zeam.form.ftests.widgets.widgetnorenderortemplate.MyWidget'> has no associated template or 'render' method.
+  ConfigurationExecutionError: <class 'martian.error.GrokError'>: Widget <class 'zeam.form.base.ftests.widgets.widgetnorenderortemplate.MyWidget'> has no associated template or 'render' method.
     in:
 
 """
 
-from zeam.form.fields import Field
-from zeam.form.widgets import Widget
-from zeam.form import interfaces
+from zeam.form.base.fields import Field
+from zeam.form.base.widgets import Widget
+from zeam.form.base import interfaces
 
 from zope.interface import Interface
 

@@ -1,5 +1,5 @@
 
-zeam.form
+zeam.form.base
 =========
 
 The component and component collections are basic objects used to
@@ -11,7 +11,7 @@ Components
 
 First let's see the component:
 
-  >>> from zeam.form.components import Component
+  >>> from zeam.form.base.components import Component
   >>> c1 = Component('The Sun', 'sun')
   >>> c1
   <Component The Sun>
@@ -23,7 +23,7 @@ First let's see the component:
 It correctly implement IComponent:
 
   >>> from zope.interface.verify import verifyObject
-  >>> from zeam.form import interfaces
+  >>> from zeam.form.base import interfaces
   >>> verifyObject(interfaces.IComponent, c1)
   True
 
@@ -55,7 +55,7 @@ Collection
 
 Collection are simple objects, implementing ICollection:
 
-  >>> from zeam.form.components import Collection
+  >>> from zeam.form.base.components import Collection
   >>> s1 = Collection()
   >>> s1
   <Collection>

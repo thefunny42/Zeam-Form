@@ -1,14 +1,14 @@
 
 import os.path
 
-import zeam.form
+import zeam.form.base
 
 from zope.app.testing.functional import ZCMLLayer, FunctionalTestSetup
 from zope.configuration.config import ConfigurationMachine
 from grokcore.component import zcml
 
 ftesting_zcml = os.path.join(
-    os.path.dirname(zeam.form.__file__), 'ftesting.zcml')
+    os.path.dirname(zeam.form.base.__file__), 'ftesting.zcml')
 FunctionalLayer = ZCMLLayer(
     ftesting_zcml, __name__, 'FunctionalLayer', allow_teardown=True)
 

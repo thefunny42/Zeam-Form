@@ -1,8 +1,8 @@
 
-from zeam.form.actions import Actions
-from zeam.form.fields import Fields
-from zeam.form.widgets import Widgets
-from zeam.form import interfaces
+from zeam.form.base.actions import Actions
+from zeam.form.base.fields import Fields
+from zeam.form.base.widgets import Widgets
+from zeam.form.base import interfaces
 
 from zope.interface import implements
 from zope.pagetemplate.interfaces import IPageTemplate

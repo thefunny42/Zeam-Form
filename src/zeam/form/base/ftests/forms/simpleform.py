@@ -1,24 +1,24 @@
 """
-We are going to define a simple form with two fields and an action.
+We are going to define a simple form with an action.
 
 Let's grok our example:
 
-  >>> from zeam.form.testing import grok
-  >>> grok('zeam.form.ftests.forms.simpleform')
+  >>> from zeam.form.base.testing import grok
+  >>> grok('zeam.form.base.ftests.forms.simpleform')
 
 We can now lookup our form by the name of its class:
 
   >>> from zope.publisher.browser import TestRequest
   >>> request = TestRequest()
 
-  >>> from zeam.form.ftests.forms.simpleform import Context
+  >>> from zeam.form.base.ftests.forms.simpleform import Context
   >>> context = Context()
 
   >>> from zope import component
   >>> form = component.getMultiAdapter(
   ...     (context, request), name='myform')
   >>> form
-  <zeam.form.ftests.forms.simpleform.MyForm object at ...>
+  <zeam.form.base.ftests.forms.simpleform.MyForm object at ...>
 
   >>> len(form.actions)
   1
@@ -76,8 +76,8 @@ Let's try to take a browser and submit that form:
 
 """
 
-from zeam.form.actions import action
-from zeam.form.form import Form
+from zeam.form.base.actions import action
+from zeam.form.base.form import Form
 
 from grokcore import component as grok
 

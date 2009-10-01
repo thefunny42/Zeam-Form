@@ -1,4 +1,4 @@
-zeam.form
+zeam.form.base
 =========
 
 Actions represent code which is executed when the user submit a form.
@@ -8,7 +8,7 @@ Action
 
 An action represent a single action of a form:
 
-   >>> from zeam.form.actions import Action
+   >>> from zeam.form.base.actions import Action
    >>> a1 = Action("Apply")
    >>> a1
    <Action Apply>
@@ -18,7 +18,7 @@ An action is callable with a form to be execuded:
    >>> from zope.publisher.browser import TestRequest
    >>> request = TestRequest()
 
-   >>> from zeam.form.form import Form
+   >>> from zeam.form.base.form import Form
    >>> f1 = Form(object(), request)
 
    >>> a1(f1)
@@ -46,7 +46,7 @@ executed:
 Action implements IAction, and IComponent:
 
    >>> from zope.interface.verify import verifyObject
-   >>> from zeam.form import interfaces
+   >>> from zeam.form.base import interfaces
    >>> verifyObject(interfaces.IAction, a1)
    True
    >>> verifyObject(interfaces.IComponent, a1)
@@ -58,7 +58,7 @@ Actions
 
 Action are added to an Actions collection:
 
-   >>> from zeam.form.actions import Actions
+   >>> from zeam.form.base.actions import Actions
    >>> s1 = Actions(a1, Action('Cancel'))
    >>> s1
    <Actions>
@@ -102,8 +102,8 @@ You can define form methods as Action, using the action decortor. This
 will create an action that will executed the method, and register in
 the Actions list located on the form class:
 
-   >>> from zeam.form.actions import action
-   >>> from zeam.form.form import Form
+   >>> from zeam.form.base.actions import action
+   >>> from zeam.form.base.form import Form
 
    >>> class MyForm(Form):
    ...   @action(u"Change")

@@ -1,7 +1,7 @@
 
-from zeam.form import interfaces
-from zeam.form.components import Component, Collection
-from zeam.form.markers import NO_VALUE
+from zeam.form.base import interfaces
+from zeam.form.base.components import Component, Collection
+from zeam.form.base.markers import NO_VALUE
 
 from zope.interface import Interface
 from zope import component

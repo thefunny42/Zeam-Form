@@ -1,4 +1,4 @@
-zeam.form
+zeam.form.base
 =========
 
 Fields represent input fields on the form.
@@ -8,7 +8,7 @@ Field
 
 A field is a simple input on a form:
 
-   >>> from zeam.form.fields import Field
+   >>> from zeam.form.base.fields import Field
    >>> f1 = Field('Age')
    >>> f1
    <Field Age>
@@ -16,7 +16,7 @@ A field is a simple input on a form:
 A Field implement IField, and is an IComponent:
 
    >>> from zope.interface.verify import verifyObject
-   >>> from zeam.form import interfaces
+   >>> from zeam.form.base import interfaces
    >>> verifyObject(interfaces.IField, f1)
    True
    >>> interfaces.IField.extends(interfaces.IComponent)
@@ -28,7 +28,7 @@ Fields
 
 Fields is a collection component used to contain Field:
 
-   >>> from zeam.form.fields import Fields
+   >>> from zeam.form.base.fields import Fields
    >>> s1 = Fields(Field('Size'), f1)
    >>> s1
    <Fields>
@@ -46,7 +46,7 @@ So it behave like a collection. You can add other Field, and Fields
 using the extend method (or constructor), but if you whish to add an
 another component it need to be a Field:
 
-   >>> from zeam.form.actions import Action, Actions
+   >>> from zeam.form.base.actions import Action, Actions
 
    >>> s1.extend(Action("Apply"))
    Traceback (most recent call last):

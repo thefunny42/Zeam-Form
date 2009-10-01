@@ -3,7 +3,7 @@ import unittest
 from pkg_resources import resource_listdir
 from zope.testing import doctest
 from zope.app.testing.functional import getRootFolder
-from zeam.form.testing import FunctionalLayer, setUp, tearDown
+from zeam.form.base.testing import FunctionalLayer, setUp, tearDown
 
 
 def suiteFromPackage(name):
@@ -19,7 +19,7 @@ def suiteFromPackage(name):
         if filename == '__init__.py':
             continue
 
-        dottedname = 'zeam.form.ftests.%s.%s' % (name, filename[:-3])
+        dottedname = 'zeam.form.base.ftests.%s.%s' % (name, filename[:-3])
         test = doctest.DocTestSuite(dottedname,
                                     setUp=setUp,
                                     tearDown=tearDown,

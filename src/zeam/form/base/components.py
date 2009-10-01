@@ -1,7 +1,7 @@
 
 import re
 
-from zeam.form import interfaces
+from zeam.form.base import interfaces
 from zope.interface import implements
 
 _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
