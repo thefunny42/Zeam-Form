@@ -6,6 +6,7 @@ from zeam.form import interfaces
 
 from zope.interface import implements
 from zope.pagetemplate.interfaces import IPageTemplate
+from zope.publisher.browser import BrowserPage
 from zope.publisher.publish import mapply
 from zope import component
 
@@ -73,7 +74,7 @@ class FormCanvas(object):
         self.field_widgets.extend(self.fields)
         self.action_widgets.extend(self.actions)
 
-        self.fields_widgets.update()
+        self.field_widgets.update()
         self.action_widgets.update()
 
     def render(self):
@@ -87,7 +88,7 @@ class FormCanvas(object):
         return template()
 
 
-class Form(FormCanvas):
+class Form(FormCanvas, BrowserPage):
     implements(interfaces.IForm)
 
     def updateForm(self):

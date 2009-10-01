@@ -13,7 +13,37 @@ An action represent a single action of a form:
    >>> a1
    <Action Apply>
 
-This implement IAction, and IComponent:
+An action is callable with a form to be execuded:
+
+   >>> from zope.publisher.browser import TestRequest
+   >>> request = TestRequest()
+
+   >>> from zeam.form.form import Form
+   >>> f1 = Form(object(), request)
+
+   >>> a1(f1)
+   Traceback (most recent call last):
+     ...
+   NotImplementedError
+
+Of course you need to implement your own action:
+
+   >>> class MyAction(Action):
+   ...    def __call__(self, form):
+   ...        print u"Execute '%s'" % self.title
+
+   >>> m1 = MyAction("I like it")
+   >>> m1(f1)
+   Execute 'I like it'
+
+Action provide a validate method as well, which is called before the
+action is. If the validate method does return True, the action is not
+executed:
+
+   >>> m1.validate(f1)
+   True
+
+Action implements IAction, and IComponent:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form import interfaces
@@ -34,6 +64,28 @@ Action are added to an Actions collection:
    <Actions>
    >>> list(s1)
    [<Action Apply>, <Action Cancel>]
+
+That Actions is a collection, so all collection operation are
+available.
+
+It add a ``process`` method, which takes a form and a request and
+execute actions that need to be. Let's create a set of action with
+real actions and try it:
+
+   >>> m2 = MyAction("Make it nicer")
+   >>> s2 = Actions(m1, m2)
+   >>> list(s2)
+   [<MyAction I like it>, <MyAction Make it nicer>]
+
+   >>> s2.process(f1, request)
+   False
+
+   >>> r2 = TestRequest(form={'form.%s' % m2.identifier: m2.title})
+   >>> f2 = Form(object(), r2)
+
+   >>> s2.process(f2, r2)
+   Execute 'Make it nicer'
+   True
 
 Those Actions implement IActions and ICollection:
 
@@ -72,7 +124,10 @@ This is like a regular action, but run the method when you call it:
    >>> verifyObject(interfaces.IAction, d1)
    True
 
-   >>> form = MyForm(None, {})
-   >>> d1(form)
-   >>> form.status
+   >>> f3 = MyForm(object(), request)
+   >>> d1.validate(f3)
+   True
+   >>> d1(f3)
+   >>> f3.status
    u'Just kidding'
+

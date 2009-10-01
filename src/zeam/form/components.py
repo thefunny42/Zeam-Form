@@ -97,5 +97,8 @@ class Collection(object):
     def __iter__(self):
         return self._components.__iter__()
 
+    def __len__(self):
+        return self._components.__len__()
+
     def __repr__(self):
         return "<%s>" % (self.__class__.__name__)

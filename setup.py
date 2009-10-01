@@ -37,5 +37,7 @@ setup(name='zeam.form',
           'zope.app.authentication',
           'zope.app.testing',
           'zope.app.zcmlfiles',
+          'zope.testing',
+          'zope.testbrowser',
           ],
       )

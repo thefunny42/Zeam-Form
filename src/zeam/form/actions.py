@@ -3,6 +3,7 @@ import sys
 
 from zeam.form import interfaces
 from zeam.form.components import Component, Collection
+from zeam.form.markers import NO_VALUE
 
 from zope.interface import implements
 from zope import component
@@ -32,7 +33,7 @@ class Actions(Collection):
             extractor = component.getMultiAdapter(
                 (action, form, request), interfaces.IWidgetExtractor)
             value, error = extractor.extract()
-            if value is not None:
+            if value is not NO_VALUE:
                 if action.validate(form):
                     action(form)
                     return True
@@ -52,7 +53,8 @@ class DecoratedAction(Action):
 
     def validate(self, form):
         if self._validator is not None:
-            self._validator(form)
+            return self._validator(form)
+        return True
 
     def __call__(self, form):
         assert self._callback is not None

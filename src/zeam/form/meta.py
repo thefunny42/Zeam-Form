@@ -7,6 +7,8 @@ from grokcore.security.util import protect_getattr
 
 from zeam.form.widgets import Widget
 from zeam.form.form import Form, FormCanvas
+
+from zope import interface, component
 from zope.publisher.interfaces.browser import IBrowserPage
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
@@ -81,14 +83,6 @@ class FormGrokker(grokcore.view.meta.views.ViewGrokker):
                       get_default = grokcore.view.meta.views.default_view_name)
 
     def execute(self, factory, config, context, layer, name, **kw):
-        methods = util.methods_from_class(factory)
-        for method in methods:
-            if grokcore.security.require.bind().get(method) is not None:
-                raise GrokError('The @grok.require decorator is used for '
-                                'method %r in view %r. It may only be used '
-                                'for XML-RPC methods.'
-                                % (method.__name__, factory), factory)
-
         # __view_name__ is needed to support IAbsoluteURL on views
         factory.__view_name__ = name
         adapts = (context, layer)

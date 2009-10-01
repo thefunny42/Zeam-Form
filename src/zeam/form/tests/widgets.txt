@@ -125,11 +125,20 @@ And you can extract the widget value, and errors from the request:
 But our request was empty here. Let's try with a non-empty one:
 
    >>> submitted_request = TestRequest(
-   ...         form={'form.do-something': u'Do Something'})
+   ...         form={'form.do-something': u'Do Something',
+   ...                'otherfield': 42})
    >>> e2 = component.getMultiAdapter(
    ...         (a1, f1, submitted_request), interfaces.IWidgetExtractor)
    >>> e2.extract()
    (u'Do Something', None)
+
+An another of the extractor is to gives the request fields used for
+the extraction:
+
+   >>> e2.extractRaw()
+   {'form.do-something': u'Do Something'}
+
+This can be used by widgets to display again any non-validated data.
 
 WidgetExtractor implements IWidgetExtractor, but inlike Widgets, not
 IComponent:

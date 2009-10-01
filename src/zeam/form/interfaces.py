@@ -1,5 +1,5 @@
 
-from zope.publisher.interfaces.browser import IBrowserView
+from zope.publisher.interfaces.browser import IBrowserPage
 from zope import interface
 
 
@@ -49,6 +49,9 @@ class ICollection(interface.Interface):
         """Return an iterator on the components.
         """
 
+    def __len__():
+        """Return the numbre of components.
+        """
 
 class IFormSubmission(interface.Interface):
     """Submission of a form.
@@ -187,7 +190,7 @@ class IDisplayFormCanvas(IFormCanvas):
     """
 
 
-class IForm(IBrowserView, IFormCanvas):
+class IForm(IBrowserPage, IFormCanvas):
     """Regular form containing fields and actions.
     """
 

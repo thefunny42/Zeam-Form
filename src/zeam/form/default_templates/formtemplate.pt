@@ -1,3 +1,39 @@
-<form>
-  Hello world !
-</form>
+<html>
+  <head>
+  </head>
+  <body>
+    <form action="." tal:attributes="action request/URL" method="post"
+          enctype="multipart/form-data">
+
+      <p class="status-message"
+         tal:condition="view/status"
+         tal:content="view/status">Status</p>
+
+      <h1 tal:condition="view/label"
+          tal:content="view/label">Label</h1>
+
+      <p tal:condition="view/description"
+         tal:content="view/description">Description</p>
+
+      <div class="fields"
+           tal:condition="view/field_widgets">
+        <tal:field tal:repeat="widget view/field_widgets">
+          <label for="#"
+                 tal:attributes="for widget/htmlId"
+                 tal:content="widget/title">
+            Label
+          </label><br />
+          <tal:widget tal:content="structure widget/render" />
+        </tal:field>
+      </div>
+
+      <div class="actions"
+           tal:condition="view/action_widgets">
+        <tal:action tal:repeat="widget view/action_widgets">
+          <tal:widget tal:content="structure widget/render" />
+        </tal:action>
+      </div>
+
+    </form>
+  </body>
+</html>
