@@ -106,7 +106,9 @@ class FieldWidget(Widget):
             extractor = component.getMultiAdapter(
                 (self.component, self.form, self.request),
                 interfaces.IWidgetExtractor)
-            return extractor.extractRaw()
+            value = extractor.extractRaw()
+            if value:
+                return value
 
         # After, the context
         if not self.form.ignoreContext:
@@ -120,6 +122,7 @@ class FieldWidget(Widget):
         return self.prepareValue(value)
 
     def prepareValue(self, value):
-        if value is NO_VALUE:
-            return u''
-        return unicode(value)
+        formatted_value = u''
+        if value is not NO_VALUE:
+            formatted_value = unicode(value)
+        return {self.htmlId(): formatted_value}

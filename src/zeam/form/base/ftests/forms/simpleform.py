@@ -77,20 +77,18 @@ Let's try to take a browser and submit that form:
 
 """
 
-from zeam.form.base.actions import action
-from zeam.form.base.form import Form
-
+from zeam.form import base
 from grokcore import component as grok
 
 class Context(grok.Context):
     pass
 
 
-class MyForm(Form):
+class MyForm(base.Form):
 
     label = u"My form"
     description = u"The description of my form"
 
-    @action(u"Change Me")
+    @base.action(u"Change Me")
     def changeMe(self):
         self.status = u"Changed"
