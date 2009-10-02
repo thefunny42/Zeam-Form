@@ -108,35 +108,3 @@ class Form(FormCanvas, BrowserPage):
 
         return self.render()
 
-
-class SubForm(FormCanvas):
-    implements(interfaces.ISubForm)
-
-    def __init__(self, context, parent, request):
-        super(SubForm, self).__init__(context, request)
-        self.parent = parent
-
-
-class ComposedForm(Form):
-    implements(interfaces.IComposedForm)
-
-    def __init__(self, context, request):
-        super(ComposedForm, self).__init__(context, request)
-
-        subforms = map(lambda x: x[1], component.getAdapters(
-                (self.context, self,  self.request), interfaces.ISubForm))
-        # TODO sort forms
-        self.subforms = []
-        for subform in subforms:
-            if subform.available():
-                self.subforms.append(subform)
-
-    def updateForm(self):
-        # Set/run actions for all forms
-        for subform in self.subforms:
-            subform.updateActions()
-        # Run our actions
-        self.updateActions()
-        # Set widgets for all forms
-        for subform in self.subforms:
-            subfrom.updateWidgets()
