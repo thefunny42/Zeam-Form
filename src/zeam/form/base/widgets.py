@@ -96,6 +96,10 @@ class ActionWidget(Widget):
 class FieldWidget(Widget):
     grok.adapts(interfaces.IField, interfaces.IFormCanvas, Interface)
 
+    def __init__(self, component, form, request):
+        super(FieldWidget, self).__init__(component, form, request)
+        self.description = component.description
+
     def value(self):
         # First lookup the request
         if not self.form.ignoreRequest:

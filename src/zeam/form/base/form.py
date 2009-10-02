@@ -42,17 +42,17 @@ class FormCanvas(object):
     def extractData(self):
         if self._data is not NOT_EXTRACTED:
             return (self._data, self.errors)
-        self._data = data = []
+        self._data = data = dict()
 
-        for field in self.form.fields:
+        for field in self.fields:
             extractor = component.getMultiAdapter(
-                (field, self.form, self.request), interfaces.IWidgetExtractor)
+                (field, self, self.request), interfaces.IWidgetExtractor)
             value, error = extractor.extract()
             if error is None:
                 error = field.validate(value)
             if error is not None:
                 self.errors.append((field, error,))
-            data.append({field.identifier: value})
+            data[field.identifier] =  value
 
         return (data, self.errors)
 

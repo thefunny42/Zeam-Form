@@ -51,6 +51,7 @@ Let's try to take a browser and submit that form:
   >>> browser = Browser()
   >>> browser.handleErrors = False
   >>> browser.open('http://localhost/content/myform')
+
   >>> action = browser.getControl('Change Me')
   >>> action
   <SubmitControl name='form.change-me' type='submit'>

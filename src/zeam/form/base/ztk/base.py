@@ -45,7 +45,7 @@ class SchemaField(Field, grok.Adapter):
 class SchemaWidgetExtractor(WidgetExtractor):
     grok.adapts(ISchemaField, interfaces.IFormCanvas, Interface)
 
-    def extract():
+    def extract(self):
         value, error = super(SchemaWidgetExtractor, self).extract()
         if error is not None:
             return value, error

@@ -18,11 +18,16 @@
       <div class="fields"
            tal:condition="view/field_widgets">
         <tal:field tal:repeat="widget view/field_widgets">
-          <label for="#"
+          <label class="field-label" for="#"
                  tal:attributes="for widget/htmlId"
                  tal:content="widget/title">
             Label
           </label><br />
+          <tal:description tal:condition="widget/description">
+            <span class="field-description"
+                  tal:content="widget/description">
+            </span><br />
+          </tal:description>
           <tal:widget tal:content="structure widget/render" />
         </tal:field>
       </div>

@@ -12,6 +12,10 @@ A field is a simple input on a form:
    >>> f1 = Field('Age')
    >>> f1
    <Field Age>
+   >>> f1.title
+   'Age'
+   >>> f1.description
+   u''
 
 A Field implement IField, and is an IComponent:
 
