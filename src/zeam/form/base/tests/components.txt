@@ -63,6 +63,9 @@ Collection are simple objects, implementing ICollection:
   >>> verifyObject(interfaces.ICollection, s1)
   True
 
+Adding components to a collection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Now we can put components in a collection, and list it back in the
 same order:
 
@@ -129,6 +132,22 @@ You can extend a collection. It work pretty much like the construtor:
   Traceback (most recent call last):
     ...
   TypeError: ('Invalid type', 'Kitty')
+
+Retriving components from a collection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can retrieve one element of the collection:
+
+  >>> s3.get('moon')
+  <Component Moon>
+  >>> s3.get('uranus')
+  <Component Uranus>
+  >>> s3.get('me')
+  Traceback (most recent call last):
+    ...
+  KeyError: 'me'
+  >>> s3.get('me', default=42)
+  42
 
 You can get a new collection with some of the components of the first
 one:

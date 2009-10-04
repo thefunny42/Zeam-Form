@@ -36,6 +36,13 @@ class FormCanvas(object):
         self.field_widgets = Widgets(form=self, request=self.request)
         self._data = NOT_EXTRACTED
 
+    @property
+    def response(self):
+        return self.request.response
+
+    def redirect(self, url):
+        self.response.redirect(url)
+
     def getContent(self):
         return self.context
 

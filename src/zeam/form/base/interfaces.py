@@ -40,6 +40,10 @@ class ICollection(interface.Interface):
         the current collection.
         """
 
+    def get(id, default=None):
+        """Return the component with the given ID.
+        """
+
     def select(*ids):
         """Return a copy containing only the given named components.
         """
@@ -183,6 +187,13 @@ class IFormCanvas(IFieldExtractionValueSetting, IFormSubmission):
     fields = interface.Attribute(u"Form fields")
     action_widgets = interface.Attribute(u"Form widgets")
     field_widgets = interface.Attribute(u"Form widgets")
+
+    response = interface.Attribute(u"Response object that is "
+                                   u"associated with the current request.")
+
+    def redirect(url):
+       """Redirect to given URL.
+       """
 
     def update():
         """User defined pre-update.

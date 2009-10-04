@@ -28,6 +28,7 @@ class Component(object):
     def __repr__(self):
         return "<%s %s>" % (self.__class__.__name__, self.title)
 
+_get_marker = object()
 
 class Collection(object):
     implements(interfaces.ICollection)
@@ -42,6 +43,14 @@ class Collection(object):
         self._ids = []
         self._components = []
         self.extend(*components)
+
+    def get(self, id, default=_get_marker):
+        try:
+            return self._components[self._ids.index(id)]
+        except ValueError:
+            if default is _get_marker:
+                raise KeyError, id
+            return default
 
     def append(self, component):
         if self.type.providedBy(component):
