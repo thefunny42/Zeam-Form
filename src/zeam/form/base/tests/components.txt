@@ -1,6 +1,5 @@
-
 zeam.form.base
-=========
+==============
 
 The component and component collections are basic objects used to
 implement fields, actions and widgets. Their behavior described here

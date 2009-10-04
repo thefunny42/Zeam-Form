@@ -1,5 +1,5 @@
 zeam.form.base
-=========
+==============
 
 Widgets are responsible to render component as HTML code for the user.
 
