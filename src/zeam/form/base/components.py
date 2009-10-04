@@ -3,6 +3,7 @@ import re
 
 from zeam.form.base import interfaces
 from zope.interface import implements
+from zope import component
 
 _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 
@@ -32,6 +33,7 @@ class Collection(object):
     implements(interfaces.ICollection)
 
     type = interfaces.IComponent
+    factory = None
 
     def __init__(self, *components, **options):
         for name, value in options.items():
@@ -60,6 +62,12 @@ class Collection(object):
                 for item in cmp:
                     self.append(item)
             else:
+                if self.factory is not None:
+                    factory = component.queryAdapter(cmp, self.factory)
+                    if factory is not None:
+                        for item in factory.produce():
+                            self.append(item)
+                        continue
                 raise TypeError("Invalid type", cmp)
 
     def select(self, *ids):

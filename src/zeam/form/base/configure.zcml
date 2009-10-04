@@ -13,6 +13,5 @@
   <!-- Grok this package -->
   <grok:grok package=".form_templates" />
   <grok:grok package=".widgets" />
-  <grok:grok package=".ztk" />
 
 </configure>

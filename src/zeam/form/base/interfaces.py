@@ -11,11 +11,24 @@ class IComponent(interface.Interface):
     title = interface.Attribute(u"Component title")
 
 
+class IComponentFactory(interface.Interface):
+    """Component used to built components.
+    """
+
+    def produce(self):
+        """Should generate components.
+        """
+
+
 class ICollection(interface.Interface):
     """Support to manage a collection of ordered named components.
     """
 
-    type = interface.Attribute(u"Interface restricting the type of component")
+    type = interface.Attribute(
+        u"Interface restricting the type of component")
+    factory = interface.Attribute(
+        u"Interface to query in order to get a factory to extend "
+        u"collection with unknow components.")
 
     def append(component):
         """Add a new component to the collection. Modify the current
@@ -116,6 +129,10 @@ class IField(IComponent):
         """Validate that the given value fullfil the field
         requirement.
         """
+
+
+class IFieldFactory(IComponentFactory):
+    pass
 
 
 class IFields(ICollection):
