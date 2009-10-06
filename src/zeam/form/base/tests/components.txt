@@ -149,6 +149,17 @@ You can retrieve one element of the collection:
   >>> s3.get('me', default=42)
   42
 
+And dictionnary like access works:
+
+  >>> s3['uranus']
+  <Component Uranus>
+  >>> s3['venus']
+  <Component Venus>
+  >>> s3['somewhere']
+  Traceback (most recent call last):
+    ...
+  KeyError: 'somewhere'
+
 You can get a new collection with some of the components of the first
 one:
 

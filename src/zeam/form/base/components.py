@@ -111,6 +111,9 @@ class Collection(object):
             return copy
         raise NotImplementedError
 
+    def __getitem__(self, id):
+        return self.get(id)
+
     def __iter__(self):
         return self._components.__iter__()
 

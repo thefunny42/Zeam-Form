@@ -62,6 +62,11 @@ class ICollection(interface.Interface):
         other component or collection.
         """
 
+    def __getitem__(id):
+        """Return the given component identified by id or raise
+        KeyError.
+        """
+
     def __iter__():
         """Return an iterator on the components.
         """
