@@ -10,6 +10,7 @@ class Field(Component):
     implements(interfaces.IField)
 
     description = u''
+    required = False
 
     def getContentValue(self, context):
         return getattr(context, self.identifier, NO_VALUE)
@@ -18,6 +19,8 @@ class Field(Component):
         raise NO_VALUE
 
     def validate(self, value):
+        if self.required and value is NO_VALUE:
+            return "Missing required value"
         return None
 
 

@@ -1,6 +1,7 @@
 
 from zeam.form.base.actions import Actions
 from zeam.form.base.fields import Fields
+from zeam.form.base.errors import Errors, Error
 from zeam.form.base.widgets import Widgets
 from zeam.form.base import interfaces
 
@@ -31,7 +32,7 @@ class FormCanvas(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.errors = []
+        self.errors = Errors()
         self.action_widgets = Widgets(form=self, request=self.request)
         self.field_widgets = Widgets(form=self, request=self.request)
         self._data = NOT_EXTRACTED
@@ -58,7 +59,7 @@ class FormCanvas(object):
             if error is None:
                 error = field.validate(value)
             if error is not None:
-                self.errors.append((field, error,))
+                self.errors.append(Error(error, field.identifier))
             data[field.identifier] =  value
 
         return (data, self.errors)

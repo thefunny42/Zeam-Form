@@ -119,7 +119,9 @@ class IFieldExtractionValueSetting(interface.Interface):
 
 class IField(IComponent):
 
-    description = interface.Attribute("Field description")
+    description = interface.Attribute(u"Field description")
+    required = interface.Attribute(
+        u"Boolean indicating if the field is required")
 
     def getContentValue(context):
         """Extract the value from the context.
@@ -136,12 +138,24 @@ class IField(IComponent):
 
 
 class IFieldFactory(IComponentFactory):
-    pass
+    """Factory to create zeam.form Fields from other components than
+    zeam.form ones.
+    """
 
 
 class IFields(ICollection):
-    pass
+    """A collection of fields.
+    """
 
+
+class IError(IComponent):
+    """A error.
+    """
+
+
+class IErrors(ICollection):
+    """A collection of errors.
+    """
 
 class IWidget(IComponent):
     """Display a form component on the page.
