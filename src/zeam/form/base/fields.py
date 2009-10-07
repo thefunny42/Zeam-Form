@@ -1,7 +1,7 @@
 
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
-from zeam.form.base.markers import NO_VALUE
+from zeam.form.base.markers import NO_VALUE, DEFAULT
 
 from zope.interface import implements
 
@@ -11,6 +11,9 @@ class Field(Component):
 
     description = u''
     required = False
+
+    ignoreContent = DEFAULT
+    ignoreRequest = DEFAULT
 
     def getContentValue(self, context):
         return getattr(context, self.identifier, NO_VALUE)

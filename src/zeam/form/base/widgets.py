@@ -1,7 +1,7 @@
 
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
-from zeam.form.base.markers import NO_VALUE
+from zeam.form.base.markers import NO_VALUE, getValue
 
 from zope.interface import Interface
 from zope import component
@@ -102,7 +102,8 @@ class FieldWidget(Widget):
 
     def value(self):
         # First lookup the request
-        if not self.form.ignoreRequest:
+        ignoreRequest = getValue(self.component, 'ignoreRequest', self.form)
+        if not ignoreRequest:
             extractor = component.getMultiAdapter(
                 (self.component, self.form, self.request),
                 interfaces.IWidgetExtractor)
@@ -111,7 +112,8 @@ class FieldWidget(Widget):
                 return value
 
         # After, the context
-        if not self.form.ignoreContext:
+        ignoreContent = getValue(self.component, 'ignoreContent', self.form)
+        if not ignoreContent:
             content = self.form.getContent()
             value = self.component.getContentValue(content)
             if value is not None:

@@ -116,13 +116,8 @@ class IFieldExtractionValueSetting(interface.Interface):
     ignoreRequest = interface.Attribute(u"Ignore request values")
     ignoreContent = interface.Attribute(u"Ignore content values")
 
-    def getContent():
-        """Return the form content (which content value should been
-        toke).
-        """
 
-
-class IField(IComponent):
+class IField(IComponent, IFieldExtractionValueSetting):
 
     description = interface.Attribute(u"Field description")
     required = interface.Attribute(
@@ -209,6 +204,11 @@ class IFormCanvas(IFieldExtractionValueSetting, IFormSubmission):
 
     response = interface.Attribute(u"Response object that is "
                                    u"associated with the current request.")
+
+    def getContent():
+        """Return the form content (which content value should been
+        toke).
+        """
 
     def redirect(url):
        """Redirect to given URL.
