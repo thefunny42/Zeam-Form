@@ -250,20 +250,3 @@ class IForm(IBrowserPage, IFormCanvas):
         """Update and render the form.
         """
 
-
-class ISubForm(IFormCanvas):
-    """A form that can be included in an other form.
-    """
-
-    parent = interface.Attribute("Parent form")
-
-    def available():
-        """If true that form will be skipped from the composition.
-        """
-
-
-class IComposedForm(IForm):
-    """A form that contain other forms.
-    """
-
-    subforms = interface.Attribute("Sub forms")
