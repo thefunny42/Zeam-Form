@@ -17,6 +17,20 @@ A field is a simple input on a form:
    >>> f1.description
    u''
 
+A field dispose of a validate method to validate a value. If field is
+required, NO_VALUE should not be accepted as a valid value:
+
+   >>> from zeam.form.base.markers import NO_VALUE
+
+   >>> f1.required
+   False
+   >>> f1.validate(NO_VALUE)
+   >>> f1.validate(42)
+   >>> f1.required = True
+   >>> f1.validate(NO_VALUE)
+   u'Missing required value'
+   >>> f1.validate(42)
+
 A Field implement IField, and is an IComponent:
 
    >>> from zope.interface.verify import verifyObject

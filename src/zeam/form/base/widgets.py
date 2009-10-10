@@ -57,7 +57,10 @@ class WidgetExtractor(grok.MultiAdapter):
         self.request = request
 
     def extract(self):
-        return (self.request.form.get(self.identifier, NO_VALUE), None)
+        value = self.request.form.get(self.identifier, u'')
+        if not len(value):
+            value = NO_VALUE
+        return (value, None)
 
     def extractRaw(self):
         entries = {}
@@ -108,6 +111,10 @@ class FieldWidget(Widget):
         super(FieldWidget, self).__init__(component, form, request)
         self.description = component.description
         self.required = component.required
+
+    @property
+    def error(self):
+        return self.form.errors.get(self.component.identifier, None)
 
     def value(self):
         # First lookup the request

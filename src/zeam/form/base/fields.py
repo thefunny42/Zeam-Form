@@ -23,7 +23,7 @@ class Field(Component):
 
     def validate(self, value):
         if self.required and value is NO_VALUE:
-            return "Missing required value"
+            return u"Missing required value"
         return None
 
 

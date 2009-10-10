@@ -174,10 +174,10 @@ class IFieldWidget(IWidget):
     """Widget for fields.
     """
 
+    description = interface.Attribute(u"Description of the field")
+    error = interface.Attribute(u"Field error, or None")
     required = interface.Attribute(
-        "Boolean indicating if the field is required")
-    description = interface.Attribute(
-        "Description of the field")
+        u"Boolean indicating if the field is required")
 
 
 class IWidgetExtractor(interface.Interface):
