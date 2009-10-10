@@ -101,6 +101,7 @@ class ActionWidget(Widget):
 
 
 class FieldWidget(Widget):
+    grok.implements(interfaces.IFieldWidget)
     grok.adapts(interfaces.IField, interfaces.IFormCanvas, Interface)
 
     def __init__(self, component, form, request):

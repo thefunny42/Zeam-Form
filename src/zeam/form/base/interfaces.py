@@ -170,6 +170,15 @@ class IWidget(IComponent):
         """Return the rendered HTML of the widget.
         """
 
+class IFieldWidget(IWidget):
+    """Widget for fields.
+    """
+
+    required = interface.Attribute(
+        "Boolean indicating if the field is required")
+    description = interface.Attribute(
+        "Description of the field")
+
 
 class IWidgetExtractor(interface.Interface):
     """The counterpart of the Widget, used to extract widget value
