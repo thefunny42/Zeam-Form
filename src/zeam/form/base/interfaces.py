@@ -214,6 +214,11 @@ class IFormCanvas(IFieldExtractionValueSetting, IFormSubmission):
        """Redirect to given URL.
        """
 
+    def url(obj=None, name=None, data=None):
+        """Compute an URL to an object (or self), and add a name, and
+        maybe some data.
+        """
+
     def update():
         """User defined pre-update.
         """

@@ -80,7 +80,7 @@ real actions and try it:
    >>> s2.process(f1, request)
    False
 
-   >>> r2 = TestRequest(form={'form.%s' % m2.identifier: m2.title})
+   >>> r2 = TestRequest(form={'form.myaction.%s' % m2.identifier: m2.title})
    >>> f2 = Form(object(), r2)
 
    >>> s2.process(f2, r2)

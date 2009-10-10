@@ -11,6 +11,8 @@ from zope.publisher.browser import BrowserPage
 from zope.publisher.publish import mapply
 from zope import component
 
+from grokcore.view import util
+
 
 NOT_EXTRACTED = object()
 
@@ -43,6 +45,33 @@ class FormCanvas(object):
 
     def redirect(self, url):
         self.response.redirect(url)
+
+    def url(self, obj=None, name=None, data=None):
+        """Return string for the URL based on the obj and name. The data
+        argument is used to form a CGI query string.
+        """
+        if isinstance(obj, basestring):
+            if name is not None:
+                raise TypeError(
+                    'url() takes either obj argument, obj, string arguments, '
+                    'or string argument')
+            name = obj
+            obj = None
+
+        if name is None and obj is None:
+            # create URL to view itself
+            obj = self
+        elif name is not None and obj is None:
+            # create URL to view on context
+            obj = self.context
+
+        if data is None:
+            data = {}
+        else:
+            if not isinstance(data, dict):
+                raise TypeError('url() data argument must be a dict.')
+
+        return util.url(self.request, obj, name, data=data)
 
     def getContent(self):
         return self.context

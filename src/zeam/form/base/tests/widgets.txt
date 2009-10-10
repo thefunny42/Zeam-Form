@@ -35,7 +35,7 @@ identifier will be composed with the component on and the form prefix:
    >>> a1.identifier
    'do-something'
    >>> w1.identifier
-   'form.do-something'
+   'form.action.do-something'
    >>> a1.title
    u'Do Something'
    >>> w1.title
@@ -45,14 +45,14 @@ The method render gives you the HTML to display. Our widget is an
 action, so by default you get a button:
 
    >>> print w1.render()
-   <input type="submit" id="form-do-something"
-          name="form.do-something" value="Do Something" />
+   <input type="submit" id="form-action-do-something"
+          name="form.action.do-something" value="Do Something" />
    <BLANKLINE>
 
 You can get its HTML id as well (to render any label for instance):
 
    >>> w1.htmlId()
-   'form-do-something'
+   'form-action-do-something'
 
 Our widget implements IWidget, and IComponent:
 
@@ -125,7 +125,7 @@ And you can extract the widget value, and errors from the request:
 But our request was empty here. Let's try with a non-empty one:
 
    >>> submitted_request = TestRequest(
-   ...         form={'form.do-something': u'Do Something',
+   ...         form={'form.action.do-something': u'Do Something',
    ...                'otherfield': 42})
    >>> e2 = component.getMultiAdapter(
    ...         (a1, f1, submitted_request), interfaces.IWidgetExtractor)
@@ -136,7 +136,7 @@ An another of the extractor is to gives the request fields used for
 the extraction:
 
    >>> e2.extractRaw()
-   {'form.do-something': u'Do Something'}
+   {'form.action.do-something': u'Do Something'}
 
 This can be used by widgets to display again any non-validated data.
 

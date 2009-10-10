@@ -9,13 +9,20 @@ from zope import component
 from grokcore import component as grok
 
 
+def widget_id(form, component):
+    """Create an unique ID for a widget.
+    """
+    cmp_type = component.__class__.__name__.lower()
+    return '%s.%s.%s' % (str(form.prefix), cmp_type, component.identifier)
+
+
 class Widget(Component, grok.MultiAdapter):
     grok.baseclass()
     grok.implements(interfaces.IWidget)
     grok.provides(interfaces.IWidget)
 
     def __init__(self, component, form, request):
-        identifier = '%s.%s' % (str(form.prefix), component.identifier)
+        identifier = widget_id(form, component)
         super(Widget, self).__init__(component.title, identifier)
         self.component = component
         self.form = form
@@ -44,7 +51,7 @@ class WidgetExtractor(grok.MultiAdapter):
     grok.adapts(interfaces.IComponent, interfaces.IFormCanvas, Interface)
 
     def __init__(self, component, form, request):
-        self.identifier = '%s.%s' % (str(form.prefix), component.identifier)
+        self.identifier = widget_id(form, component)
         self.component = component
         self.form = form
         self.request = request
@@ -99,6 +106,7 @@ class FieldWidget(Widget):
     def __init__(self, component, form, request):
         super(FieldWidget, self).__init__(component, form, request)
         self.description = component.description
+        self.required = component.required
 
     def value(self):
         # First lookup the request
