@@ -12,8 +12,8 @@ from grokcore import component as grok
 def widget_id(form, component):
     """Create an unique ID for a widget.
     """
-    cmp_type = component.__class__.__name__.lower()
-    return '%s.%s.%s' % (str(form.prefix), cmp_type, component.identifier)
+    return '%s.%s.%s' % (
+        str(form.prefix), component.prefix, component.identifier)
 
 
 class Widget(Component, grok.MultiAdapter):
@@ -48,7 +48,8 @@ class Widget(Component, grok.MultiAdapter):
 
 class WidgetExtractor(grok.MultiAdapter):
     grok.provides(interfaces.IWidgetExtractor)
-    grok.adapts(interfaces.IComponent, interfaces.IFormCanvas, Interface)
+    grok.adapts(
+        interfaces.IPrefixableComponent, interfaces.IFormCanvas, Interface)
 
     def __init__(self, component, form, request):
         self.identifier = widget_id(form, component)
@@ -116,7 +117,7 @@ class FieldWidget(Widget):
     def error(self):
         return self.form.errors.get(self.component.identifier, None)
 
-    def value(self):
+    def computeValue(self):
         # First lookup the request
         ignoreRequest = getValue(self.component, 'ignoreRequest', self.form)
         if not ignoreRequest:
@@ -143,4 +144,15 @@ class FieldWidget(Widget):
         formatted_value = u''
         if value is not NO_VALUE:
             formatted_value = unicode(value)
-        return {self.htmlId(): formatted_value}
+        return {self.identifier: formatted_value}
+
+    def inputValue(self, id=None):
+        if id is not None:
+            id = '%s.%s' % (self.identifier, id)
+        else:
+            id = self.identifier
+        return self.value.get(id, '')
+
+    def update(self):
+        self.value = self.computeValue()
+

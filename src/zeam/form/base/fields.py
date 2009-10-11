@@ -11,6 +11,7 @@ class Field(Component):
 
     description = u''
     required = False
+    prefix = 'field'
 
     ignoreContent = DEFAULT
     ignoreRequest = DEFAULT

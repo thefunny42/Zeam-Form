@@ -35,8 +35,8 @@ And we can render it:
         <h1>My form</h1>
         <p>The description of my form</p>
         <div class="actions">
-            <input type="submit" id="form-decoratedaction-change-me"
-                   name="form.decoratedaction.change-me"
+            <input type="submit" id="form-action-change-me"
+                   name="form.action.change-me"
                    value="Change Me" />
         </div>
       </form>
@@ -55,7 +55,7 @@ Let's try to take a browser and submit that form:
 
   >>> action = browser.getControl('Change Me')
   >>> action
-  <SubmitControl name='form.decoratedaction.change-me' type='submit'>
+  <SubmitControl name='form.action.change-me' type='submit'>
 
   >>> action.click()
   >>> print browser.contents
@@ -69,8 +69,8 @@ Let's try to take a browser and submit that form:
         <h1>My form</h1>
         <p>The description of my form</p>
         <div class="actions">
-            <input type="submit" id="form-decoratedaction-change-me"
-                   name="form.decoratedaction.change-me"
+            <input type="submit" id="form-action-change-me"
+                   name="form.action.change-me"
                    value="Change Me" />
         </div>
       </form>

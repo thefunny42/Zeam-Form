@@ -75,6 +75,19 @@ class ICollection(interface.Interface):
         """Return the numbre of components.
         """
 
+
+class IPrefixable(interface.Interface):
+    """An object with a prefix.
+    """
+
+    prefix = interface.Attribute("Prefix")
+
+
+class IPrefixableComponent(IComponent, IPrefixable):
+    """A component with a prefix.
+    """
+
+
 class IFormSubmission(interface.Interface):
     """Submission of a form.
     """
@@ -87,7 +100,7 @@ class IFormSubmission(interface.Interface):
         """
 
 
-class IAction(IComponent):
+class IAction(IPrefixableComponent):
     """A form action.
     """
 
@@ -117,7 +130,7 @@ class IFieldExtractionValueSetting(interface.Interface):
     ignoreContent = interface.Attribute(u"Ignore content values")
 
 
-class IField(IComponent, IFieldExtractionValueSetting):
+class IField(IPrefixableComponent, IFieldExtractionValueSetting):
 
     description = interface.Attribute(u"Field description")
     required = interface.Attribute(
@@ -157,6 +170,7 @@ class IErrors(ICollection):
     """A collection of errors.
     """
 
+
 class IWidget(IComponent):
     """Display a form component on the page.
     """
@@ -169,6 +183,7 @@ class IWidget(IComponent):
     def render():
         """Return the rendered HTML of the widget.
         """
+
 
 class IFieldWidget(IWidget):
     """Widget for fields.
@@ -200,9 +215,8 @@ class IWidgets(ICollection):
     pass
 
 
-class IFormCanvas(IFieldExtractionValueSetting, IFormSubmission):
+class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IFormSubmission):
 
-    prefix = interface.Attribute(u"Prefix to apply on form widgets")
     title = interface.Attribute(u"Form title")
     description = interface.Attribute(u"Form description")
 

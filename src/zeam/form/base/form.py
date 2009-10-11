@@ -26,7 +26,7 @@ class FormCanvas(object):
 
     status = u''
     ignoreRequest = False
-    ignoreContent = False
+    ignoreContent = True
 
     actions = Actions()
     fields = Fields()

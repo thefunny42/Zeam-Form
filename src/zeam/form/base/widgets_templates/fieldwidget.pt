@@ -1,3 +1,4 @@
 <input id="#" name="#" value=""
        tal:attributes="name widget/identifier;
-                       id widget/htmlId" />
+                       id widget/htmlId;
+                       value widget/inputValue" />

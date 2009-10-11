@@ -14,6 +14,8 @@ class Action(Component):
     """
     implements(interfaces.IAction)
 
+    prefix = 'action'
+
     def validate(self, submission):
         return True
 
