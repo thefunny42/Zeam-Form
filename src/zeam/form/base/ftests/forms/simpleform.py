@@ -35,9 +35,10 @@ And we can render it:
         <h1>My form</h1>
         <p>The description of my form</p>
         <div class="actions">
-            <input type="submit" id="form-action-change-me"
-                   name="form.action.change-me"
-                   value="Change Me" />
+           <div class="action">
+              <input type="submit" id="form-action-change-me"
+                     name="form.action.change-me" value="Change Me" />
+           </div>
         </div>
       </form>
     </body>
@@ -65,13 +66,14 @@ Let's try to take a browser and submit that form:
     <body>
       <form action="http://localhost/content/myform"
             method="post" enctype="multipart/form-data">
-        <p class="status-message">Changed</p>
         <h1>My form</h1>
         <p>The description of my form</p>
+        <p class="form-status">Changed</p>
         <div class="actions">
-            <input type="submit" id="form-action-change-me"
-                   name="form.action.change-me"
-                   value="Change Me" />
+           <div class="action">
+              <input type="submit" id="form-action-change-me"
+                   name="form.action.change-me" value="Change Me" />
+           </div>
         </div>
       </form>
     </body>
