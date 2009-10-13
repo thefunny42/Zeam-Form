@@ -58,13 +58,8 @@ class FormCanvas(object):
             name = obj
             obj = None
 
-        if name is None and obj is None:
-            # create URL to view itself
-            obj = self
-        elif name is not None and obj is None:
-            # create URL to view on context
+        if obj is None:
             obj = self.context
-
         if data is None:
             data = {}
         else:
