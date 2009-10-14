@@ -21,7 +21,7 @@ class FormCanvas(object):
     implements(interfaces.IFormCanvas)
 
     prefix = 'form'
-    title = u''
+    label = u''
     description = u''
 
     status = u''

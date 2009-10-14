@@ -217,7 +217,7 @@ class IWidgets(ICollection):
 
 class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IFormSubmission):
 
-    title = interface.Attribute(u"Form title")
+    label = interface.Attribute(u"Form title")
     description = interface.Attribute(u"Form description")
 
     actions = interface.Attribute(u"Form actions")
