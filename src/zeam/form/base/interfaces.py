@@ -100,6 +100,11 @@ class IFormSubmission(interface.Interface):
         """
 
 
+class ActionError(Exception):
+    """A error happening while processing the form.
+    """
+
+
 class IAction(IPrefixableComponent):
     """A form action.
     """

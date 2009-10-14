@@ -3,6 +3,7 @@ import sys
 
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
+from zeam.form.base.errors import Error
 from zeam.form.base.markers import NO_VALUE
 
 from zope.interface import implements
@@ -36,9 +37,12 @@ class Actions(Collection):
                 (action, form, request), interfaces.IWidgetExtractor)
             value, error = extractor.extract()
             if value is not NO_VALUE:
-                if action.validate(form):
-                    action(form)
-                    return True
+                try:
+                    if action.validate(form):
+                        action(form)
+                        return True
+                except interfaces.ActionError, e:
+                    form.errors.append(Error(e.args[0], form.prefix))
         return False
 
 

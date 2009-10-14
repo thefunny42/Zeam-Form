@@ -40,6 +40,10 @@ class FormCanvas(object):
         self._data = NOT_EXTRACTED
 
     @property
+    def form_error(self):
+        return self.errors.get(self.prefix, None)
+
+    @property
     def response(self):
         return self.request.response
 

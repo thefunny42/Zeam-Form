@@ -17,7 +17,14 @@
          tal:content="view/status">Status</p>
 
       <p class="form-error"
-         tal:condition="view/errors">There were errors</p>
+         tal:condition="view/errors">
+        There were errors:
+        <tal:error tal:define="form_error view/form_error"
+                   tal:condition="form_error">
+          <br />
+          <span tal:replace="form_error/title" />
+        </tal:error>
+      </p>
 
       <div class="fields"
            tal:condition="view/field_widgets">
