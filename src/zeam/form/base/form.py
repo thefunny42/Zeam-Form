@@ -2,6 +2,7 @@
 from zeam.form.base.actions import Actions
 from zeam.form.base.fields import Fields
 from zeam.form.base.errors import Errors, Error
+from zeam.form.base.markers import INPUT
 from zeam.form.base.widgets import Widgets
 from zeam.form.base import interfaces
 
@@ -27,6 +28,7 @@ class FormCanvas(object):
     status = u''
     ignoreRequest = False
     ignoreContent = True
+    mode = INPUT
 
     actions = Actions()
     fields = Fields()

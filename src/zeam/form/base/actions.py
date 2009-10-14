@@ -4,7 +4,7 @@ import sys
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.errors import Error
-from zeam.form.base.markers import NO_VALUE
+from zeam.form.base.markers import NO_VALUE, DEFAULT
 
 from zope.interface import implements
 from zope import component
@@ -16,6 +16,7 @@ class Action(Component):
     implements(interfaces.IAction)
 
     prefix = 'action'
+    mode = DEFAULT
 
     def validate(self, submission):
         return True

@@ -49,7 +49,7 @@ class Widget(Component, grok.MultiAdapter):
 class WidgetExtractor(grok.MultiAdapter):
     grok.provides(interfaces.IWidgetExtractor)
     grok.adapts(
-        interfaces.IPrefixableComponent, interfaces.IFormCanvas, Interface)
+        interfaces.IRenderableComponent, interfaces.IFormCanvas, Interface)
 
     def __init__(self, component, form, request):
         self.identifier = widget_id(form, component)
@@ -85,8 +85,10 @@ class Widgets(Collection):
         for collection in collections:
             if interfaces.ICollection.providedBy(collection):
                 for cmp in collection:
+                    mode = str(getValue(cmp, 'mode', self.form))
                     widget = component.getMultiAdapter(
-                        (cmp, self.form, self.request), interfaces.IWidget)
+                        (cmp, self.form, self.request),
+                        interfaces.IWidget, name=mode)
                     self.append(widget)
             else:
                 raise TypeError("Unrecognized argument type", cmp)
@@ -101,12 +103,14 @@ class Widgets(Collection):
 
 class ActionWidget(Widget):
     grok.adapts(interfaces.IAction, interfaces.IFormCanvas, Interface)
+    grok.name('input')
 
 
 
 class FieldWidget(Widget):
     grok.implements(interfaces.IFieldWidget)
     grok.adapts(interfaces.IField, interfaces.IFormCanvas, Interface)
+    grok.name('input')
 
     def __init__(self, component, form, request):
         super(FieldWidget, self).__init__(component, form, request)
@@ -156,3 +160,6 @@ class FieldWidget(Widget):
     def update(self):
         self.value = self.computeValue()
 
+
+class DisplayFieldWidget(FieldWidget):
+    grok.name('display')

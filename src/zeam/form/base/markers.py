@@ -5,16 +5,20 @@ class Marker(object):
     True, False).
     """
 
-    def __init__(self, name, value=None):
+    def __init__(self, name):
         self.name = name
-        self.value = value
+
+    def __str__(self):
+        return self.name.lower()
 
     def __repr__(self):
-        return '<Marker %s>' % (self.name)
+        return '<Marker %s>' % (self.name.upper())
 
 
 NO_VALUE = Marker('NO_VALUE')
 DEFAULT = Marker('DEFAULT')
+DISPLAY = Marker('DISPLAY')
+INPUT = Marker('INPUT')
 
 
 def getValue(object, attr, default_object):

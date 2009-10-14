@@ -83,9 +83,12 @@ class IPrefixable(interface.Interface):
     prefix = interface.Attribute("Prefix")
 
 
-class IPrefixableComponent(IComponent, IPrefixable):
-    """A component with a prefix.
+class IRenderableComponent(IComponent, IPrefixable):
+    """A component that can be rendered with the help of a widget.
     """
+
+    mode = interface.Attribute(
+        u"Mode should be used to rendered the component")
 
 
 class IFormSubmission(interface.Interface):
@@ -105,7 +108,7 @@ class ActionError(Exception):
     """
 
 
-class IAction(IPrefixableComponent):
+class IAction(IRenderableComponent):
     """A form action.
     """
 
@@ -135,7 +138,7 @@ class IFieldExtractionValueSetting(interface.Interface):
     ignoreContent = interface.Attribute(u"Ignore content values")
 
 
-class IField(IPrefixableComponent, IFieldExtractionValueSetting):
+class IField(IRenderableComponent, IFieldExtractionValueSetting):
 
     description = interface.Attribute(u"Field description")
     required = interface.Attribute(

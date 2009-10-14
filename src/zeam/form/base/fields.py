@@ -15,6 +15,7 @@ class Field(Component):
 
     ignoreContent = DEFAULT
     ignoreRequest = DEFAULT
+    mode = DEFAULT
 
     def getContentValue(self, context):
         return getattr(context, self.identifier, NO_VALUE)

@@ -25,7 +25,7 @@ So now we can get a widget for an action for instance:
    >>> from zeam.form.base import interfaces
    >>> from zope import component
    >>> w1 = component.getMultiAdapter(
-   ...         (a1, f1, request), interfaces.IWidget)
+   ...         (a1, f1, request), interfaces.IWidget, name='input')
    >>> w1
    <ActionWidget Do Something>
 
