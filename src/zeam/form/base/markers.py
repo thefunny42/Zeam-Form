@@ -16,6 +16,7 @@ class Marker(object):
 
 
 NO_VALUE = Marker('NO_VALUE')
+NOT_EXTRACTED = Marker('NOT_EXTRACTED')
 DEFAULT = Marker('DEFAULT')
 DISPLAY = Marker('DISPLAY')
 INPUT = Marker('INPUT')

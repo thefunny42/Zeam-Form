@@ -230,8 +230,8 @@ class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IFormSubmission):
 
     actions = interface.Attribute(u"Form actions")
     fields = interface.Attribute(u"Form fields")
-    action_widgets = interface.Attribute(u"Form widgets")
-    field_widgets = interface.Attribute(u"Form widgets")
+    actionWidgets = interface.Attribute(u"Form widgets")
+    fieldWidgets = interface.Attribute(u"Form widgets")
 
     response = interface.Attribute(u"Response object that is "
                                    u"associated with the current request.")

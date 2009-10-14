@@ -19,16 +19,16 @@
       <p class="form-error"
          tal:condition="view/errors">
         There were errors:
-        <tal:error tal:define="form_error view/form_error"
-                   tal:condition="form_error">
+        <tal:error tal:define="formError view/formError"
+                   tal:condition="formError">
           <br />
-          <span tal:replace="form_error/title" />
+          <span tal:replace="formError/title" />
         </tal:error>
       </p>
 
       <div class="fields"
-           tal:condition="view/field_widgets">
-        <div class="field" tal:repeat="widget view/field_widgets">
+           tal:condition="view/fieldWidgets">
+        <div class="field" tal:repeat="widget view/fieldWidgets">
           <label class="field-label" for="#"
                  tal:attributes="for widget/htmlId"
                  tal:content="widget/title">
@@ -55,8 +55,8 @@
       </div>
 
       <div class="actions"
-           tal:condition="view/action_widgets">
-        <div class="action" tal:repeat="widget view/action_widgets">
+           tal:condition="view/actionWidgets">
+        <div class="action" tal:repeat="widget view/actionWidgets">
           <tal:widget tal:content="structure widget/render" />
         </div>
       </div>

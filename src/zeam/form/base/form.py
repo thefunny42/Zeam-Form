@@ -2,7 +2,7 @@
 from zeam.form.base.actions import Actions
 from zeam.form.base.fields import Fields
 from zeam.form.base.errors import Errors, Error
-from zeam.form.base.markers import INPUT
+from zeam.form.base.markers import INPUT, NOT_EXTRACTED
 from zeam.form.base.widgets import Widgets
 from zeam.form.base import interfaces
 
@@ -15,35 +15,14 @@ from zope import component
 from grokcore.view import util
 
 
-NOT_EXTRACTED = object()
-
-
-class FormCanvas(object):
-    implements(interfaces.IFormCanvas)
-
-    prefix = 'form'
-    label = u''
-    description = u''
-
-    status = u''
-    ignoreRequest = False
-    ignoreContent = True
-    mode = INPUT
-
-    actions = Actions()
-    fields = Fields()
+class GrokViewSupport(object):
+    """Support Grok view methods, without inheriting of Grok view (not
+    to get any grokker at all, or inherit from BrowerView, BrowserPage).
+    """
 
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.errors = Errors()
-        self.action_widgets = Widgets(form=self, request=self.request)
-        self.field_widgets = Widgets(form=self, request=self.request)
-        self._data = NOT_EXTRACTED
-
-    @property
-    def form_error(self):
-        return self.errors.get(self.prefix, None)
 
     @property
     def response(self):
@@ -74,6 +53,49 @@ class FormCanvas(object):
 
         return util.url(self.request, obj, name, data=data)
 
+    def default_namespace(self):
+        return {'view': self,
+                'context': self.context,
+                'request': self.request}
+
+    def namespace(self):
+        return {}
+
+    def update(self):
+        pass
+
+    def render(self):
+        pass
+
+
+class FormCanvas(GrokViewSupport):
+    """Basic form alike support.
+    """
+    implements(interfaces.IFormCanvas)
+
+    prefix = 'form'
+    label = u''
+    description = u''
+
+    status = u''
+    ignoreRequest = False
+    ignoreContent = True
+    mode = INPUT
+
+    actions = Actions()
+    fields = Fields()
+    errors = Errors()
+
+    def __init__(self, context, request):
+        super(FormCanvas, self).__init__(context, request)
+        self.actionWidgets = Widgets(form=self, request=self.request)
+        self.fieldWidgets = Widgets(form=self, request=self.request)
+        self._data = NOT_EXTRACTED
+
+    @property
+    def formError(self):
+        return self.errors.get(self.prefix, None)
+
     def getContent(self):
         return self.context
 
@@ -94,33 +116,22 @@ class FormCanvas(object):
 
         return (data, self.errors)
 
-    def default_namespace(self):
-        return {'view': self,
-                'context': self.context,
-                'request': self.request}
-
-    def namespace(self):
-        return {}
-
-    def update(self):
-        pass
-
     def updateActions(self):
         self.actions.process(self, self.request)
 
     def updateWidgets(self):
-        self.field_widgets.extend(self.fields)
-        self.action_widgets.extend(self.actions)
+        self.fieldWidgets.extend(self.fields)
+        self.actionWidgets.extend(self.actions)
 
-        self.field_widgets.update()
-        self.action_widgets.update()
+        self.fieldWidgets.update()
+        self.actionWidgets.update()
 
     def render(self):
         # Try grok template first
         template = getattr(self, 'template', None)
         if template is not None:
             return self.template.render(self)
-        # Fallbacl on IPageTemplate
+        # Fallback on IPageTemplate
         template = component.getMultiAdapter(
             (self, self.request), IPageTemplate)
         return template()
