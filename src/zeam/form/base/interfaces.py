@@ -308,3 +308,44 @@ class IForm(IBrowserPage, IFormCanvas):
 class ISimpleForm(IForm, ISimpleFormCanvas):
     """A simple form, with fields and actions.
     """
+
+
+class IZeamFormBaseAPI(interface.Interface):
+    """Base zeam form API.
+    """
+
+    Action = interface.Attribute(
+        u"A form action")
+    Actions = interface.Attribute(
+        u"A collection of actions")
+    Field = interface.Attribute(
+        u"A form field")
+    Fields = interface.Attribute(
+        u"A collection of fields")
+    Form = interface.Attribute(
+        u"A basic and simple Form")
+    ActionError = interface.Attribute(
+        u"An error occuring while processing an Action")
+
+    action = interface.Attribute(
+        u"Decorator to use a form method as an Action")
+
+    context  = interface.Attribute(
+        u"Directive to map form to a context")
+    name = interface.Attribute(
+        u"Directive to name a form")
+    layer = interface.Attribute(
+        u"Directive to specify a form layer")
+    template = interface.Attribute(
+        u"Directive to specify a grok template to render the form")
+    require = interface.Attribute(
+        u"Directive to require a permission to access the form")
+
+    NO_VALUE = interface.Attribute(
+        u"Marker to mark the absence of value")
+    DISPLAY = interface.Attribute(
+        u"Marker for mode to get display widgets")
+    INPUT = interface.Attribute(
+        u"Marker for mode to get input widgets")
+    DEFAULT = interface.Attribute(
+        u"Marker used to use the default value located on the form")
