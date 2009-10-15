@@ -49,7 +49,7 @@ class Widget(Component, grok.MultiAdapter):
 class WidgetExtractor(grok.MultiAdapter):
     grok.provides(interfaces.IWidgetExtractor)
     grok.adapts(
-        interfaces.IRenderableComponent, interfaces.IFormCanvas, Interface)
+        interfaces.IRenderableComponent, interfaces.IFormSubmission, Interface)
 
     def __init__(self, component, form, request):
         self.identifier = widget_id(form, component)
@@ -102,14 +102,14 @@ class Widgets(Collection):
 # widgets
 
 class ActionWidget(Widget):
-    grok.adapts(interfaces.IAction, interfaces.IFormCanvas, Interface)
+    grok.adapts(interfaces.IAction, interfaces.IFormSubmission, Interface)
     grok.name('input')
 
 
 
 class FieldWidget(Widget):
     grok.implements(interfaces.IFieldWidget)
-    grok.adapts(interfaces.IField, interfaces.IFormCanvas, Interface)
+    grok.adapts(interfaces.IField, interfaces.IFormSubmission, Interface)
     grok.name('input')
 
     def __init__(self, component, form, request):

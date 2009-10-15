@@ -18,10 +18,10 @@ An action is callable with a form to be execuded:
    >>> from zope.publisher.browser import TestRequest
    >>> request = TestRequest()
 
-   >>> from zeam.form.base.form import Form
-   >>> f1 = Form(object(), request)
+   >>> from zeam.form.base.form import FormSubmission
+   >>> s1 = FormSubmission(object(), request)
 
-   >>> a1(f1)
+   >>> a1(s1)
    Traceback (most recent call last):
      ...
    NotImplementedError
@@ -29,18 +29,18 @@ An action is callable with a form to be execuded:
 Of course you need to implement your own action:
 
    >>> class MyAction(Action):
-   ...    def __call__(self, form):
+   ...    def __call__(self, submission):
    ...        print u"Execute '%s'" % self.title
 
    >>> m1 = MyAction("I like it")
-   >>> m1(f1)
+   >>> m1(s1)
    Execute 'I like it'
 
 Action provide a validate method as well, which is called before the
 action is. If the validate method does return True, the action is not
 executed:
 
-   >>> m1.validate(f1)
+   >>> m1.validate(s1)
    True
 
 Action implements IAction, and IComponent:
@@ -59,10 +59,10 @@ Actions
 Action are added to an Actions collection:
 
    >>> from zeam.form.base.actions import Actions
-   >>> s1 = Actions(a1, Action('Cancel'))
-   >>> s1
+   >>> as1 = Actions(a1, Action('Cancel'))
+   >>> as1
    <Actions>
-   >>> list(s1)
+   >>> list(as1)
    [<Action Apply>, <Action Cancel>]
 
 That Actions is a collection, so all collection operation are
@@ -73,23 +73,23 @@ execute actions that need to be. Let's create a set of action with
 real actions and try it:
 
    >>> m2 = MyAction("Make it nicer")
-   >>> s2 = Actions(m1, m2)
-   >>> list(s2)
+   >>> as2 = Actions(m1, m2)
+   >>> list(as2)
    [<MyAction I like it>, <MyAction Make it nicer>]
 
-   >>> s2.process(f1, request)
+   >>> as2.process(s1, request)
    False
 
    >>> r2 = TestRequest(form={'form.action.%s' % m2.identifier: m2.title})
-   >>> f2 = Form(object(), r2)
+   >>> s2 = FormSubmission(object(), r2)
 
-   >>> s2.process(f2, r2)
+   >>> as2.process(s2, r2)
    Execute 'Make it nicer'
    True
 
 Those Actions implement IActions and ICollection:
 
-   >>> verifyObject(interfaces.IActions, s1)
+   >>> verifyObject(interfaces.IActions, as1)
    True
    >>> interfaces.IActions.extends(interfaces.ICollection)
    True

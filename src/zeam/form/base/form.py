@@ -26,6 +26,7 @@ class GrokViewSupport(object):
     grok.implements(interfaces.IGrokViewSupport)
 
     def __init__(self, context, request):
+        super(GrokViewSupport, self).__init__(context, request)
         self.context = context
         self.request = request
 
@@ -94,13 +95,13 @@ class FormSubmission(object):
     ignoreContent = True
 
     status = u''
-    errors = Errors()
 
     def __init__(self, context, request):
         super(FormSubmission, self).__init__(context, request)
         self.context = context
         self.request = request
-        self._data = NOT_EXTRACTED
+        self.errors = Errors()
+        self.__data = NOT_EXTRACTED
 
     @property
     def submissionError(self):
@@ -110,9 +111,9 @@ class FormSubmission(object):
         return self.context
 
     def extractData(self):
-        if self._data is not NOT_EXTRACTED:
-            return (self._data, self.errors)
-        self._data = data = dict()
+        if self.__data is not NOT_EXTRACTED:
+            return (self.__data, self.errors)
+        self.__data = data = dict()
 
         for field in self.fields:
             extractor = component.getMultiAdapter(
