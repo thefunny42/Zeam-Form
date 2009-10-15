@@ -6,19 +6,23 @@ from zeam.form.base.markers import INPUT, NOT_EXTRACTED
 from zeam.form.base.widgets import Widgets
 from zeam.form.base import interfaces
 
-from zope.interface import implements
 from zope.pagetemplate.interfaces import IPageTemplate
 from zope.publisher.browser import BrowserPage
 from zope.publisher.publish import mapply
 from zope import component
 
 from grokcore.view import util
+from grokcore import component as grok
 
 
 class GrokViewSupport(object):
-    """Support Grok view methods, without inheriting of Grok view (not
-    to get any grokker at all, or inherit from BrowerView, BrowserPage).
+    """Support Grok view like behavior, without inheriting of Grok
+    view (not to get any grokker at all, or inherit from BrowerView,
+    BrowserPage).
+
+    The render method support IPageTemplate in addition to Grok template.
     """
+    grok.baseclass()
 
     def __init__(self, context, request):
         self.context = context
@@ -65,31 +69,35 @@ class GrokViewSupport(object):
         pass
 
     def render(self):
-        pass
+        # Try grok template first
+        template = getattr(self, 'template', None)
+        if template is not None:
+            return self.template.render(self)
+        # Fallback on IPageTemplate
+        template = component.getMultiAdapter(
+            (self, self.request), IPageTemplate)
+        return template()
 
 
-class FormCanvas(GrokViewSupport):
-    """Basic form alike support.
+class FormSubmission(object):
+    """This represent a submission of a form. It can be used to update
+    widgets and run actions.
     """
-    implements(interfaces.IFormCanvas)
+    grok.baseclass()
 
     prefix = 'form'
-    label = u''
-    description = u''
-
-    status = u''
-    ignoreRequest = False
-    ignoreContent = True
     mode = INPUT
 
-    actions = Actions()
-    fields = Fields()
+    ignoreRequest = False
+    ignoreContent = True
+
+    status = u''
     errors = Errors()
 
     def __init__(self, context, request):
-        super(FormCanvas, self).__init__(context, request)
-        self.actionWidgets = Widgets(form=self, request=self.request)
-        self.fieldWidgets = Widgets(form=self, request=self.request)
+        super(FormSubmission, self).__init__(context, request)
+        self.context = context
+        self.request = request
         self._data = NOT_EXTRACTED
 
     @property
@@ -116,6 +124,25 @@ class FormCanvas(GrokViewSupport):
 
         return (data, self.errors)
 
+
+class FormCanvas(GrokViewSupport, FormSubmission):
+    """This represent a sumple form setup: setup some fields and
+    actions, prepare widgets for it.
+    """
+    grok.baseclass()
+    grok.implements(interfaces.IFormCanvas)
+
+    label = u''
+    description = u''
+
+    actions = Actions()
+    fields = Fields()
+
+    def __init__(self, context, request):
+        super(FormCanvas, self).__init__(context, request)
+        self.actionWidgets = Widgets(form=self, request=self.request)
+        self.fieldWidgets = Widgets(form=self, request=self.request)
+
     def updateActions(self):
         self.actions.process(self, self.request)
 
@@ -126,19 +153,17 @@ class FormCanvas(GrokViewSupport):
         self.fieldWidgets.update()
         self.actionWidgets.update()
 
-    def render(self):
-        # Try grok template first
-        template = getattr(self, 'template', None)
-        if template is not None:
-            return self.template.render(self)
-        # Fallback on IPageTemplate
-        template = component.getMultiAdapter(
-            (self, self.request), IPageTemplate)
-        return template()
 
+class StandaloneForm(GrokViewSupport, BrowserPage):
+    """This is a base for a standalone form, process the form.
+    """
+    grok.baseclass()
 
-class Form(FormCanvas, BrowserPage):
-    implements(interfaces.IForm)
+    def updateActions(self):
+        pass
+
+    def updateWidgets(self):
+        pass
 
     def updateForm(self):
         self.updateActions()
@@ -146,14 +171,23 @@ class Form(FormCanvas, BrowserPage):
 
     def __call__(self):
         mapply(self.update, (), self.request)
-        if self.request.response.getStatus() in (302, 303):
+        if self.response.getStatus() in (302, 303):
             # A redirect was triggered somewhere in update().  Don't
             # continue processing the form
             return
 
         self.updateForm()
-        if self.request.response.getStatus() in (302, 303):
+        if self.response.getStatus() in (302, 303):
             return
 
         return self.render()
+
+
+class Form(FormCanvas, StandaloneForm):
+    """A full simple standalone form.
+    """
+    grok.baseclass()
+    grok.implements(interfaces.IForm)
+
+
 

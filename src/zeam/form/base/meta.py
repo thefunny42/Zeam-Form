@@ -6,7 +6,7 @@ import grokcore.security
 from grokcore.security.util import protect_getattr
 
 from zeam.form.base.widgets import Widget
-from zeam.form.base.form import Form, FormCanvas
+from zeam.form.base.form import StandaloneForm, GrokViewSupport
 
 from zope import interface, component
 from zope.publisher.interfaces.browser import IBrowserPage
@@ -43,7 +43,7 @@ class WidgetTemplateGrokker(martian.ClassGrokker):
 
 
 class FormTemplateGrokker(martian.ClassGrokker):
-    martian.component(FormCanvas)
+    martian.component(GrokViewSupport)
 
     def grok(self, name, factory, module_info, **kw):
         # Need to store the module info object on the view class so that it
@@ -76,7 +76,7 @@ class FormTemplateGrokker(martian.ClassGrokker):
 
 
 class FormGrokker(grokcore.view.meta.views.ViewGrokker):
-    martian.component(Form)
+    martian.component(StandaloneForm)
     martian.directive(grokcore.component.context)
     martian.directive(grokcore.view.layer, default = IDefaultBrowserLayer)
     martian.directive(grokcore.component.name,
@@ -95,7 +95,7 @@ class FormGrokker(grokcore.view.meta.views.ViewGrokker):
 
 
 class FormSecurityGrokker(martian.ClassGrokker):
-    martian.component(FormCanvas)
+    martian.component(StandaloneForm)
     martian.directive(grokcore.security.require, name='permission')
 
     def execute(self, factory, config, permission, **kw):
