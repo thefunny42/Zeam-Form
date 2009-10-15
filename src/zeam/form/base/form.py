@@ -23,6 +23,7 @@ class GrokViewSupport(object):
     The render method support IPageTemplate in addition to Grok template.
     """
     grok.baseclass()
+    grok.implements(interfaces.IGrokViewSupport)
 
     def __init__(self, context, request):
         self.context = context
@@ -84,6 +85,7 @@ class FormSubmission(object):
     widgets and run actions.
     """
     grok.baseclass()
+    grok.implements(interfaces.IFormSubmission)
 
     prefix = 'form'
     mode = INPUT
@@ -101,7 +103,7 @@ class FormSubmission(object):
         self._data = NOT_EXTRACTED
 
     @property
-    def formError(self):
+    def submissionError(self):
         return self.errors.get(self.prefix, None)
 
     def getContent(self):
@@ -130,7 +132,7 @@ class FormCanvas(GrokViewSupport, FormSubmission):
     actions, prepare widgets for it.
     """
     grok.baseclass()
-    grok.implements(interfaces.IFormCanvas)
+    grok.implements(interfaces.ISimpleFormCanvas)
 
     label = u''
     description = u''
@@ -187,7 +189,7 @@ class Form(FormCanvas, StandaloneForm):
     """A full simple standalone form.
     """
     grok.baseclass()
-    grok.implements(interfaces.IForm)
+    grok.implements(interfaces.ISimpleForm)
 
 
 

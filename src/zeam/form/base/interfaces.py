@@ -83,20 +83,37 @@ class IPrefixable(interface.Interface):
     prefix = interface.Attribute("Prefix")
 
 
-class IRenderableComponent(IComponent, IPrefixable):
+class IRenderableComponent(IPrefixable, IComponent):
     """A component that can be rendered with the help of a widget.
     """
 
     mode = interface.Attribute(
-        u"Mode should be used to rendered the component")
+        u"Mode should be used to render the component")
 
 
-class IFormSubmission(interface.Interface):
-    """Submission of a form.
+class IFieldExtractionValueSetting(interface.Interface):
+    """Setting to extract field values.
     """
 
-    errors = interface.Attribute(u"List of errors who might occurs")
+    ignoreRequest = interface.Attribute(u"Ignore request values")
+    ignoreContent = interface.Attribute(u"Ignore content values")
+
+
+class IFormSubmission(IPrefixable, IFieldExtractionValueSetting):
+    """Submission of a form. It is used to process and setup the form.
+    """
+
+    errors = interface.Attribute(u"List of all errors who might occurs")
     status = interface.Attribute(u"Status message")
+    submissionError = interface.Attribute(u"Main error who occurred")
+
+    mode = interface.Attribute(
+        u"Mode should be used to render all the widgets")
+
+    def getContent():
+        """Return the content (which content should been processed by
+        the form).
+        """
 
     def extractData():
         """Return form data.
@@ -130,15 +147,9 @@ class IActions(ICollection):
         """
 
 
-class IFieldExtractionValueSetting(interface.Interface):
-    """Setting to extract field values.
-    """
-
-    ignoreRequest = interface.Attribute(u"Ignore request values")
-    ignoreContent = interface.Attribute(u"Ignore content values")
-
-
 class IField(IRenderableComponent, IFieldExtractionValueSetting):
+    """A form field.
+    """
 
     description = interface.Attribute(u"Field description")
     required = interface.Attribute(
@@ -220,26 +231,16 @@ class IWidgetExtractor(interface.Interface):
 
 
 class IWidgets(ICollection):
-    pass
+    """A collection of widgets.
+    """
 
 
-class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IFormSubmission):
-
-    label = interface.Attribute(u"Form title")
-    description = interface.Attribute(u"Form description")
-
-    actions = interface.Attribute(u"Form actions")
-    fields = interface.Attribute(u"Form fields")
-    actionWidgets = interface.Attribute(u"Form widgets")
-    fieldWidgets = interface.Attribute(u"Form widgets")
+class IGrokViewSupport(interface.Interface):
+    """Some usefull methods from Grok View.
+    """
 
     response = interface.Attribute(u"Response object that is "
                                    u"associated with the current request.")
-
-    def getContent():
-        """Return the form content (which content value should been
-        toke).
-        """
 
     def redirect(url):
        """Redirect to given URL.
@@ -254,6 +255,24 @@ class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IFormSubmission):
         """User defined pre-update.
         """
 
+    def render():
+        """Render the form.
+        """
+
+
+class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IGrokViewSupport):
+    """Definition of a form it have a label, description, fields and
+    actions that you can update.
+
+    You can as well render it as a view.
+    """
+
+    label = interface.Attribute(u"Form title")
+    description = interface.Attribute(u"Form description")
+
+    actions = interface.Attribute(u"Form actions")
+    fields = interface.Attribute(u"Form fields")
+
     def updateActions():
         """Set up and run form actions.
         """
@@ -263,18 +282,18 @@ class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IFormSubmission):
         display.
         """
 
-    def render():
-        """Render the form.
-        """
 
-
-class IDisplayFormCanvas(IFormCanvas):
-    """Special form set in display only mode.
+class ISimpleFormCanvas(IFormCanvas, IFormSubmission):
+    """A simple form canvas with only fields and actions.
     """
+
+    actionWidgets = interface.Attribute(u"Form widgets")
+    fieldWidgets = interface.Attribute(u"Form widgets")
 
 
 class IForm(IBrowserPage, IFormCanvas):
-    """Regular form containing fields and actions.
+    """Regular form containing fields and actions, that you can call,
+    and will be updated and rendered.
     """
 
     def updateForm():
@@ -286,3 +305,6 @@ class IForm(IBrowserPage, IFormCanvas):
         """Update and render the form.
         """
 
+class ISimpleForm(IForm, ISimpleFormCanvas):
+    """A simple form, with fields and actions.
+    """
