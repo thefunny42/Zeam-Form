@@ -13,7 +13,7 @@ An action represent a single action of a form:
    >>> a1
    <Action Apply>
 
-An action is callable with a form to be execuded:
+An action is callable with a submission to be execuded:
 
    >>> from zope.publisher.browser import TestRequest
    >>> request = TestRequest()
@@ -37,16 +37,29 @@ Of course you need to implement your own action:
    Execute 'I like it'
 
 Action provide a validate method as well, which is called before the
-action is. If the validate method does return True, the action is not
-executed:
+action is. If the validate method does return True, the action will
+not be processed:
 
    >>> m1.validate(s1)
    True
 
-Action implements IAction, and IComponent:
+
+Submissions
+~~~~~~~~~~~
+
+This object contains information about the submitted form for the
+actions to be processed and the widgets to be rendered:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
+   >>> verifyObject(interfaces.IFormSubmission, s1)
+   True
+
+Interface
+~~~~~~~~~
+
+Action implements IAction, and IComponent:
+
    >>> verifyObject(interfaces.IAction, a1)
    True
    >>> verifyObject(interfaces.IComponent, a1)
@@ -68,6 +81,10 @@ Action are added to an Actions collection:
 That Actions is a collection, so all collection operation are
 available.
 
+
+Processing of actions
+~~~~~~~~~~~~~~~~~~~~~
+
 It add a ``process`` method, which takes a form and a request and
 execute actions that need to be. Let's create a set of action with
 real actions and try it:
@@ -86,6 +103,99 @@ real actions and try it:
    >>> as2.process(s2, r2)
    Execute 'Make it nicer'
    True
+
+
+Validation
+~~~~~~~~~~
+
+Like we said, an action have a validate method. Let's define an action
+which doesn't validate unless there is a key 'valid' in the request:
+
+   >>> class MyNeverHappyAction(MyAction):
+   ...     def validate(self, submission):
+   ...         return submission.request.has_key('valid')
+
+   >>> m3 = MyNeverHappyAction("I am unhappy")
+   >>> as3 = Actions(m3)
+
+And a test submission for it, which validate the action:
+
+   >>> r3 = TestRequest(form={'form.action.%s' % m3.identifier: m3.title,
+   ...                        'valid': True})
+   >>> s3 = FormSubmission(object(), r3)
+
+The action works:
+
+   >>> m3(s3)
+   Execute 'I am unhappy'
+   >>> as3.process(s3, r3)
+   Execute 'I am unhappy'
+   True
+
+However if the validation fail, it is not:
+
+   >>> r31 = TestRequest(form={'form.action.%s' % m3.identifier: m3.title})
+   >>> s31 = FormSubmission(object(), r31)
+
+   >>> m3(s31)
+   Execute 'I am unhappy'
+   >>> as3.process(s31, r31)
+   False
+
+
+Errors
+~~~~~~
+
+Actions can trigger errors, by raising ActionError. Let's define an
+action like that:
+
+   >>> class MyFailingAction(Action):
+   ...     def __call__(self, submission):
+   ...         raise interfaces.ActionError, "I can't take it anymore"
+
+   >>> m4 = MyFailingAction("Do it")
+   >>> as4 = Actions(m4)
+
+Errors can be read from the submission:
+
+   >>> r4 = TestRequest(form={'form.action.%s' % m4.identifier: m4.title})
+   >>> s4 = FormSubmission(object(), r4)
+
+   >>> list(s4.errors)
+   []
+   >>> s4.submissionError
+
+So the action doesn't work, and the error will be reported in the
+submission:
+
+   >>> m4(s4)
+   Traceback (most recent call last):
+     ...
+   ActionError: I can't take it anymore
+   >>> as4.process(s4, r4)
+   False
+
+   >>> list(s4.errors)
+   [<Error I can't take it anymore>]
+   >>> s4.submissionError
+   <Error I can't take it anymore>
+
+Errors implement an interface as well, and are components contained
+in a collection:
+
+   >>> verifyObject(interfaces.IError, s4.submissionError)
+   True
+   >>> interfaces.IError.extends(interfaces.IComponent)
+   True
+
+   >>> verifyObject(interfaces.IErrors, s4.errors)
+   True
+   >>> interfaces.IErrors.extends(interfaces.ICollection)
+   True
+
+
+Interfaces
+~~~~~~~~~~
 
 Those Actions implement IActions and ICollection:
 
