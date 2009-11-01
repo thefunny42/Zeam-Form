@@ -3,7 +3,7 @@ import unittest
 from pkg_resources import resource_listdir
 from zope.testing import doctest
 from zope.app.testing.functional import getRootFolder
-from zeam.form.base.testing import FunctionalLayer, setUp, tearDown
+from zeam.form.base.testing import FunctionalLayer, setUp, tearDown, checker
 
 
 def suiteFromPackage(name):
@@ -24,6 +24,7 @@ def suiteFromPackage(name):
                                     setUp=setUp,
                                     tearDown=tearDown,
                                     extraglobs=globs,
+                                    checker=checker,
                                     optionflags=optionflags)
         test.layer = FunctionalLayer
         suite.addTest(test)
