@@ -14,52 +14,112 @@ a given form, and request. So we need all that:
    >>> request = TestRequest()
 
    >>> from zeam.form.base.form import Form
-   >>> f1 = Form(None, request)
+   >>> form1 = Form(None, request)
 
    >>> from zeam.form.base.actions import Action
-   >>> a1 = Action(u"Do Something")
-   >>> f1.actions += a1
+   >>> action1 = Action(u"Do Something")
+   >>> form1.actions += action1
 
 So now we can get a widget for an action for instance:
 
    >>> from zeam.form.base import interfaces
    >>> from zope import component
-   >>> w1 = component.getMultiAdapter(
-   ...         (a1, f1, request), interfaces.IWidget, name='input')
-   >>> w1
+   >>> widget1 = component.getMultiAdapter(
+   ...         (action1, form1, request), interfaces.IWidget, name='input')
+   >>> widget1
    <ActionWidget Do Something>
 
 By default our widget will the same title than the component, and its
 identifier will be composed with the component on and the form prefix:
 
-   >>> a1.identifier
+   >>> action1.identifier
    'do-something'
-   >>> w1.identifier
+   >>> widget1.identifier
    'form.action.do-something'
-   >>> a1.title
+   >>> action1.title
    u'Do Something'
-   >>> w1.title
+   >>> widget1.title
    u'Do Something'
 
 The method render gives you the HTML to display. Our widget is an
 action, so by default you get a button:
 
-   >>> print w1.render()
+   >>> print widget1.render()
    <input type="submit" id="form-action-do-something"
           name="form.action.do-something" value="Do Something" />
    <BLANKLINE>
 
 You can get its HTML id as well (to render any label for instance):
 
-   >>> w1.htmlId()
+   >>> widget1.htmlId()
    'form-action-do-something'
 
 Our widget implements IWidget, and IComponent:
 
    >>> from zope.interface.verify import verifyObject
-   >>> verifyObject(interfaces.IWidget, w1)
+   >>> verifyObject(interfaces.IWidget, widget1)
    True
    >>> interfaces.IWidget.extends(interfaces.IComponent)
+   True
+
+
+Field widget
+~~~~~~~~~~~~
+
+Like for actions, fields have widgets to be rendered. They are a bit
+more advanced:
+
+   >>> from zeam.form.base.fields import Field
+   >>> field1 = Field(u"Title")
+   >>> field1.description = u"Nice name for your field"
+   >>> field1.required = True
+   >>> form1.fields += field1
+
+   >>> widget2 = component.getMultiAdapter(
+   ...         (field1, form1, request), interfaces.IWidget, name='input')
+   >>> widget2
+   <FieldWidget Title>
+
+Like for an action, all identifier and title are set correctly:
+
+   >>> field1.identifier
+   'title'
+   >>> widget2.identifier
+   'form.field.title'
+   >>> field1.title
+   u'Title'
+   >>> widget2.title
+   u'Title'
+
+For convinience, the description and required is also available on the
+widget (to be used while rendering that last one):
+
+   >>> widget2.description
+   u'Nice name for your field'
+   >>> widget2.required
+   True 
+
+As well, any error reported for the field on the form is accessible
+via the widget:
+
+   >>> widget2.error
+
+   >>> from zeam.form.base.errors import Error
+   >>> form1.errors.append(Error('Not Happy', 'someone'))
+   >>> widget2.error
+   >>> form1.errors.append(Error('Missing value', 'title'))
+   >>> widget2.error
+   <Error Missing value>
+
+Our widget implement IFieldWidget:
+
+   >>> verifyObject(interfaces.IFieldWidget, widget1)
+   Traceback (most recent call last):
+     ...
+   DoesNotImplement: An object does not implement interface <InterfaceClass zeam.form.base.interfaces.IFieldWidget>
+   >>> verifyObject(interfaces.IFieldWidget, widget2)
+   True
+   >>> interfaces.IFieldWidget.extends(interfaces.IWidget)
    True
 
 
@@ -73,20 +133,25 @@ widgets.
 Let's a an another action to our form, and let's create widgets for
 them:
 
-   >>> f1.actions += Action("Do Nothing")
-   >>> list(f1.actions)
+   >>> form1.actions += Action("Do Nothing")
+   >>> list(form1.actions)
    [<Action Do Something>, <Action Do Nothing>]
 
    >>> from zeam.form.base.widgets import Widgets
-   >>> ws1 = Widgets(f1.actions, form=f1, request=request)
-   >>> ws1
+   >>> widgets1 = Widgets(form1.actions, form=form1, request=request)
+   >>> widgets1
    <Widgets>
-   >>> list(ws1)
+   >>> list(widgets1)
    [<ActionWidget Do Something>, <ActionWidget Do Nothing>]
+
+There is an update method on a Widgets collection, which is going to
+call update on each Widget of the collection:
+
+   >>> widgets1.update()
 
 Widgets implements IWidgets and ICollection:
 
-   >>> verifyObject(interfaces.IWidgets, ws1)
+   >>> verifyObject(interfaces.IWidgets, widgets1)
    True
    >>> interfaces.IWidgets.extends(interfaces.ICollection)
    True
@@ -113,7 +178,7 @@ So WidgetExtractor are multiadapters, adapting the component, form and
 request, like a Widget does:
 
    >>> e1 = component.getMultiAdapter(
-   ...         (a1, f1, request), interfaces.IWidgetExtractor)
+   ...         (action1, form1, request), interfaces.IWidgetExtractor)
    >>> e1
    <zeam.form.base.widgets.WidgetExtractor object at ...>
 
@@ -128,7 +193,8 @@ But our request was empty here. Let's try with a non-empty one:
    ...         form={'form.action.do-something': u'Do Something',
    ...                'otherfield': 42})
    >>> e2 = component.getMultiAdapter(
-   ...         (a1, f1, submitted_request), interfaces.IWidgetExtractor)
+   ...         (action1, form1, submitted_request),
+   ...         interfaces.IWidgetExtractor)
    >>> e2.extract()
    (u'Do Something', None)
 
