@@ -1,8 +1,8 @@
 zeam.form.base
 ==============
 
-Widgets are responsible to render component as HTML code for the user.
-
+Widgets are responsible to render component (like actions and fields)
+as HTML code for the user.
 
 Widget
 ------
@@ -62,7 +62,6 @@ Our widget implements IWidget, and IComponent:
    >>> interfaces.IWidget.extends(interfaces.IComponent)
    True
 
-
 Field widget
 ~~~~~~~~~~~~
 
@@ -111,7 +110,18 @@ via the widget:
    >>> widget2.error
    <Error Missing value>
 
-Our widget implement IFieldWidget:
+Field widget value
+~~~~~~~~~~~~~~~~~~
+
+A field widget is able to compute a value for the field to be rendered
+in the widget. It can look it on the previous request or the context,
+depending of the settings.
+
+
+Field widget interface
+~~~~~~~~~~~~~~~~~~~~~~
+
+Our widget implement IFieldWidget, which extend the default widget interface:
 
    >>> verifyObject(interfaces.IFieldWidget, widget1)
    Traceback (most recent call last):
@@ -121,7 +131,6 @@ Our widget implement IFieldWidget:
    True
    >>> interfaces.IFieldWidget.extends(interfaces.IWidget)
    True
-
 
 Widgets
 -------
@@ -155,7 +164,6 @@ Widgets implements IWidgets and ICollection:
    True
    >>> interfaces.IWidgets.extends(interfaces.ICollection)
    True
-
 
 WidgetExtractor
 ---------------

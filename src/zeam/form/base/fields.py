@@ -21,7 +21,7 @@ class Field(Component):
         return getattr(context, self.identifier, NO_VALUE)
 
     def getDefaultValue(self):
-        raise NO_VALUE
+        return NO_VALUE
 
     def validate(self, value):
         if self.required and value is NO_VALUE:
