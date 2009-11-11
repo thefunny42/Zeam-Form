@@ -96,7 +96,7 @@ widget (to be used while rendering that last one):
    >>> widget2.description
    u'Nice name for your field'
    >>> widget2.required
-   True 
+   True
 
 As well, any error reported for the field on the form is accessible
 via the widget:
@@ -132,6 +132,7 @@ Our widget implement IFieldWidget, which extend the default widget interface:
    >>> interfaces.IFieldWidget.extends(interfaces.IWidget)
    True
 
+
 Widgets
 -------
 
@@ -139,7 +140,7 @@ As you can guess, you are not going to build your widgets one by one
 to render them. You can a Widgets collection to create and manage your
 widgets.
 
-Let's a an another action to our form, and let's create widgets for
+Let's add an another action to our form, and let's create widgets for
 them:
 
    >>> form1.actions += Action("Do Nothing")
@@ -164,6 +165,35 @@ Widgets implements IWidgets and ICollection:
    True
    >>> interfaces.IWidgets.extends(interfaces.ICollection)
    True
+
+Since Widgets are collection, you can of course use ``copy``,
+``select`` or ``omit`` on your widget the selection:
+
+   >>> widgets1copy = widgets1.copy()
+   >>> widgets1copy
+   <Widgets>
+   >>> widgets1copy.form is widgets1.form
+   True
+   >>> widgets1copy.request is widgets1.request
+   True
+   >>> list(widgets1copy) == list(widgets1)
+   True
+   >>> widgets1copy is widgets1
+   False
+
+   >>> list(widgets1.omit('form.action.do-something'))
+   [<ActionWidget Do Nothing>]
+
+   >>> list(widgets1.select('form.action.do-something'))
+   [<ActionWidget Do Something>]
+
+Of course you cannot extend it with anything else than components:
+
+   >>> widgets1.extend(42)
+   Traceback (most recent call last):
+     ...
+   TypeError: ('Invalid type', 42)
+
 
 WidgetExtractor
 ---------------

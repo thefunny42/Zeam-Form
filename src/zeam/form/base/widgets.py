@@ -77,21 +77,21 @@ class Widgets(Collection):
 
     type = interfaces.IWidget
 
-    def extend(self, *collections):
+    def extend(self, *args):
         # Ensure the user created us with the right options
         assert self.__dict__.get('form', None) is not None
         assert self.__dict__.get('request', None) is not None
 
-        for collection in collections:
-            if interfaces.ICollection.providedBy(collection):
-                for cmp in collection:
-                    mode = str(getValue(cmp, 'mode', self.form))
+        for candidate in args:
+            if interfaces.ICollection.providedBy(candidate):
+                for item in candidate:
+                    mode = str(getValue(item, 'mode', self.form))
                     widget = component.getMultiAdapter(
-                        (cmp, self.form, self.request),
+                        (item, self.form, self.request),
                         interfaces.IWidget, name=mode)
                     self.append(widget)
             else:
-                raise TypeError("Unrecognized argument type", cmp)
+                self.append(candidate)
 
     def update(self):
         for widget in self:
