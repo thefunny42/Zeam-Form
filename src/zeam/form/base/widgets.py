@@ -144,10 +144,13 @@ class FieldWidget(Widget):
         value = self.component.getDefaultValue()
         return self.prepareValue(value)
 
+    def valueToUnicode(self, value):
+        return unicode(value)
+
     def prepareValue(self, value):
         formatted_value = u''
         if value is not NO_VALUE:
-            formatted_value = unicode(value)
+            formatted_value = self.valueToUnicode(value)
         return {self.identifier: formatted_value}
 
     def inputValue(self, id=None):
