@@ -322,6 +322,10 @@ class IZeamFormBaseAPI(interface.Interface):
         u"A form field")
     Fields = interface.Attribute(
         u"A collection of fields")
+    Widgets = interface.Attribute(
+        u"A collection of widgets")
+    FormSubmission = interface.Attribute(
+        u"A configuration object to render fields as widgets")
     Form = interface.Attribute(
         u"A basic and simple Form")
     ActionError = interface.Attribute(
