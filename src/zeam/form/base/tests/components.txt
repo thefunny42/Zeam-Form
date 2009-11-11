@@ -133,6 +133,15 @@ You can extend a collection. It work pretty much like the construtor:
     ...
   TypeError: ('Invalid type', 'Kitty')
 
+You can copy a collection:
+
+  >>> s3copy = s3.copy()
+  >>> list(s3copy) == list(s3)
+  True
+  >>> s3copy is s3
+  False
+
+
 Retriving components from a collection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -177,3 +186,41 @@ Or the other way around some components of a collection:
   >>> list(s5)
   [<Component Jupiter>, <Component Saturn>,
    <Component Venus>, <Component Uranus>]
+
+
+Parameters on collections
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can provides extra parameters on collections that will be set as
+attributes on the object:
+
+  >>> s6 = Collection(s2, name=u'me', city=u'rotterdam')
+  >>> s6
+  <Collection>
+  >>> list(s6)
+  [<Component Jupiter>, <Component Saturn>]
+  >>> s6.name
+  u'me'
+  >>> s6.city
+  u'rotterdam'
+
+Those attributes are kept if you use the operations ``select``,
+``omit`` or ``copy``:
+
+  >>> s6copy = s6.copy()
+  >>> s6copy.name
+  u'me'
+  >>> s6copy.city
+  u'rotterdam'
+
+  >>> s6omit = s6.omit('jupiter')
+  >>> s6omit.name
+  u'me'
+  >>> s6omit.city
+  u'rotterdam'
+
+  >>> s6select = s6.select('jupiter')
+  >>> s6select.name
+  u'me'
+  >>> s6select.city
+  u'rotterdam'

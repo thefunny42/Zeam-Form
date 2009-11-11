@@ -37,16 +37,18 @@ class Collection(object):
     factory = None
 
     def __init__(self, *components, **options):
+        self.__options = {}
         for name, value in options.items():
             if name not in interfaces.ICollection:
-                self.__dict__[name] = value
-        self._ids = []
-        self._components = []
+                self.__options[name] = value
+        self.__dict__.update(self.__options)
+        self.__ids = []
+        self.__components = []
         self.extend(*components)
 
     def get(self, id, default=_get_marker):
         try:
-            return self._components[self._ids.index(id)]
+            return self.__components[self.__ids.index(id)]
         except ValueError:
             if default is _get_marker:
                 raise KeyError, id
@@ -54,9 +56,9 @@ class Collection(object):
 
     def append(self, component):
         if self.type.providedBy(component):
-            if component.identifier not in self._ids:
-                self._ids.append(component.identifier)
-                self._components.append(component)
+            if component.identifier not in self.__ids:
+                self.__ids.append(component.identifier)
+                self.__components.append(component)
             else:
                 raise ValueError(
                     "Duplicate identifier", component.identifier)
@@ -80,24 +82,15 @@ class Collection(object):
                 raise TypeError("Invalid type", cmp)
 
     def select(self, *ids):
-        copy = self.__class__()
-        for component in self._components:
-            if component.identifier in ids:
-                copy.append(component)
-        return copy
+        components = (c for c in self.__components if c.identifier in ids)
+        return self.__class__(*components, **self.__options)
 
     def omit(self, *ids):
-        copy = self.__class__()
-        for component in self._components:
-            if component.identifier not in ids:
-                copy.append(component)
-        return copy
+        components = (c for c in self.__components if c.identifier not in ids)
+        return self.__class__(*components, **self.__options)
 
     def copy(self):
-        copy = self.__class__()
-        for component in self._components:
-            copy.append(component)
-        return copy
+        return self.__class__(*self.__components, **self.__options)
 
     def __add__(self, other):
         if interfaces.ICollection.providedBy(other):
@@ -115,10 +108,10 @@ class Collection(object):
         return self.get(id)
 
     def __iter__(self):
-        return self._components.__iter__()
+        return self.__components.__iter__()
 
     def __len__(self):
-        return self._components.__len__()
+        return self.__components.__len__()
 
     def __repr__(self):
         return "<%s>" % (self.__class__.__name__)
