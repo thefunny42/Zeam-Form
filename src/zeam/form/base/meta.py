@@ -67,7 +67,7 @@ class FormTemplateGrokker(martian.ClassGrokker):
     def checkTemplates(self, templates, module_info, factory):
 
         def has_render(factory):
-            return factory.render != FormCanvas.render
+            return factory.render != GrokViewSupport.render
         def has_no_render(factory):
             return False
 
