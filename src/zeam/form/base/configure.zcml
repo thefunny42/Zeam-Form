@@ -5,6 +5,7 @@
   <include package="grokcore.view" file="meta-minimal.zcml" />
   <include package="grokcore.view" />
 
+  <include package="megrok.chameleon" />
   <include package="megrok.pagetemplate" file="meta.zcml" />
 
   <!-- Grok da grokkers -->

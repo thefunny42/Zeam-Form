@@ -90,6 +90,11 @@ class IRenderableComponent(IPrefixable, IComponent):
     mode = interface.Attribute(
         u"Mode should be used to render the component")
 
+    def available(context):
+        """Return a boolean to qualify if the component wants to be
+        rendered in the given context (i.e. form).
+        """
+
 
 class IFieldExtractionValueSetting(interface.Interface):
     """Setting to extract field values.

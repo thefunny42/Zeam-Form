@@ -18,6 +18,9 @@ class Action(Component):
     prefix = 'action'
     mode = DEFAULT
 
+    def available(self, context):
+        return True
+
     def validate(self, submission):
         return True
 

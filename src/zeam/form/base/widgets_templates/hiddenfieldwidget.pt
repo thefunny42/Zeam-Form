@@ -1,4 +1,0 @@
-<input id="#" name="#" type="hidden" value=""
-       tal:attributes="name widget/identifier;
-                       id widget/htmlId;
-                       value widget/inputValue" />

@@ -1,1 +1,1 @@
-<span tal:replace="widget/inputValue" />
+<span tal:replace="widget.inputValue()" />

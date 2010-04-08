@@ -85,6 +85,8 @@ class Widgets(Collection):
         for candidate in args:
             if interfaces.ICollection.providedBy(candidate):
                 for item in candidate:
+                    if not item.available(self.form):
+                        continue
                     mode = str(getValue(item, 'mode', self.form))
                     widget = component.getMultiAdapter(
                         (item, self.form, self.request),
