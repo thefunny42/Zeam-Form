@@ -20,6 +20,7 @@ NOT_EXTRACTED = Marker('NOT_EXTRACTED')
 DEFAULT = Marker('DEFAULT')
 DISPLAY = Marker('DISPLAY')
 INPUT = Marker('INPUT')
+HIDDEN = Marker('HIDDEN')
 
 
 def getValue(object, attr, default_object):
