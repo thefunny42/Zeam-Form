@@ -28,6 +28,9 @@ class Widget(Component, grok.MultiAdapter):
         self.form = form
         self.request = request
 
+    def copy(self):
+        raise NotImplementedError
+
     def htmlId(self):
         # Return an identifier suitable for CSS usage
         return self.identifier.replace('.', '-')
@@ -82,18 +85,23 @@ class Widgets(Collection):
         assert self.__dict__.get('form', None) is not None
         assert self.__dict__.get('request', None) is not None
 
-        for candidate in args:
-            if interfaces.ICollection.providedBy(candidate):
-                for item in candidate:
-                    if not item.available(self.form):
-                        continue
-                    mode = str(getValue(item, 'mode', self.form))
-                    widget = component.getMultiAdapter(
-                        (item, self.form, self.request),
-                        interfaces.IWidget, name=mode)
-                    self.append(widget)
+        def createWidget(field):
+            if not field.available(self.form):
+                return
+            mode = str(getValue(field, 'mode', self.form))
+            widget = component.getMultiAdapter(
+                (field, self.form, self.request),
+                interfaces.IWidget, name=mode)
+            self.append(widget)
+
+        for arg in args:
+            if interfaces.ICollection.providedBy(arg):
+                for item in arg:
+                    createWidget(item)
+            elif interfaces.IWidget.providedBy(arg):
+                self.append(arg)
             else:
-                self.append(candidate)
+                createWidget(arg)
 
     def update(self):
         for widget in self:

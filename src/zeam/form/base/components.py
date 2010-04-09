@@ -25,6 +25,9 @@ class Component(object):
             identifier = createId(title)
         self.identifier = identifier
 
+    def copy(self, new_identifier=None):
+        self.__class__(self.title, new_identifier)
+
     def __repr__(self):
         return "<%s %s>" % (self.__class__.__name__, self.title)
 
