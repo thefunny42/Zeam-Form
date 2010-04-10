@@ -160,10 +160,6 @@ class IField(IRenderableComponent, IFieldExtractionValueSetting):
     required = interface.Attribute(
         u"Boolean indicating if the field is required")
 
-    def getContentValue(context):
-        """Extract the value from the context.
-        """
-
     def getDefaultValue():
         """Return the default value.
         """

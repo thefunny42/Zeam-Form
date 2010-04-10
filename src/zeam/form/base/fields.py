@@ -20,9 +20,6 @@ class Field(Component):
     def available(self, context):
         return True
 
-    def getContentValue(self, context):
-        return getattr(context, self.identifier, NO_VALUE)
-
     def getDefaultValue(self):
         return NO_VALUE
 

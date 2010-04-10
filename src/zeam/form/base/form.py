@@ -1,5 +1,6 @@
 
 from zeam.form.base.actions import Actions
+from zeam.form.base.datamanager import ObjectDataManager
 from zeam.form.base.fields import Fields
 from zeam.form.base.errors import Errors, Error
 from zeam.form.base.markers import INPUT, NOT_EXTRACTED
@@ -80,6 +81,14 @@ class GrokViewSupport(object):
             (self, self.request), IPageTemplate)
         return template()
 
+def cloneSubmission(original, content=None):
+    assert isinstance(original, FormSubmission)
+    clone = FormSubmission(original.context, original.request, content)
+    clone.ignoreRequest = original.ignoreRequest
+    clone.ignoreContent = original.ignoreContent
+    clone.mode = original.mode
+    return clone
+
 
 class FormSubmission(object):
     """This represent a submission of a form. It can be used to update
@@ -90,17 +99,21 @@ class FormSubmission(object):
 
     prefix = 'form'
     mode = INPUT
+    dataManager = ObjectDataManager
 
     ignoreRequest = False
     ignoreContent = True
 
     status = u''
 
-    def __init__(self, context, request):
+    def __init__(self, context, request, content=None):
         super(FormSubmission, self).__init__(context, request)
         self.context = context
         self.request = request
         self.errors = Errors()
+        if content is None:
+            content = self.dataManager(context)
+        self.content = content
         self.__data = NOT_EXTRACTED
 
     @property
@@ -108,7 +121,7 @@ class FormSubmission(object):
         return self.errors.get(self.prefix, None)
 
     def getContent(self):
-        return self.context
+        return self.content
 
     def extractData(self):
         if self.__data is not NOT_EXTRACTED:

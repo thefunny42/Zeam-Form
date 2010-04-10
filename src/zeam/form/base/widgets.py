@@ -75,33 +75,42 @@ class WidgetExtractor(grok.MultiAdapter):
         return entries
 
 
+def createWidget(field, form, request):
+    """Create a widget (or return None) for the given form and
+    request.
+    """
+    if not field.available(form):
+        return None
+    mode = str(getValue(field, 'mode', form))
+    return component.getMultiAdapter(
+        (field, form, request), interfaces.IWidget, name=mode)
+
+
 class Widgets(Collection):
     grok.implements(interfaces.IWidgets)
 
     type = interfaces.IWidget
 
     def extend(self, *args):
+        if not args:
+            return
+
         # Ensure the user created us with the right options
         assert self.__dict__.get('form', None) is not None
         assert self.__dict__.get('request', None) is not None
 
-        def createWidget(field):
-            if not field.available(self.form):
-                return
-            mode = str(getValue(field, 'mode', self.form))
-            widget = component.getMultiAdapter(
-                (field, self.form, self.request),
-                interfaces.IWidget, name=mode)
-            self.append(widget)
-
         for arg in args:
             if interfaces.ICollection.providedBy(arg):
                 for item in arg:
-                    createWidget(item)
+                    widget = createWidget(item, self.form, self.request)
+                    if widget is not None:
+                        self.append(widget)
             elif interfaces.IWidget.providedBy(arg):
                 self.append(arg)
             else:
-                createWidget(arg)
+                widget = createWidget(arg, self.form, self.request)
+                if widget is not None:
+                    self.append(widget)
 
     def update(self):
         for widget in self:
@@ -146,9 +155,14 @@ class FieldWidget(Widget):
         ignoreContent = getValue(self.component, 'ignoreContent', self.form)
         if not ignoreContent:
             content = self.form.getContent()
-            value = self.component.getContentValue(content)
-            if value is not None:
+            try:
+                value = content.get(self.component.identifier)
+                # XXX: Need review
+                if value is None:
+                    value = NO_VALUE
                 return self.prepareValue(value)
+            except ValueError:
+                pass
 
         # Take any default value
         value = self.component.getDefaultValue()
