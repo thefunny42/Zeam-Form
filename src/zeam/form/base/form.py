@@ -113,7 +113,7 @@ class FormSubmission(object):
         self.errors = Errors()
         if content is None:
             content = self.dataManager(context)
-        self.content = content
+        self.__content = content
         self.__data = NOT_EXTRACTED
 
     @property
@@ -121,7 +121,7 @@ class FormSubmission(object):
         return self.errors.get(self.prefix, None)
 
     def getContent(self):
-        return self.content
+        return self.__content
 
     def extractData(self):
         if self.__data is not NOT_EXTRACTED:
