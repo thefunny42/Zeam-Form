@@ -63,6 +63,12 @@ Inexisting content value raises KeyError
      ...
    KeyError: 'foobar'
 
+You can set values as well:
+
+   >>> manager1.set('ready', True)
+   >>> content.ready
+   True
+
 
 Dictionary data manager
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,7 +77,8 @@ There is a data manager which is able to work on dictionaries as well:
 
    >>> from zeam.form.base.datamanager import DictDataManager
 
-   >>> manager2 = DictDataManager({'title': u'Content', 'value': 42})
+   >>> data = {'title': u'Content', 'value': 42}
+   >>> manager2 = DictDataManager(data)
 
 It correctly implements its interface:
 
@@ -91,3 +98,9 @@ Inexisting content value raises KeyError
    Traceback (most recent call last):
      ...
    KeyError: 'foobar'
+
+You can set values as well:
+
+   >>> manager2.set('ready', True)
+   >>> data.get('ready')
+   True

@@ -138,6 +138,8 @@ class IFormSubmission(IPrefixable, IFieldExtractionValueSetting):
     errors = interface.Attribute(u"List of all errors who might occurs")
     status = interface.Attribute(u"Status message")
     submissionError = interface.Attribute(u"Main error who occurred")
+    dataManager = interface.Attribute(u"Data manager class to use to "
+                                      u"access content")
 
     mode = interface.Attribute(
         u"Mode should be used to render all the widgets")
