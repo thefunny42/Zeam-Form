@@ -22,3 +22,72 @@ They implements IForm:
    >>> from zeam.form.base import interfaces
    >>> verifyObject(interfaces.IForm, f1)
    True
+
+
+Data manager
+------------
+
+A form (exactly widgets) can access content data via a data
+manager. Data manager will transparently help you to access different
+type of content, like dictionary or objects, or directly attributes.
+
+
+Object data manager
+~~~~~~~~~~~~~~~~~~~
+
+   >>> from zeam.form.base.datamanager import ObjectDataManager
+
+   >>> class MyContent(object):
+   ...    title = u'Content'
+   ...    value = 42
+   >>> content = MyContent()
+
+   >>> manager1 = ObjectDataManager(content)
+
+It correctly implements its interface:
+
+   >>> verifyObject(interfaces.IDataManager, manager1)
+   True
+
+And you can use it to access content value:
+
+   >>> manager1.get('title')
+   u'Content'
+   >>> manager1.get('value')
+   42
+
+Inexisting content value raises KeyError
+
+   >>> manager1.get('foobar')
+   Traceback (most recent call last):
+     ...
+   KeyError: 'foobar'
+
+
+Dictionary data manager
+~~~~~~~~~~~~~~~~~~~~~~~
+
+There is a data manager which is able to work on dictionaries as well:
+
+   >>> from zeam.form.base.datamanager import DictDataManager
+
+   >>> manager2 = DictDataManager({'title': u'Content', 'value': 42})
+
+It correctly implements its interface:
+
+   >>> verifyObject(interfaces.IDataManager, manager2)
+   True
+
+And you can use it to access content value:
+
+   >>> manager2.get('title')
+   u'Content'
+   >>> manager2.get('value')
+   42
+
+Inexisting content value raises KeyError
+
+   >>> manager2.get('foobar')
+   Traceback (most recent call last):
+     ...
+   KeyError: 'foobar'

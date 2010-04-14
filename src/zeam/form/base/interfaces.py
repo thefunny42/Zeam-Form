@@ -113,6 +113,24 @@ class IFieldExtractionValueSetting(interface.Interface):
     ignoreContent = interface.Attribute(u"Ignore content values")
 
 
+class IDataManager(interface.Interface):
+    """A data manager let you access content.
+    """
+
+    def __init__(content):
+        """Initialize the data manager for the given content.
+        """
+
+    def get(identifier):
+        """Return content value associated to the given identifier or
+        raise KeyError.
+        """
+
+    def set(identifier, value):
+        """Modifiy content value associated to the given identifier.
+        """
+
+
 class IFormSubmission(IPrefixable, IFieldExtractionValueSetting):
     """Submission of a form. It is used to process and setup the form.
     """

@@ -163,7 +163,8 @@ class FieldWidget(Widget):
                 if value is None:
                     value = NO_VALUE
                 return self.prepareValue(value)
-            except ValueError:
+            except KeyError:
+                # No value on the content for field, continue.
                 pass
 
         # Take any default value
