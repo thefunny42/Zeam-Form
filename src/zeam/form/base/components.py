@@ -25,13 +25,15 @@ class Component(object):
             identifier = createId(title)
         self.identifier = identifier
 
-    def copy(self, new_identifier=None):
-        self.__class__(self.title, new_identifier)
+    def clone(self, new_identifier=None):
+        return self.__class__(self.title, new_identifier)
 
     def __repr__(self):
         return "<%s %s>" % (self.__class__.__name__, self.title)
 
+
 _get_marker = object()
+
 
 class Collection(object):
     implements(interfaces.ICollection)
@@ -64,13 +66,13 @@ class Collection(object):
                 self.__components.append(component)
             else:
                 raise ValueError(
-                    "Duplicate identifier", component.identifier)
+                    u"Duplicate identifier", component.identifier)
         else:
-            raise TypeError("Invalid type", component)
+            raise TypeError(u"Invalid type", component)
 
     def extend(self, *components):
         for cmp in components:
-            if interfaces.IComponent.providedBy(cmp):
+            if self.type.providedBy(cmp):
                 self.append(cmp)
             elif interfaces.ICollection.providedBy(cmp):
                 for item in cmp:
@@ -82,7 +84,7 @@ class Collection(object):
                         for item in factory.produce():
                             self.append(item)
                         continue
-                raise TypeError("Invalid type", cmp)
+                raise TypeError(u'Invalid type', cmp)
 
     def select(self, *ids):
         components = (c for c in self.__components if c.identifier in ids)
@@ -94,6 +96,9 @@ class Collection(object):
 
     def copy(self):
         return self.__class__(*self.__components, **self.__options)
+
+    def keys(self):
+        return list(self.__ids)
 
     def __add__(self, other):
         if interfaces.ICollection.providedBy(other):

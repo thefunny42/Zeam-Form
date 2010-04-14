@@ -48,6 +48,24 @@ encoded:
   >>> c4.identifier
   'c383c2897461742d64752d64c383c2a9736972'
 
+You can clone a component and change its identifier:
+
+  >>> c3clone = c3.clone('new-world')
+  >>> c3clone
+  <Component Some lost planet>
+  >>> c3clone.identifier
+  'new-world'
+  >>> c3clone is c3
+  False
+
+But you can keep the old one as well:
+
+  >>> c4clone = c4.clone()
+  >>> c4clone.identifier
+  'c383c2897461742d64752d64c383c2a9736972'
+  >>> c4clone is c4
+  False
+
 
 Collection
 ----------
@@ -81,14 +99,14 @@ But you can't add twice the same component:
   >>> s1.append(c1)
   Traceback (most recent call last):
     ...
-  ValueError: ('Duplicate identifier', 'sun')
+  ValueError: (u'Duplicate identifier', 'sun')
 
 And this need to be a component:
 
   >>> s1.append('home')
   Traceback (most recent call last):
     ...
-  TypeError: ('Invalid type', 'home')
+  TypeError: (u'Invalid type', 'home')
 
 You create a collection with components or collection as argument:
 
@@ -102,7 +120,7 @@ You create a collection with components or collection as argument:
   >>> Collection(42)
   Traceback (most recent call last):
     ...
-  TypeError: ('Invalid type', 42)
+  TypeError: (u'Invalid type', 42)
 
 You can add collections. You will receive a copy with all
 components. Components will ordered as the addition is:
@@ -131,7 +149,7 @@ You can extend a collection. It work pretty much like the construtor:
   >>> s3.extend('Kitty')
   Traceback (most recent call last):
     ...
-  TypeError: ('Invalid type', 'Kitty')
+  TypeError: (u'Invalid type', 'Kitty')
 
 You can copy a collection:
 
@@ -169,6 +187,11 @@ And dictionnary like access works:
     ...
   KeyError: 'somewhere'
 
+You can get all components ids:
+
+  >>> s3.keys()
+  ['sun', 'moon', 'jupiter', 'saturn', 'venus', 'uranus']
+
 You can get a new collection with some of the components of the first
 one:
 
@@ -177,6 +200,8 @@ one:
   False
   >>> list(s4)
   [<Component Venus>, <Component Uranus>]
+  >>> s4.keys()
+  ['venus', 'uranus']
 
 Or the other way around some components of a collection:
 

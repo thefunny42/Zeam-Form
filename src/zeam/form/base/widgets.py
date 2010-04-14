@@ -107,10 +107,12 @@ class Widgets(Collection):
                         self.append(widget)
             elif interfaces.IWidget.providedBy(arg):
                 self.append(arg)
-            else:
+            elif interfaces.IRenderableComponent.providedBy(arg):
                 widget = createWidget(arg, self.form, self.request)
                 if widget is not None:
                     self.append(widget)
+            else:
+                raise TypeError(u'Invalid type', arg)
 
     def update(self):
         for widget in self:

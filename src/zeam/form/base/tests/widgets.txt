@@ -153,6 +153,8 @@ them:
    <Widgets>
    >>> list(widgets1)
    [<ActionWidget Do Something>, <ActionWidget Do Nothing>]
+   >>> widgets1.keys()
+   ['form.action.do-something', 'form.action.do-nothing']
 
 There is an update method on a Widgets collection, which is going to
 call update on each Widget of the collection:
@@ -192,8 +194,16 @@ Of course you cannot extend it with anything else than components:
    >>> widgets1.extend(42)
    Traceback (most recent call last):
      ...
-   TypeError: ('Invalid type', 42)
+   TypeError: (u'Invalid type', 42)
 
+But you can directly add an already created widget:
+
+   >>> widgets2 = Widgets(form=form1, request=request)
+   >>> widgets2.extend(widgets1['form.action.do-nothing'])
+   >>> list(widgets2)
+   [<ActionWidget Do Nothing>]
+   >>> widgets2.keys()
+   ['form.action.do-nothing']
 
 WidgetExtractor
 ---------------

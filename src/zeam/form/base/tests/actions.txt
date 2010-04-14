@@ -9,8 +9,8 @@ Action
 An action represent a single action of a form:
 
    >>> from zeam.form.base.actions import Action
-   >>> a1 = Action("Apply")
-   >>> a1
+   >>> action1 = Action("Apply")
+   >>> action1
    <Action Apply>
 
 An action is callable with a submission to be execuded:
@@ -19,9 +19,9 @@ An action is callable with a submission to be execuded:
    >>> request = TestRequest()
 
    >>> from zeam.form.base.form import FormSubmission
-   >>> s1 = FormSubmission(object(), request)
+   >>> submission1 = FormSubmission(object(), request)
 
-   >>> a1(s1)
+   >>> action1(submission1)
    Traceback (most recent call last):
      ...
    NotImplementedError
@@ -32,15 +32,15 @@ Of course you need to implement your own action:
    ...    def __call__(self, submission):
    ...        print u"Execute '%s'" % self.title
 
-   >>> m1 = MyAction("I like it")
-   >>> m1(s1)
+   >>> myaction1 = MyAction("I like it")
+   >>> myaction1(submission1)
    Execute 'I like it'
 
 Action provide a validate method as well, which is called before the
 action is. If the validate method does return True, the action will
 not be processed:
 
-   >>> m1.validate(s1)
+   >>> myaction1.validate(submission1)
    True
 
 
@@ -52,7 +52,33 @@ actions to be processed and the widgets to be rendered:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
-   >>> verifyObject(interfaces.IFormSubmission, s1)
+   >>> verifyObject(interfaces.IFormSubmission, submission1)
+   True
+
+You have an helper function to clone them:
+
+   >>> from zeam.form.base.form import cloneSubmission
+   >>> clone1 = cloneSubmission(submission1)
+   >>> clone1 is submission1
+   False
+   >>> verifyObject(interfaces.IFormSubmission, clone1)
+   True
+
+Settings are cloned as well:
+
+   >>> clone1.ignoreRequest = True
+   >>> clone1.ignoreContent = False
+   >>> clone1.mode = 'carambar'
+   >>> clone2 = cloneSubmission(clone1)
+   >>> clone2 is clone1
+   False
+   >>> clone2.ignoreRequest
+   True
+   >>> clone2.ignoreContent
+   False
+   >>> clone2.mode
+   'carambar'
+   >>> verifyObject(interfaces.IFormSubmission, clone2)
    True
 
 Interface
@@ -60,9 +86,9 @@ Interface
 
 Action implements IAction, and IComponent:
 
-   >>> verifyObject(interfaces.IAction, a1)
+   >>> verifyObject(interfaces.IAction, action1)
    True
-   >>> verifyObject(interfaces.IComponent, a1)
+   >>> verifyObject(interfaces.IComponent, action1)
    True
 
 
@@ -72,7 +98,7 @@ Actions
 Action are added to an Actions collection:
 
    >>> from zeam.form.base.actions import Actions
-   >>> as1 = Actions(a1, Action('Cancel'))
+   >>> as1 = Actions(action1, Action('Cancel'))
    >>> as1
    <Actions>
    >>> list(as1)
@@ -89,18 +115,19 @@ It add a ``process`` method, which takes a form and a request and
 execute actions that need to be. Let's create a set of action with
 real actions and try it:
 
-   >>> m2 = MyAction("Make it nicer")
-   >>> as2 = Actions(m1, m2)
+   >>> myaction2 = MyAction("Make it nicer")
+   >>> as2 = Actions(myaction1, myaction2)
    >>> list(as2)
    [<MyAction I like it>, <MyAction Make it nicer>]
 
-   >>> as2.process(s1, request)
+   >>> as2.process(submission1, request)
    False
 
-   >>> r2 = TestRequest(form={'form.action.%s' % m2.identifier: m2.title})
-   >>> s2 = FormSubmission(object(), r2)
+   >>> r2 = TestRequest(form={'form.action.%s' %
+   ...      myaction2.identifier: myaction2.title})
+   >>> submission2 = FormSubmission(object(), r2)
 
-   >>> as2.process(s2, r2)
+   >>> as2.process(submission2, r2)
    Execute 'Make it nicer'
    True
 
@@ -122,13 +149,13 @@ And a test submission for it, which validate the action:
 
    >>> r3 = TestRequest(form={'form.action.%s' % m3.identifier: m3.title,
    ...                        'valid': True})
-   >>> s3 = FormSubmission(object(), r3)
+   >>> submission3 = FormSubmission(object(), r3)
 
 The action works:
 
-   >>> m3(s3)
+   >>> m3(submission3)
    Execute 'I am unhappy'
-   >>> as3.process(s3, r3)
+   >>> as3.process(submission3, r3)
    Execute 'I am unhappy'
    True
 

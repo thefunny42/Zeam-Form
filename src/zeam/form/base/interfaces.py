@@ -10,6 +10,11 @@ class IComponent(interface.Interface):
     identifier = interface.Attribute(u"Component id")
     title = interface.Attribute(u"Component title")
 
+    def clone(new_identifier=None):
+        """Return a clone of the new component, with identifier
+        new_identifier if it is not None.
+        """
+
 
 class IComponentFactory(interface.Interface):
     """Component used to built components.
@@ -55,6 +60,10 @@ class ICollection(interface.Interface):
 
     def copy():
         """Return a copy of the collection.
+        """
+
+    def keys():
+        """Return all components id contained in the collection.
         """
 
     def __add__(other):

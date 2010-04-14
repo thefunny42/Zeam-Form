@@ -39,22 +39,6 @@ A field can provide a default value:
    >>> field1.getDefaultValue()
    <Marker NO_VALUE>
 
-A field can provide a value from an object:
-
-   >>> class EmptyObject(object):
-   ...     nothing = None
-
-   >>> object1 = EmptyObject()
-   >>> field1.getContentValue(object1)
-   <Marker NO_VALUE>
-
-   >>> class OldObject(object):
-   ...     age = 42
-
-   >>> object2 = OldObject()
-   >>> field1.getContentValue(object2)
-   42
-
 A Field implement IField, and is an IComponent:
 
    >>> from zope.interface.verify import verifyObject
@@ -93,15 +77,15 @@ another component it need to be a Field:
    >>> s1.extend(Action("Apply"))
    Traceback (most recent call last):
       ...
-   TypeError: ('Invalid type', <Action Apply>)
+   TypeError: (u'Invalid type', <Action Apply>)
 
    >>> s1.extend(Actions(Action("Apply")))
    Traceback (most recent call last):
       ...
-   TypeError: ('Invalid type', <Action Apply>)
+   TypeError: (u'Invalid type', <Action Apply>)
 
    >>> s1.extend(42)
    Traceback (most recent call last):
       ...
-   TypeError: ('Invalid type', 42)
+   TypeError: (u'Invalid type', 42)
 
