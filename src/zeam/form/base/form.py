@@ -81,12 +81,20 @@ class GrokViewSupport(object):
             (self, self.request), IPageTemplate)
         return template()
 
-def cloneSubmission(original, content=None):
+
+_marker = object()
+
+
+def cloneSubmission(original, content=_marker, prefix=None):
     assert isinstance(original, FormSubmission)
     clone = FormSubmission(original.context, original.request, content)
     clone.ignoreRequest = original.ignoreRequest
     clone.ignoreContent = original.ignoreContent
     clone.mode = original.mode
+    if prefix is None:
+        clone.prefix = original.prefix
+    else:
+        clone.prefix = prefix
     return clone
 
 
@@ -106,14 +114,12 @@ class FormSubmission(object):
 
     status = u''
 
-    def __init__(self, context, request, content=None):
+    def __init__(self, context, request, content=_marker):
         super(FormSubmission, self).__init__(context, request)
         self.context = context
         self.request = request
         self.errors = Errors()
-        if content is None:
-            content = self.dataManager(context)
-        self.__content = content
+        self.setContent(content is _marker and context or content)
         self.__data = NOT_EXTRACTED
 
     @property
@@ -123,12 +129,17 @@ class FormSubmission(object):
     def getContent(self):
         return self.__content
 
-    def extractData(self):
+    def setContent(self, content):
+        if not interfaces.IDataManager.providedBy(content):
+            content = self.dataManager(content)
+        self.__content = content
+
+    def extractData(self, fields):
         if self.__data is not NOT_EXTRACTED:
             return (self.__data, self.errors)
         self.__data = data = dict()
 
-        for field in self.fields:
+        for field in fields:
             extractor = component.getMultiAdapter(
                 (field, self, self.request), interfaces.IWidgetExtractor)
             value, error = extractor.extract()
@@ -158,6 +169,11 @@ class FormCanvas(GrokViewSupport, FormSubmission):
         super(FormCanvas, self).__init__(context, request)
         self.actionWidgets = Widgets(form=self, request=self.request)
         self.fieldWidgets = Widgets(form=self, request=self.request)
+
+    def extractData(self, fields=None):
+        if fields is None:
+            fields = self.fields
+        return super(FormCanvas, self).extractData(fields)
 
     def updateActions(self):
         self.actions.process(self, self.request)

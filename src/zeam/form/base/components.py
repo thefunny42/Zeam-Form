@@ -32,7 +32,7 @@ class Component(object):
         return "<%s %s>" % (self.__class__.__name__, self.title)
 
 
-_get_marker = object()
+_marker = object()
 
 
 class Collection(object):
@@ -51,12 +51,12 @@ class Collection(object):
         self.__components = []
         self.extend(*components)
 
-    def get(self, id, default=_get_marker):
+    def get(self, id, default=_marker):
         try:
             return self.__components[self.__ids.index(id)]
         except ValueError:
-            if default is _get_marker:
-                raise KeyError, id
+            if default is _marker:
+                raise KeyError(id)
             return default
 
     def append(self, component):

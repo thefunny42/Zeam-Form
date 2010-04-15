@@ -12,8 +12,7 @@ from grokcore import component as grok
 def widget_id(form, component):
     """Create an unique ID for a widget.
     """
-    return '%s.%s.%s' % (
-        str(form.prefix), component.prefix, component.identifier)
+    return '.'.join((str(form.prefix), component.prefix, component.identifier,))
 
 
 class Widget(Component, grok.MultiAdapter):
