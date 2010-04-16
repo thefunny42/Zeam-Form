@@ -19,7 +19,7 @@
       <p class="form-error"
          tal:condition="view/errors">
         There were errors:
-        <tal:error tal:define="formError view/submissionError"
+        <tal:error tal:define="formError view/formError"
                    tal:condition="formError">
           <br />
           <span tal:replace="formError/title" />

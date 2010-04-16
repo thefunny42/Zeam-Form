@@ -51,7 +51,7 @@ class Widget(Component, grok.MultiAdapter):
 class WidgetExtractor(grok.MultiAdapter):
     grok.provides(interfaces.IWidgetExtractor)
     grok.adapts(
-        interfaces.IRenderableComponent, interfaces.IFormSubmission, Interface)
+        interfaces.IRenderableComponent, interfaces.IFormData, Interface)
 
     def __init__(self, component, form, request):
         self.identifier = widget_id(form, component)
@@ -122,14 +122,14 @@ class Widgets(Collection):
 # widgets
 
 class ActionWidget(Widget):
-    grok.adapts(interfaces.IAction, interfaces.IFormSubmission, Interface)
+    grok.adapts(interfaces.IAction, interfaces.IFormData, Interface)
     grok.name('input')
 
 
 
 class FieldWidget(Widget):
     grok.implements(interfaces.IFieldWidget)
-    grok.adapts(interfaces.IField, interfaces.IFormSubmission, Interface)
+    grok.adapts(interfaces.IField, interfaces.IFormData, Interface)
     grok.name('input')
 
     def __init__(self, component, form, request):
@@ -155,9 +155,9 @@ class FieldWidget(Widget):
         # After, the context
         ignoreContent = getValue(self.component, 'ignoreContent', self.form)
         if not ignoreContent:
-            content = self.form.getContent()
+            data = self.form.getContentData()
             try:
-                value = content.get(self.component.identifier)
+                value = data.get(self.component.identifier)
                 # XXX: Need review
                 if value is None:
                     value = NO_VALUE

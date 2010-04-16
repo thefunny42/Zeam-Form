@@ -18,8 +18,8 @@ An action is callable with a submission to be execuded:
    >>> from zope.publisher.browser import TestRequest
    >>> request = TestRequest()
 
-   >>> from zeam.form.base.form import FormSubmission
-   >>> submission1 = FormSubmission(object(), request)
+   >>> from zeam.form.base.form import FormData
+   >>> submission1 = FormData(object(), request)
 
    >>> action1(submission1)
    Traceback (most recent call last):
@@ -52,16 +52,16 @@ actions to be processed and the widgets to be rendered:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
-   >>> verifyObject(interfaces.IFormSubmission, submission1)
+   >>> verifyObject(interfaces.IFormData, submission1)
    True
 
 You have an helper function to clone them:
 
-   >>> from zeam.form.base.form import cloneSubmission
-   >>> clone1 = cloneSubmission(submission1)
+   >>> from zeam.form.base.form import cloneFormData
+   >>> clone1 = cloneFormData(submission1)
    >>> clone1 is submission1
    False
-   >>> verifyObject(interfaces.IFormSubmission, clone1)
+   >>> verifyObject(interfaces.IFormData, clone1)
    True
 
 Settings are cloned as well:
@@ -69,7 +69,8 @@ Settings are cloned as well:
    >>> clone1.ignoreRequest = True
    >>> clone1.ignoreContent = False
    >>> clone1.mode = 'carambar'
-   >>> clone2 = cloneSubmission(clone1)
+   >>> clone1.prefix = 'form.advanced'
+   >>> clone2 = cloneFormData(clone1)
    >>> clone2 is clone1
    False
    >>> clone2.ignoreRequest
@@ -78,7 +79,9 @@ Settings are cloned as well:
    False
    >>> clone2.mode
    'carambar'
-   >>> verifyObject(interfaces.IFormSubmission, clone2)
+   >>> clone2.prefix
+   'form.advanced'
+   >>> verifyObject(interfaces.IFormData, clone2)
    True
 
 Interface
@@ -125,7 +128,7 @@ real actions and try it:
 
    >>> r2 = TestRequest(form={'form.action.%s' %
    ...      myaction2.identifier: myaction2.title})
-   >>> submission2 = FormSubmission(object(), r2)
+   >>> submission2 = FormData(object(), r2)
 
    >>> as2.process(submission2, r2)
    Execute 'Make it nicer'
@@ -149,7 +152,7 @@ And a test submission for it, which validate the action:
 
    >>> r3 = TestRequest(form={'form.action.%s' % m3.identifier: m3.title,
    ...                        'valid': True})
-   >>> submission3 = FormSubmission(object(), r3)
+   >>> submission3 = FormData(object(), r3)
 
 The action works:
 
@@ -162,7 +165,7 @@ The action works:
 However if the validation fail, it is not:
 
    >>> r31 = TestRequest(form={'form.action.%s' % m3.identifier: m3.title})
-   >>> s31 = FormSubmission(object(), r31)
+   >>> s31 = FormData(object(), r31)
 
    >>> m3(s31)
    Execute 'I am unhappy'
@@ -186,11 +189,11 @@ action like that:
 Errors can be read from the submission:
 
    >>> r4 = TestRequest(form={'form.action.%s' % m4.identifier: m4.title})
-   >>> s4 = FormSubmission(object(), r4)
+   >>> s4 = FormData(object(), r4)
 
    >>> list(s4.errors)
    []
-   >>> s4.submissionError
+   >>> s4.formError
 
 So the action doesn't work, and the error will be reported in the
 submission:
@@ -204,13 +207,13 @@ submission:
 
    >>> list(s4.errors)
    [<Error I can't take it anymore>]
-   >>> s4.submissionError
+   >>> s4.formError
    <Error I can't take it anymore>
 
 Errors implement an interface as well, and are components contained
 in a collection:
 
-   >>> verifyObject(interfaces.IError, s4.submissionError)
+   >>> verifyObject(interfaces.IError, s4.formError)
    True
    >>> interfaces.IError.extends(interfaces.IComponent)
    True

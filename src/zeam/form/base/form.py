@@ -85,9 +85,9 @@ class GrokViewSupport(object):
 _marker = object()
 
 
-def cloneSubmission(original, content=_marker, prefix=None):
-    assert isinstance(original, FormSubmission)
-    clone = FormSubmission(original.context, original.request, content)
+def cloneFormData(original, content=_marker, prefix=None):
+    assert isinstance(original, FormData)
+    clone = FormData(original.context, original.request, content)
     clone.ignoreRequest = original.ignoreRequest
     clone.ignoreContent = original.ignoreContent
     clone.mode = original.mode
@@ -98,12 +98,12 @@ def cloneSubmission(original, content=_marker, prefix=None):
     return clone
 
 
-class FormSubmission(object):
+class FormData(object):
     """This represent a submission of a form. It can be used to update
     widgets and run actions.
     """
     grok.baseclass()
-    grok.implements(interfaces.IFormSubmission)
+    grok.implements(interfaces.IFormData)
 
     prefix = 'form'
     mode = INPUT
@@ -115,29 +115,29 @@ class FormSubmission(object):
     status = u''
 
     def __init__(self, context, request, content=_marker):
-        super(FormSubmission, self).__init__(context, request)
+        super(FormData, self).__init__(context, request)
         self.context = context
         self.request = request
         self.errors = Errors()
-        self.setContent(content is _marker and context or content)
-        self.__data = NOT_EXTRACTED
+        self.setContentData(content is _marker and context or content)
+        self.__extracted = NOT_EXTRACTED
 
     @property
-    def submissionError(self):
+    def formError(self):
         return self.errors.get(self.prefix, None)
 
-    def getContent(self):
+    def getContentData(self):
         return self.__content
 
-    def setContent(self, content):
+    def setContentData(self, content):
         if not interfaces.IDataManager.providedBy(content):
             content = self.dataManager(content)
         self.__content = content
 
     def extractData(self, fields):
-        if self.__data is not NOT_EXTRACTED:
-            return (self.__data, self.errors)
-        self.__data = data = dict()
+        if self.__extracted is not NOT_EXTRACTED:
+            return (self.__extracted, self.errors)
+        self.__extracted = data = dict()
 
         for field in fields:
             extractor = component.getMultiAdapter(
@@ -152,7 +152,7 @@ class FormSubmission(object):
         return (data, self.errors)
 
 
-class FormCanvas(GrokViewSupport, FormSubmission):
+class FormCanvas(GrokViewSupport, FormData):
     """This represent a sumple form setup: setup some fields and
     actions, prepare widgets for it.
     """

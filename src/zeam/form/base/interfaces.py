@@ -131,26 +131,31 @@ class IDataManager(interface.Interface):
         """
 
 
-class IFormSubmission(IPrefixable, IFieldExtractionValueSetting):
+class IFormData(IPrefixable, IFieldExtractionValueSetting):
     """Submission of a form. It is used to process and setup the form.
     """
 
     errors = interface.Attribute(u"List of all errors who might occurs")
     status = interface.Attribute(u"Status message")
-    submissionError = interface.Attribute(u"Main error who occurred")
+    formError = interface.Attribute(u"Main error who occurred")
     dataManager = interface.Attribute(u"Data manager class to use to "
                                       u"access content")
 
     mode = interface.Attribute(
         u"Mode should be used to render all the widgets")
 
-    def getContent():
-        """Return the content (which content should been processed by
-        the form).
+    def getContentData():
+        """Return the data from the content that should be used by
+        the form.
         """
 
-    def extractData():
-        """Return form data.
+    def setContentData(content):
+        """Use content as base to retrieve the data that should be
+        used by the form.
+        """
+
+    def extractData(fields):
+        """Return form data for the given fields.
         """
 
 
@@ -313,7 +318,7 @@ class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IGrokViewSupport):
         """
 
 
-class ISimpleFormCanvas(IFormCanvas, IFormSubmission):
+class ISimpleFormCanvas(IFormCanvas, IFormData):
     """A simple form canvas with only fields and actions.
     """
 
@@ -354,7 +359,7 @@ class IZeamFormBaseAPI(interface.Interface):
         u"A collection of fields")
     Widgets = interface.Attribute(
         u"A collection of widgets")
-    FormSubmission = interface.Attribute(
+    FormData = interface.Attribute(
         u"A configuration object to render fields as widgets")
     Form = interface.Attribute(
         u"A basic and simple Form")
