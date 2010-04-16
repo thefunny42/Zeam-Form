@@ -8,19 +8,20 @@ Forms are class, registered like views:
    >>> from zope.publisher.browser import TestRequest
    >>> request = TestRequest()
 
-   >>> class Context(object):
-   ...     pass
-   >>> context = Context()
+   >>> class Content(object):
+   ...     def __repr__(self):
+   ...         return '<%s object>' % self.__class__.__name__
+   >>> context = Content()
 
-   >>> f1 = Form(context, request)
-   >>> f1
+   >>> form1 = Form(context, request)
+   >>> form1
    <zeam.form.base.form.Form object at ...>
 
 They implements IForm:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
-   >>> verifyObject(interfaces.IForm, f1)
+   >>> verifyObject(interfaces.IForm, form1)
    True
 
 
@@ -37,12 +38,14 @@ Object data manager
 
    >>> from zeam.form.base.datamanager import ObjectDataManager
 
-   >>> class MyContent(object):
+   >>> class MyContent(Content):
    ...    title = u'Content'
    ...    value = 42
-   >>> content = MyContent()
+   >>> mycontent = MyContent()
 
-   >>> manager1 = ObjectDataManager(content)
+   >>> manager1 = ObjectDataManager(mycontent)
+   >>> manager1
+   <ObjectDataManager used for <MyContent object>>
 
 It correctly implements its interface:
 
@@ -66,7 +69,7 @@ Inexisting content value raises KeyError
 You can set values as well:
 
    >>> manager1.set('ready', True)
-   >>> content.ready
+   >>> mycontent.ready
    True
 
 
@@ -79,6 +82,8 @@ There is a data manager which is able to work on dictionaries as well:
 
    >>> data = {'title': u'Content', 'value': 42}
    >>> manager2 = DictDataManager(data)
+   >>> manager2
+   <DictDataManager used for {'value': 42, 'title': u'Content'}>
 
 It correctly implements its interface:
 
@@ -103,4 +108,30 @@ You can set values as well:
 
    >>> manager2.set('ready', True)
    >>> data.get('ready')
+   True
+
+
+Using a data manager on a form
+------------------------------
+
+You can use a data manager on every FormData:
+
+   >>> from zeam.form.base.form import cloneFormData
+   >>> formdata1 = cloneFormData(form1)
+
+By default you will get a data manager for the context:
+
+   >>> formdata1.getContentData()
+   <ObjectDataManager used for <Content object>>
+
+However you modify it and give directly a content:
+
+   >>> formdata1.setContentData(mycontent)
+   >>> formdata1.getContentData()
+   <ObjectDataManager used for <MyContent object>>
+
+Or directly a data manager:
+
+   >>> formdata1.setContentData(manager2)
+   >>> formdata1.getContentData() is manager2
    True

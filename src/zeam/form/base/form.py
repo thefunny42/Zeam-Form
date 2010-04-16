@@ -86,7 +86,7 @@ _marker = object()
 
 
 def cloneFormData(original, content=_marker, prefix=None):
-    assert isinstance(original, FormData)
+    assert interfaces.IFieldExtractionValueSetting.providedBy(original)
     clone = FormData(original.context, original.request, content)
     clone.ignoreRequest = original.ignoreRequest
     clone.ignoreContent = original.ignoreContent

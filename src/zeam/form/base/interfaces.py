@@ -95,7 +95,6 @@ class IPrefixable(interface.Interface):
 class IRenderableComponent(IPrefixable, IComponent):
     """A component that can be rendered with the help of a widget.
     """
-
     mode = interface.Attribute(
         u"Mode should be used to render the component")
 
@@ -105,12 +104,13 @@ class IRenderableComponent(IPrefixable, IComponent):
         """
 
 
-class IFieldExtractionValueSetting(interface.Interface):
+class IFieldExtractionValueSetting(IPrefixable):
     """Setting to extract field values.
     """
-
     ignoreRequest = interface.Attribute(u"Ignore request values")
     ignoreContent = interface.Attribute(u"Ignore content values")
+    mode = interface.Attribute(
+        u"Mode should be used to render all the widgets")
 
 
 class IDataManager(interface.Interface):
@@ -131,18 +131,14 @@ class IDataManager(interface.Interface):
         """
 
 
-class IFormData(IPrefixable, IFieldExtractionValueSetting):
-    """Submission of a form. It is used to process and setup the form.
+class IFormData(IFieldExtractionValueSetting):
+    """Data of a form. It is used to process and setup the form.
     """
-
     errors = interface.Attribute(u"List of all errors who might occurs")
     status = interface.Attribute(u"Status message")
     formError = interface.Attribute(u"Main error who occurred")
-    dataManager = interface.Attribute(u"Data manager class to use to "
-                                      u"access content")
-
-    mode = interface.Attribute(
-        u"Mode should be used to render all the widgets")
+    dataManager = interface.Attribute(
+        u"Data manager class to use to access content")
 
     def getContentData():
         """Return the data from the content that should be used by

@@ -4,14 +4,28 @@ from zeam.form.base.markers import NO_VALUE
 from zope.interface import implements
 
 
-class ObjectDataManager(object):
-    """An object data manager, which look up data as attributes on
-    objects.
+class BaseDataManager(object):
+    """Base class for a data manager.
     """
     implements(IDataManager)
 
     def __init__(self, content):
         self.content = content
+
+    def get(self, identifier):
+        raise NotImplementedError
+
+    def set(self, identifier, value):
+        raise NotImplementedError
+
+    def __repr__(self):
+        return '<%s used for %r>' % (self.__class__.__name__, self.content)
+
+
+class ObjectDataManager(BaseDataManager):
+    """An object data manager, which look up data as attributes on
+    objects.
+    """
 
     def get(self, identifier):
         try:
@@ -23,15 +37,10 @@ class ObjectDataManager(object):
         setattr(self.content, identifier, value)
 
 
-class DictDataManager(object):
+class DictDataManager(BaseDataManager):
     """A dictionary data manager, which look up data as keys in the
     dictionary.
     """
-    implements(IDataManager)
-
-    def __init__(self, content):
-        assert isinstance(content, dict)
-        self.content = content
 
     def get(self, identifier):
         return self.content[identifier]
@@ -40,18 +49,10 @@ class DictDataManager(object):
         self.content[identifier] = value
 
 
-class NoneDataManager(object):
+class NoneDataManager(BaseDataManager):
     """A null data manager, which return directly the given object as
     data.
     """
-    implements(IDataManager)
-
-    def __init__(self, content):
-        self.content = content
 
     def get(self, identifier):
         return self.content
-
-    def set(self, identifier, value):
-        # You cannot set values with that data manager
-        raise NotImplementedError
