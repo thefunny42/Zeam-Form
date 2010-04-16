@@ -209,3 +209,5 @@ class DisplayFieldWidget(FieldWidget):
     grok.name('display')
 
 
+class HiddenFieldWidget(FieldWidget):
+    grok.name('hidden')
