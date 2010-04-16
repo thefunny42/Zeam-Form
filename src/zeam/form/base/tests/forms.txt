@@ -121,8 +121,11 @@ You can use a data manager on every FormData:
 
 By default you will get a data manager for the context:
 
-   >>> formdata1.getContentData()
+   >>> manager3 = formdata1.getContentData()
+   >>> manager3
    <ObjectDataManager used for <Content object>>
+   >>> manager3.content is context
+   True
 
 However you modify it and give directly a content:
 
