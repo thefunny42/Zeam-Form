@@ -4,7 +4,7 @@ from zeam.form.base.datamanager import ObjectDataManager
 from zeam.form.base.fields import Fields
 from zeam.form.base.errors import Errors, Error
 from zeam.form.base.markers import INPUT, NOT_EXTRACTED
-from zeam.form.base.widgets import Widgets
+from zeam.form.base.widgets import Widgets, getWidgetExtractor
 from zeam.form.base import interfaces
 
 from zope.pagetemplate.interfaces import IPageTemplate
@@ -140,8 +140,7 @@ class FormData(object):
         self.__extracted = data = dict()
 
         for field in fields:
-            extractor = component.getMultiAdapter(
-                (field, self, self.request), interfaces.IWidgetExtractor)
+            extractor = getWidgetExtractor(field, self, self.request)
             value, error = extractor.extract()
             if error is None:
                 error = field.validate(value)

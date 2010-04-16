@@ -74,6 +74,10 @@ class WidgetExtractor(grok.MultiAdapter):
         return entries
 
 
+class HiddenWidgetExtractor(WidgetExtractor):
+    grok.name('hidden')
+
+
 def createWidget(field, form, request):
     """Create a widget (or return None) for the given form and
     request.
@@ -126,6 +130,15 @@ class ActionWidget(Widget):
     grok.name('input')
 
 
+def getWidgetExtractor(field, form, request):
+    mode = str(getValue(field, 'mode', form))
+    extractor = component.queryMultiAdapter(
+        (field, form, request), interfaces.IWidgetExtractor, name=mode)
+    if extractor is not None:
+        return extractor
+    return component.getMultiAdapter(
+        (field, form, request), interfaces.IWidgetExtractor)
+
 
 class FieldWidget(Widget):
     grok.implements(interfaces.IFieldWidget)
@@ -145,12 +158,11 @@ class FieldWidget(Widget):
         # First lookup the request
         ignoreRequest = getValue(self.component, 'ignoreRequest', self.form)
         if not ignoreRequest:
-            extractor = component.getMultiAdapter(
-                (self.component, self.form, self.request),
-                interfaces.IWidgetExtractor)
+            extractor = getWidgetExtractor(
+                self.component, self.form, self.request)
             value = extractor.extractRaw()
             if value:
-                return value
+                return self.prepareRequestValue(value)
 
         # After, the context
         ignoreContent = getValue(self.component, 'ignoreContent', self.form)
@@ -161,19 +173,22 @@ class FieldWidget(Widget):
                 # XXX: Need review
                 if value is None:
                     value = NO_VALUE
-                return self.prepareValue(value)
+                return self.prepareContentValue(value)
             except KeyError:
                 # No value on the content for field, continue.
                 pass
 
         # Take any default value
         value = self.component.getDefaultValue()
-        return self.prepareValue(value)
+        return self.prepareContentValue(value)
 
     def valueToUnicode(self, value):
         return unicode(value)
 
-    def prepareValue(self, value):
+    def prepareRequestValue(self, value):
+        return value
+
+    def prepareContentValue(self, value):
         formatted_value = u''
         if value is not NO_VALUE:
             formatted_value = self.valueToUnicode(value)
@@ -194,5 +209,3 @@ class DisplayFieldWidget(FieldWidget):
     grok.name('display')
 
 
-class HiddenFieldWidget(FieldWidget):
-    grok.name('hidden')

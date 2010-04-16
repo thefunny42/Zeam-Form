@@ -16,12 +16,15 @@ class Field(Component):
     ignoreContent = DEFAULT
     ignoreRequest = DEFAULT
     mode = DEFAULT
+    defaultValue = NO_VALUE
 
     def available(self, context):
         return True
 
     def getDefaultValue(self):
-        return NO_VALUE
+        if callable(self.defaultValue):
+            return self.defaultValue
+        return self.defaultValue
 
     def validate(self, value):
         if self.required and value is NO_VALUE:
