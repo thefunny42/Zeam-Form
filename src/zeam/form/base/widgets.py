@@ -49,6 +49,7 @@ class Widget(Component, grok.MultiAdapter):
 
 
 class WidgetExtractor(grok.MultiAdapter):
+    grok.implements(interfaces.IWidgetExtractor)
     grok.provides(interfaces.IWidgetExtractor)
     grok.adapts(
         interfaces.IRenderableComponent, interfaces.IFormData, Interface)
