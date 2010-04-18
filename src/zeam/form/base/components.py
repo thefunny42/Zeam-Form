@@ -20,10 +20,13 @@ class Component(object):
     implements(interfaces.IComponent)
 
     def __init__(self, title, identifier=None):
-        self.title = title
         if identifier is None:
             identifier = createId(title)
         self.identifier = identifier
+        if not title:
+            # If the title is empty, use the identifier as title
+            title = identifier
+        self.title = title
 
     def clone(self, new_identifier=None):
         return self.__class__(self.title, new_identifier)
