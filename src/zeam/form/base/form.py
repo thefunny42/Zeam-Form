@@ -148,7 +148,7 @@ class FormData(object):
                 self.errors.append(Error(error, field.identifier))
             data[field.identifier] =  value
 
-        return (data, self.errors)
+        return (data, len(self.errors) and self.errors or None)
 
 
 class FormCanvas(GrokViewSupport, FormData):
