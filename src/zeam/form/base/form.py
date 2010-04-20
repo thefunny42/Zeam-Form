@@ -148,7 +148,12 @@ class FormData(object):
                 self.errors.append(Error(error, field.identifier))
             data[field.identifier] =  value
 
-        return (data, len(self.errors) and self.errors or None)
+        errors = None
+        if len(self.errors):
+            if not self.prefix in self.errors:
+                self.errors.append(Error(u"There were errors", self.prefix))
+            errors = self.errors
+        return (data, errors)
 
 
 class FormCanvas(GrokViewSupport, FormData):

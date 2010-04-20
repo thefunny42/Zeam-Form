@@ -21,6 +21,9 @@ DEFAULT = Marker('DEFAULT')
 DISPLAY = Marker('DISPLAY')
 INPUT = Marker('INPUT')
 HIDDEN = Marker('HIDDEN')
+SUCCESS = Marker('SUCCESS')
+FAILURE = Marker('FAILURE')
+NOTHING_DONE = Marker('NOTHING_DONE')
 
 
 def getValue(object, attr, default_object):

@@ -1,6 +1,5 @@
 
 from zeam.form.base.interfaces import IDataManager
-from zeam.form.base.markers import NO_VALUE
 from zope.interface import implements
 
 

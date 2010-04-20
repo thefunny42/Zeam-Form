@@ -9,6 +9,7 @@ Action
 An action represent a single action of a form:
 
    >>> from zeam.form.base.actions import Action
+
    >>> action1 = Action("Apply")
    >>> action1
    <Action Apply>
@@ -28,13 +29,17 @@ An action is callable with a submission to be execuded:
 
 Of course you need to implement your own action:
 
+   >>> from zeam.form.base.markers import SUCCESS
+
    >>> class MyAction(Action):
    ...    def __call__(self, submission):
    ...        print u"Execute '%s'" % self.title
+   ...        return SUCCESS
 
    >>> myaction1 = MyAction("I like it")
    >>> myaction1(submission1)
    Execute 'I like it'
+   <Marker SUCCESS>
 
 Action provide a validate method as well, which is called before the
 action is. If the validate method does return True, the action will
@@ -124,7 +129,7 @@ real actions and try it:
    [<MyAction I like it>, <MyAction Make it nicer>]
 
    >>> as2.process(submission1, request)
-   False
+   <Marker NOTHING_DONE>
 
    >>> r2 = TestRequest(form={'form.action.%s' %
    ...      myaction2.identifier: myaction2.title})
@@ -132,7 +137,7 @@ real actions and try it:
 
    >>> as2.process(submission2, r2)
    Execute 'Make it nicer'
-   True
+   <Marker SUCCESS>
 
 
 Validation
@@ -158,9 +163,10 @@ The action works:
 
    >>> m3(submission3)
    Execute 'I am unhappy'
+   <Marker SUCCESS>
    >>> as3.process(submission3, r3)
    Execute 'I am unhappy'
-   True
+   <Marker SUCCESS>
 
 However if the validation fail, it is not:
 
@@ -169,8 +175,9 @@ However if the validation fail, it is not:
 
    >>> m3(s31)
    Execute 'I am unhappy'
+   <Marker SUCCESS>
    >>> as3.process(s31, r31)
-   False
+   <Marker NOTHING_DONE>
 
 
 Errors
@@ -203,7 +210,7 @@ submission:
      ...
    ActionError: I can't take it anymore
    >>> as4.process(s4, r4)
-   False
+   <Marker FAILURE>
 
    >>> list(s4.errors)
    [<Error I can't take it anymore>]

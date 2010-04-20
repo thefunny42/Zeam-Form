@@ -4,7 +4,7 @@ import sys
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.errors import Error
-from zeam.form.base.markers import NO_VALUE, DEFAULT, getValue
+from zeam.form.base.markers import NO_VALUE, NOTHING_DONE, DEFAULT, FAILURE
 
 from zope.interface import implements
 from zope import component
@@ -39,15 +39,16 @@ class Actions(Collection):
         for action in self:
             extractor = component.getMultiAdapter(
                 (action, form, request), interfaces.IWidgetExtractor)
+
             value, error = extractor.extract()
             if value is not NO_VALUE:
                 try:
                     if action.validate(form):
-                        action(form)
-                        return True
+                        return action(form)
                 except interfaces.ActionError, e:
                     form.errors.append(Error(e.args[0], form.prefix))
-        return False
+                    return FAILURE
+        return NOTHING_DONE
 
 
 # Convience API, decorator to add action
