@@ -34,6 +34,9 @@ class Widget(Component, grok.MultiAdapter):
         # Return an identifier suitable for CSS usage
         return self.identifier.replace('.', '-')
 
+    def htmlClass(self):
+        return 'field'
+
     def default_namespace(self):
         namespace = {'widget': self,
                      'request': self.request}
