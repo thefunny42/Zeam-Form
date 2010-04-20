@@ -9,7 +9,7 @@ _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 
 def createId(name):
     # Create a valid id from any string.
-    id = str(name.encode('utf-8'))
+    id = unicode(name).encode('utf-8')
     id = id.replace(' ', '-')
     if _valid_identifier.match(id):
         return id.lower()

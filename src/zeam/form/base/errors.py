@@ -13,3 +13,5 @@ class Errors(Collection):
 
     type = interfaces.IError
 
+    def toError(self, title, identifier):
+        return None

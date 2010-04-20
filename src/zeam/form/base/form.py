@@ -10,7 +10,7 @@ from zeam.form.base import interfaces
 from zope.pagetemplate.interfaces import IPageTemplate
 from zope.publisher.browser import BrowserPage
 from zope.publisher.publish import mapply
-from zope import component
+from zope import component, i18n
 
 from grokcore.view import util
 from grokcore import component as grok
@@ -25,6 +25,8 @@ class GrokViewSupport(object):
     """
     grok.baseclass()
     grok.implements(interfaces.IGrokViewSupport)
+
+    i18nLanguage = None
 
     def __init__(self, context, request):
         super(GrokViewSupport, self).__init__(context, request)
@@ -61,9 +63,13 @@ class GrokViewSupport(object):
         return util.url(self.request, obj, name, data=data)
 
     def default_namespace(self):
-        return {'view': self,
-                'context': self.context,
-                'request': self.request}
+        namespace = {'view': self,
+                     'context': self.context,
+                     'request': self.request}
+        if self.i18nLanguage is not None:
+            namespace['target_language'] = self.i18nLanguage
+        return namespace
+
 
     def namespace(self):
         return {}
@@ -90,6 +96,7 @@ def cloneFormData(original, content=_marker, prefix=None):
     clone = FormData(original.context, original.request, content)
     clone.ignoreRequest = original.ignoreRequest
     clone.ignoreContent = original.ignoreContent
+    clone.i18nLanguage = original.i18nLanguage
     clone.mode = original.mode
     if prefix is None:
         clone.prefix = original.prefix
@@ -108,6 +115,7 @@ class FormData(object):
     prefix = 'form'
     mode = INPUT
     dataManager = ObjectDataManager
+    i18nLanguage = None
 
     ignoreRequest = False
     ignoreContent = True
@@ -212,6 +220,8 @@ class StandaloneForm(GrokViewSupport, BrowserPage):
             # continue processing the form
             return
 
+        if self.i18nLanguage is None:
+            self.i18nLanguage = i18n.negotiate(self.request)
         self.updateForm()
         if self.response.getStatus() in (302, 303):
             return

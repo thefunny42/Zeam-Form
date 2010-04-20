@@ -1,4 +1,5 @@
 <input type="submit" id="#" name="#" value="#"
        tal:attributes="name widget.identifier;
                        value widget.title;
-                       id widget.htmlId()" />
+                       id widget.htmlId()"
+       i18n:attributes="value" />
