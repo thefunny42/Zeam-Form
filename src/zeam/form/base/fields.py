@@ -18,17 +18,6 @@ class Field(Component):
     mode = DEFAULT
     defaultValue = NO_VALUE
 
-    def clone(self, new_identifier=None):
-        clone = super(Field, self).clone(new_identifier=new_identifier)
-        clone.defaultValue = self.defaultValue
-        clone.description = self.description
-        clone.ignoreContent = self.ignoreContent
-        clone.ignoreRequest = self.ignoreRequest
-        clone.mode = self.mode
-        clone.prefix = self.prefix
-        clone.required = self.required
-        return clone
-
     def available(self, context):
         return True
 
