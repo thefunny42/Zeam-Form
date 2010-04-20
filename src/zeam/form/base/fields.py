@@ -23,7 +23,7 @@ class Field(Component):
 
     def getDefaultValue(self):
         if callable(self.defaultValue):
-            return self.defaultValue
+            return self.defaultValue()
         return self.defaultValue
 
     def validate(self, value):

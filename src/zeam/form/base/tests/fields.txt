@@ -6,7 +6,7 @@ Fields represent input fields on the form.
 Field
 -----
 
-A field is a simple input on a form:
+A field is a simple input on a form::
 
    >>> from zeam.form.base.fields import Field
    >>> field1 = Field('Age')
@@ -21,7 +21,7 @@ Field value
 ~~~~~~~~~~~
 
 A field dispose of a validate method to validate a value. If field is
-required, NO_VALUE should not be accepted as a valid value:
+required, ``NO_VALUE`` should not be accepted as a valid value::
 
    >>> from zeam.form.base.markers import NO_VALUE
 
@@ -34,12 +34,24 @@ required, NO_VALUE should not be accepted as a valid value:
    u'Missing required value'
    >>> field1.validate(42)
 
-A field can provide a default value:
+A field can provide a default value::
 
    >>> field1.getDefaultValue()
    <Marker NO_VALUE>
 
-A Field implement IField, and is an IComponent:
+You can modify the defalut value of a field by setting defaultValue to
+be it or a callable. In case of a callable it will be called each a
+new default value is needed::
+
+   >>> field1.defaultValue = 42
+   >>> field1.getDefaultValue()
+   42
+
+   >>> field1.defaultValue = lambda: u'NOW'
+   >>> field1.getDefaultValue()
+   u'NOW'
+
+A Field implement IField, and is an IComponent::
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
@@ -52,7 +64,7 @@ A Field implement IField, and is an IComponent:
 Fields
 ------
 
-Fields is a collection component used to contain Field:
+Fields is a collection component used to contain Field::
 
    >>> from zeam.form.base.fields import Fields
    >>> s1 = Fields(Field('Size'), field1)
@@ -61,7 +73,7 @@ Fields is a collection component used to contain Field:
    >>> list(s1)
    [<Field Size>, <Field Age>]
 
-They implements IFields and ICollection:
+They implements ``IFields`` and ``ICollection``::
 
    >>> verifyObject(interfaces.IFields, s1)
    True
@@ -70,7 +82,7 @@ They implements IFields and ICollection:
 
 So it behave like a collection. You can add other Field, and Fields
 using the extend method (or constructor), but if you whish to add an
-another component it need to be a Field:
+another component it need to be a Field::
 
    >>> from zeam.form.base.actions import Action, Actions
 
