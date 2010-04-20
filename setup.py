@@ -3,6 +3,17 @@ import os
 
 version = '1.0'
 
+tests_require = [
+    'zope.app.authentication',
+    'zope.app.testing',
+    'zope.app.zcmlfiles',
+    'zope.configuration',
+    'zope.securitypolicy',
+    'zope.testbrowser',
+    'zope.testing',
+    ]
+
+
 setup(name='zeam.form.base',
       version=version,
       description="Grok based form framework",
@@ -35,12 +46,7 @@ setup(name='zeam.form.base',
           'grokcore.security',
           'megrok.pagetemplate',
           'megrok.chameleon',
-          # Test
-          'zope.securitypolicy',
-          'zope.app.authentication',
-          'zope.app.testing',
-          'zope.app.zcmlfiles',
-          'zope.testing',
-          'zope.testbrowser',
           ],
+      tests_require = tests_require,
+      extras_require = {'test': tests_require},
       )
