@@ -26,7 +26,7 @@ class Field(Component):
             return self.defaultValue()
         return self.defaultValue
 
-    def validate(self, value):
+    def validate(self, value, context=None):
         if self.required and value is NO_VALUE:
             return u"Missing required value"
         return None

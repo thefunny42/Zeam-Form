@@ -55,3 +55,17 @@ class NoneDataManager(BaseDataManager):
 
     def get(self, identifier):
         return self.content
+
+
+def makeAdaptiveDataManager(interface):
+
+    class AdaptiveDataManager(ObjectDataManager):
+        """A data manager that adapt its content to an interface
+        before doing anything.
+        """
+
+        def __init__(self, content):
+            self.content = interface(content)
+
+    return AdaptiveDataManager
+

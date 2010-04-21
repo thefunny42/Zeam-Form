@@ -151,7 +151,7 @@ class FormData(object):
             extractor = getWidgetExtractor(field, self, self.request)
             value, error = extractor.extract()
             if error is None:
-                error = field.validate(value)
+                error = field.validate(value, self.context)
             if error is not None:
                 self.errors.append(Error(error, field.identifier))
             data[field.identifier] =  value
