@@ -6,7 +6,6 @@ from zope import interface
 class IComponent(interface.Interface):
     """A named component.
     """
-
     identifier = interface.Attribute(u"Component id")
     title = interface.Attribute(u"Component title")
 
@@ -28,7 +27,6 @@ class IComponentFactory(interface.Interface):
 class ICollection(interface.Interface):
     """Support to manage a collection of ordered named components.
     """
-
     type = interface.Attribute(
         u"Interface restricting the type of component")
     factory = interface.Attribute(
@@ -88,7 +86,6 @@ class ICollection(interface.Interface):
 class IPrefixable(interface.Interface):
     """An object with a prefix.
     """
-
     prefix = interface.Attribute("Prefix")
 
 
@@ -185,7 +182,6 @@ class IActions(ICollection):
 class IField(IRenderableComponent, IFieldExtractionValueSetting):
     """A form field.
     """
-
     description = interface.Attribute(u"Field description")
     required = interface.Attribute(
         u"Boolean indicating if the field is required")
@@ -194,7 +190,7 @@ class IField(IRenderableComponent, IFieldExtractionValueSetting):
         """Return the default value.
         """
 
-    def validate(value):
+    def validate(value, context=None):
         """Validate that the given value fullfil the field
         requirement.
         """
@@ -230,6 +226,10 @@ class IWidget(IComponent):
         widget.
         """
 
+    def htmlClass():
+        """Return an HTML class to mark the widget with.
+        """
+
     def render():
         """Return the rendered HTML of the widget.
         """
@@ -238,7 +238,6 @@ class IWidget(IComponent):
 class IFieldWidget(IWidget):
     """Widget for fields.
     """
-
     description = interface.Attribute(u"Description of the field")
     error = interface.Attribute(u"Field error, or None")
     required = interface.Attribute(
@@ -269,9 +268,10 @@ class IWidgets(ICollection):
 class IGrokViewSupport(interface.Interface):
     """Some usefull methods from Grok View.
     """
-
-    response = interface.Attribute(u"Response object that is "
-                                   u"associated with the current request.")
+    response = interface.Attribute(
+        u"Response object that is associated with the current request.")
+    i18nLanguage = interface.Attribute(
+        u"Language code to translate view content to.")
 
     def redirect(url):
        """Redirect to given URL.
@@ -297,7 +297,6 @@ class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IGrokViewSupport):
 
     You can as well render it as a view.
     """
-
     label = interface.Attribute(u"Form title")
     description = interface.Attribute(u"Form description")
 
@@ -317,7 +316,6 @@ class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IGrokViewSupport):
 class ISimpleFormCanvas(IFormCanvas, IFormData):
     """A simple form canvas with only fields and actions.
     """
-
     actionWidgets = interface.Attribute(u"Form widgets")
     fieldWidgets = interface.Attribute(u"Form widgets")
 
@@ -344,7 +342,6 @@ class ISimpleForm(IForm, ISimpleFormCanvas):
 class IZeamFormBaseAPI(interface.Interface):
     """Base zeam form API.
     """
-
     Action = interface.Attribute(
         u"A form action")
     Actions = interface.Attribute(

@@ -16,7 +16,16 @@ from grokcore.view import util
 from grokcore import component as grok
 
 
-class GrokViewSupport(object):
+class Object(object):
+    """Python object that takes argument to its __init__, in order to
+    use super. This is required by Python 2.6.
+    """
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+
+class GrokViewSupport(Object):
     """Support Grok view like behavior, without inheriting of Grok
     view (not to get any grokker at all, or inherit from BrowerView,
     BrowserPage).
@@ -105,7 +114,7 @@ def cloneFormData(original, content=_marker, prefix=None):
     return clone
 
 
-class FormData(object):
+class FormData(Object):
     """This represent a submission of a form. It can be used to update
     widgets and run actions.
     """
