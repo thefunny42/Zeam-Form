@@ -5,7 +5,8 @@ zeam.form.base
 Summary
 -------
 
-``zeam.form.base`` is a form framework for Zope. It has common goals and purposes with ``formlib`` or ``z3c.form`` but tries to:
+``zeam.form.base`` is a form framework for Zope. It has common goals
+and purposes with ``formlib`` or ``z3c.form`` but tries to:
 
 - define small sane and reusable components : you don't
   need a full flavored form to render and display only few widgets in
@@ -47,15 +48,32 @@ Grok 1.0, 1.1).
 Example
 -------
 
-Let's define a short example. Actions can be defined standalone::
+Let's define a quick example. Actions can be defined standalone::
 
-  from zeam.form.base import Action
+  from zeam.form.base import Action, SUCCESS
 
   class MailAction(Action):
 
      def available(self, form):
          return form.context.haveMailHost()
 
+     def __call__(self, form):
+         # Send a mail
+         form.status = u"Mail sent"
+         return SUCCESS
+
+
+And included as attributes to the form::
+
+  class MailForm(Form):
+     label = u"Send a mail"
+     description = u"to people"
+     fields = Fields(Field(u'Name'), Field(u'E-mail'), Field(u'Message'))
+     actions = Actions(MailAction(u'Send mail'))
+
+
+(A decoractor can be used on a form method as well if you don't need
+lot of code for your action).
 
 
 For more information

@@ -381,3 +381,7 @@ class IZeamFormBaseAPI(interface.Interface):
         u"Marker for mode to get input widgets")
     DEFAULT = interface.Attribute(
         u"Marker used to use the default value located on the form")
+    SUCCESS = interface.Attribute(
+        u"Marker used by actions to report a success")
+    FAILURE = interface.Attribute(
+        u"Marker used by actions to report a failure")
