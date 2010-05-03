@@ -3,7 +3,7 @@ zeam.form.base
 ==============
 
 Summary
--------
+=======
 
 ``zeam.form.base`` is a form framework for Zope. It has common goals
 and purposes with ``formlib`` or ``z3c.form`` but tries to:
@@ -46,7 +46,7 @@ Grok 1.0, 1.1).
 
 
 Example
--------
+=======
 
 Let's define a quick example. Actions can be defined standalone::
 
@@ -77,7 +77,7 @@ lot of code for your action).
 
 
 For more information
---------------------
+====================
 
 You can refer to the functional and doctest included in the
 package. Since it tries to be composed of small components, there is
