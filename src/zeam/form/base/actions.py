@@ -57,8 +57,8 @@ class DecoratedAction(Action):
     """An action created by a decorator.
     """
 
-    def __init__(self, title, callback, identifiant=None, validator=None):
-        super(Action, self).__init__(title, identifiant)
+    def __init__(self, title, callback, identifier=None, validator=None):
+        super(Action, self).__init__(title, identifier)
         self._callback = callback
         self._validator = validator
 
@@ -72,9 +72,9 @@ class DecoratedAction(Action):
         self._callback(form)
 
 
-def action(title, identifiant=None, validator=None):
+def action(title, identifier=None, validator=None):
     def createAction(callback):
-        new_action = DecoratedAction(title, callback, identifiant, validator)
+        new_action = DecoratedAction(title, callback, identifier, validator)
 
         # Magic to access the parent action list to add the action
         frame = sys._getframe(1)
