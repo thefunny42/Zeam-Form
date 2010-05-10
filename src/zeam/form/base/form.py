@@ -136,7 +136,9 @@ class FormData(Object):
         self.context = context
         self.request = request
         self.errors = Errors()
-        self.setContentData(content is _marker and context or content)
+        if content is _marker:
+            content = context
+        self.setContentData(content)
         self.__extracted = NOT_EXTRACTED
 
     @property
