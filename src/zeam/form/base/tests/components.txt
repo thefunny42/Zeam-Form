@@ -48,6 +48,12 @@ encoded:
   >>> c4.identifier
   'c383c2897461742d64752d64c383c2a9736972'
 
+Spaces are normalized::
+
+   >>> c5 = Component(' Some unappropriate spacing  ')
+   >>> c5.identifier
+   'some-unappropriate-spacing'
+
 You can clone a component and change its identifier:
 
   >>> c3clone = c3.clone('new-world')
