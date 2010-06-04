@@ -6,6 +6,13 @@ Changelog
 
 * ...
 
+1.0b3 (2010/06/04)
+------------------
+
+* Fixed the way the identifiers are generated. Now, empty prefixes are
+  no longer generating malformed ids/names. Added tests to fix that
+  behavior.
+
 1.0b2 (2010/05/13)
 ------------------
 
