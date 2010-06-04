@@ -90,6 +90,37 @@ Like for an action, all identifier and title are set correctly:
    >>> widget2.title
    u'Title'
 
+Prefixes of the form and the component will alter the identifier:
+
+   >>> form2 = Form(None, request)
+   >>> form2.prefix = u"something"
+
+   >>> action2 = Action(u"Some action")
+   >>> action2.prefix = u"else"
+   >>> form2.actions += action2
+
+   >>> widget3 = component.getMultiAdapter(
+   ...         (action2, form2, request), interfaces.IWidget, name='input')
+
+   >>> widget3.identifier
+   u'something.else.some-action'
+
+If the prefixes are empty:
+
+   >>> form2.prefix = u""
+   >>> widget3 = component.getMultiAdapter(
+   ...         (action2, form2, request), interfaces.IWidget, name='input')
+
+   >>> print widget3.identifier
+   else.some-action
+
+   >>> action2.prefix = u""
+   >>> widget3 = component.getMultiAdapter(
+   ...         (action2, form2, request), interfaces.IWidget, name='input')
+   
+   >>> print widget3.identifier
+   some-action
+
 For convinience, the description and required is also available on the
 widget (to be used while rendering that last one):
 
