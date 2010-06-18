@@ -296,6 +296,8 @@ Therefore, they will be allowed as a valid Errors item::
   >>> errors.append(errors_group)
   >>> errors.get('form.somefield')
   <Errors>
+  >>> errors.get('form.somefield') is errors_group
+  True
 
   >>> verifyObject(interfaces.ICollection, errors_group)
   True
