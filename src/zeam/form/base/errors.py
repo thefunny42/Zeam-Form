@@ -22,3 +22,8 @@ class Errors(Collection):
 
     def clone(self, new_identifier=None):
         raise NotImplementedError(u'Errors collections are not clonable.')
+
+    def __repr__(self):
+        if interfaces.IError.providedBy(self):
+            return "<%s for %r>" % (self.__class__.__name__, self.identifier)
+        return Collection.__repr__(self)
