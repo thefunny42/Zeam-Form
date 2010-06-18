@@ -1,19 +1,20 @@
+# -*- coding: utf-8 -*-
 
+from grokcore import component as grok
+from grokcore.view import util
+
+from zeam.form.base import interfaces
 from zeam.form.base.actions import Actions
 from zeam.form.base.datamanager import ObjectDataManager
-from zeam.form.base.fields import Fields
 from zeam.form.base.errors import Errors, Error
+from zeam.form.base.fields import Fields
 from zeam.form.base.markers import INPUT, NOT_EXTRACTED
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
-from zeam.form.base import interfaces
 
+from zope import component, i18n
 from zope.pagetemplate.interfaces import IPageTemplate
 from zope.publisher.browser import BrowserPage
 from zope.publisher.publish import mapply
-from zope import component, i18n
-
-from grokcore.view import util
-from grokcore import component as grok
 
 
 class Object(object):
@@ -78,7 +79,6 @@ class GrokViewSupport(Object):
         if self.i18nLanguage is not None:
             namespace['target_language'] = self.i18nLanguage
         return namespace
-
 
     def namespace(self):
         return {}
@@ -165,7 +165,7 @@ class FormData(Object):
                 error = field.validate(value, self.context)
             if error is not None:
                 self.errors.append(Error(error, field.identifier))
-            data[field.identifier] =  value
+            data[field.identifier] = value
 
         errors = None
         if len(self.errors):
@@ -245,6 +245,3 @@ class Form(FormCanvas, StandaloneForm):
     """
     grok.baseclass()
     grok.implements(interfaces.ISimpleForm)
-
-
-

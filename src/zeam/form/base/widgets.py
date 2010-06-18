@@ -1,20 +1,20 @@
+# -*- coding: utf-8 -*-
 
+from grokcore import component as grok
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.markers import NO_VALUE, getValue
-
-from zope.interface import Interface
 from zope import component
-
-from grokcore import component as grok
+from zope.interface import Interface
 
 
 def widget_id(form, component):
     """Create an unique ID for a widget.
     """
-    return '.'.join((iditem for iditem in
-                     (str(form.prefix), component.prefix, component.identifier,)
-                     if iditem))
+    return '.'.join(
+        (iditem for iditem in
+         (str(form.prefix), component.prefix, component.identifier,)
+         if iditem))
 
 
 class Widget(Component, grok.MultiAdapter):

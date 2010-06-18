@@ -37,4 +37,3 @@ class Fields(Collection):
 
     type = interfaces.IField
     factory = interfaces.IFieldFactory
-

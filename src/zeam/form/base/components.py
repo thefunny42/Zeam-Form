@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
 
 import re
-
 from zeam.form.base import interfaces
 from zope.interface import implements
 from zope import component
 
 _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
+
 
 def createId(name):
     # Create a valid id from any string.

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import martian
 import grokcore.view
 import grokcore.component
@@ -34,10 +36,13 @@ class WidgetTemplateGrokker(martian.ClassGrokker):
         return False
 
     def checkTemplates(self, templates, module_info, factory):
+
         def has_render(factory):
             return factory.render != Widget.render
+
         def has_no_render(factory):
             return not has_render(factory)
+
         templates.checkTemplates(
             module_info, factory, 'widget', has_render, has_no_render)
 
@@ -51,7 +56,6 @@ class FormTemplateGrokker(martian.ClassGrokker):
         factory.module_info = module_info
         return super(FormTemplateGrokker, self).grok(
             name, factory, module_info, **kw)
-
 
     def execute(self, factory, config, **kw):
         # find templates
@@ -68,6 +72,7 @@ class FormTemplateGrokker(martian.ClassGrokker):
 
         def has_render(factory):
             return factory.render != GrokViewSupport.render
+
         def has_no_render(factory):
             return False
 
@@ -78,9 +83,9 @@ class FormTemplateGrokker(martian.ClassGrokker):
 class FormGrokker(grokcore.view.meta.views.ViewGrokker):
     martian.component(StandaloneForm)
     martian.directive(grokcore.component.context)
-    martian.directive(grokcore.view.layer, default = IDefaultBrowserLayer)
+    martian.directive(grokcore.view.layer, default=IDefaultBrowserLayer)
     martian.directive(grokcore.component.name,
-                      get_default = grokcore.view.meta.views.default_view_name)
+                      get_default=grokcore.view.meta.views.default_view_name)
 
     def execute(self, factory, config, context, layer, name, **kw):
         # __view_name__ is needed to support IAbsoluteURL on views

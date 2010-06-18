@@ -68,4 +68,3 @@ def makeAdaptiveDataManager(interface):
             self.content = interface(content)
 
     return AdaptiveDataManager
-

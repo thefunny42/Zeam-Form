@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 
-from zope.publisher.interfaces.browser import IBrowserPage
 from zope import interface
+from zope.publisher.interfaces.browser import IBrowserPage
 
 
 class IComponent(interface.Interface):
@@ -274,8 +275,8 @@ class IGrokViewSupport(interface.Interface):
         u"Language code to translate view content to.")
 
     def redirect(url):
-       """Redirect to given URL.
-       """
+        """Redirect to given URL.
+        """
 
     def url(obj=None, name=None, data=None):
         """Compute an URL to an object (or self), and add a name, and
@@ -362,7 +363,7 @@ class IZeamFormBaseAPI(interface.Interface):
     action = interface.Attribute(
         u"Decorator to use a form method as an Action")
 
-    context  = interface.Attribute(
+    context = interface.Attribute(
         u"Directive to map form to a context")
     name = interface.Attribute(
         u"Directive to name a form")
