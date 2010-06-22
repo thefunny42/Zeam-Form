@@ -1,12 +1,12 @@
 Changelog
 =========
 
-1.0b4 (unreleased)
+1.0b4 (2010/06/22)
 ------------------
 
 * Now the 'Errors' class can be used as a logical grouping of 'Error'
-  and stack.
-
+  and it stacks, in this case. Added tests to demonstrate and fix the
+  behavior.
 
 1.0b3 (2010/06/04)
 ------------------
@@ -25,4 +25,3 @@ Changelog
 ------------------
 
 * Initial release
-

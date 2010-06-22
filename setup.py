@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0b3'
+version = '1.0b4'
 
 tests_require = [
     'zope.app.authentication',
@@ -13,13 +13,11 @@ tests_require = [
     'zope.testing',
     ]
 
-
 setup(name='zeam.form.base',
       version=version,
       description="Grok based form framework",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
-
       classifiers=[
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
