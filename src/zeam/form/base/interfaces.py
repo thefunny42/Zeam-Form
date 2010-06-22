@@ -335,6 +335,7 @@ class IForm(IBrowserPage, IFormCanvas):
         """Update and render the form.
         """
 
+
 class ISimpleForm(IForm, ISimpleFormCanvas):
     """A simple form, with fields and actions.
     """

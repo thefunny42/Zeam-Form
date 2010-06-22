@@ -1,10 +1,12 @@
 Changelog
 =========
 
-1.0 (unreleased)
-----------------
+1.0b4 (unreleased)
+------------------
 
-* ...
+* Now the 'Errors' class can be used as a logical grouping of 'Error'
+  and stack.
+
 
 1.0b3 (2010/06/04)
 ------------------
