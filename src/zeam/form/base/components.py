@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import re
-from zeam.form.base import interfaces
-from zope.interface import implements
+
+from pkg_resources import iter_entry_points
 from zope import component
+from zope.interface import implements
+from zope.testing import cleanup
+
+from zeam.form.base import interfaces
+
 
 _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 
@@ -37,9 +42,41 @@ class Component(object):
 
 
 _marker = object()
+_loaded = False
+
+
+def loadComponents():
+    """Goes through all available components loaders and call them.
+    """
+    global _loaded
+    if _loaded:
+        return
+    for loader_entry in iter_entry_points('zeam.form.components'):
+        loader = loader_entry.load()
+        if not callable(loader):
+            raise TypeError(
+                'Entry point %r should be a callable to register  components'
+                % loader_entry.name)
+        loader()
+    _loaded = True
+
+
+def reloadComponents():
+    """Reload all zeam components.
+
+    This is mainly used by testing layers.
+    """
+    global _loaded
+    _loaded = False
+    loadComponents()
+
+
+cleanup.addCleanUp(reloadComponents)
 
 
 class Collection(object):
+    """Represent a collection of components.
+    """
     implements(interfaces.ICollection)
 
     type = interfaces.IComponent
@@ -53,7 +90,12 @@ class Collection(object):
         self.__dict__.update(self.__options)
         self.__ids = []
         self.__components = []
-        self.extend(*components)
+        if len(components):
+            self.extend(*components)
+
+    def clear(self):
+        self.__ids = []
+        self.__components = []
 
     def get(self, id, default=_marker):
         try:
@@ -83,6 +125,7 @@ class Collection(object):
                     self.append(item)
             else:
                 if self.factory is not None:
+                    loadComponents()
                     factory = component.queryAdapter(cmp, self.factory)
                     if factory is not None:
                         for item in factory.produce():

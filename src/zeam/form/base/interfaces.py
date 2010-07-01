@@ -61,6 +61,10 @@ class ICollection(interface.Interface):
         """Return a copy of the collection.
         """
 
+    def clear():
+        """Empty the collection: remove all components from it.
+        """
+
     def keys():
         """Return all components id contained in the collection.
         """

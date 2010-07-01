@@ -165,6 +165,14 @@ You can copy a collection:
   >>> s3copy is s3
   False
 
+You can remove all elements from a collection:
+
+  >>> len(s1)
+  2
+  >>> s1.clear()
+  >>> len(s1)
+  0
+
 
 Retriving components from a collection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
