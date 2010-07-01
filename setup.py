@@ -10,7 +10,6 @@ tests_require = [
     'zope.configuration',
     'zope.securitypolicy',
     'zope.testbrowser',
-    'zope.testing',
     ]
 
 setup(name='zeam.form.base',
@@ -45,6 +44,7 @@ setup(name='zeam.form.base',
           'zope.interface',
           'zope.pagetemplate',
           'zope.publisher',
+          'zope.testing',
           ],
       tests_require = tests_require,
       extras_require = {'test': tests_require},
