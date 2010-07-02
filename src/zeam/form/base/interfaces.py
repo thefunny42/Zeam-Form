@@ -4,6 +4,15 @@ from zope import interface
 from zope.publisher.interfaces.browser import IBrowserPage
 
 
+class IModeMarker(interface.Interface):
+    """This interface identifies a form mode and defines if it allows
+    data extraction.
+    """
+    extractable = interface.Attribute(
+        u"Boolean allowing or not the extraction of the data,"
+        u" for components in that mode.")
+
+
 class IComponent(interface.Interface):
     """A named component.
     """

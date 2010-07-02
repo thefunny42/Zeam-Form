@@ -138,3 +138,76 @@ Or directly a data manager:
    >>> formdata1.setContentData(manager2)
    >>> formdata1.getContentData() is manager2
    True
+
+
+Modes & extraction
+------------------
+
+Mode Markers
+~~~~~~~~~~~~
+
+Forms and Fields have a mode. This mode decides what widget you get
+and the behavior of the form extractor. Logically, some modes should
+not allow value extraction.
+
+Let's have a closer look at a ModeMarker that defines a component
+mode::
+
+  >>> from zeam.form.base.interfaces import IModeMarker
+  >>> list(IModeMarker)
+  ['extractable']
+
+The `extractable` attribute defines the ability of a mode to provide a
+valid value extraction::
+
+  >>> print IModeMarker['extractable'].__doc__
+  Boolean allowing or not the extraction of the data, for components in that mode.
+
+``zeam.form.base`` provides 4 base mode markers. Letr's review them::
+
+  >>> from zeam.form.base import markers
+
+The `default` mode is, by default, extractable::
+
+  >>> IModeMarker.providedBy(markers.DEFAULT)
+  True
+  >>> markers.DEFAULT.extractable
+  True
+  >>> print markers.DEFAULT
+  default
+
+The `input` mode is, logically, extractable, as the form submission
+are based on it::
+
+  >>> IModeMarker.providedBy(markers.INPUT)
+  True
+  >>> markers.INPUT.extractable
+  True
+  >>> print markers.INPUT
+  input
+
+Accordingly, the `hidden` mode matches the `input` behavior::
+
+  >>> IModeMarker.providedBy(markers.HIDDEN)
+  True
+  >>> markers.HIDDEN.extractable
+  True
+  >>> print markers.HIDDEN
+  hidden
+
+At the contrary, the `display` mode will not be extractable, as it's
+used for presentation purpose only::
+
+  >>> IModeMarker.providedBy(markers.DISPLAY)
+  True
+  >>> markers.DISPLAY.extractable
+  False
+  >>> print markers.DISPLAY
+  display
+
+
+Extraction
+~~~~~~~~~~
+
+   >>> request = TestRequest(form={""})
+   >>> context = Content()
