@@ -209,5 +209,43 @@ used for presentation purpose only::
 Extraction
 ~~~~~~~~~~
 
-   >>> request = TestRequest(form={""})
-   >>> context = Content()
+The extraction process will rely on the fields' mode or, if not defined
+locally, on the form's mode. Let's define a form with 2 fields::
+
+  >>> from zeam.form.base.fields import Field, Fields
+  >>> id = Field('identifier')
+  >>> name = Field('name')
+
+  >>> class MyForm(Form):
+  ...    fields = Fields(id, name)
+
+Now, we create a request with some data, for the `name` field. We
+consider the `id` field immutable.
+
+  >>> request = TestRequest(form={"form.field.name": "myname"})
+  >>> context = Content()
+
+While extracting the data, the form will retrieve the values of all
+the "extractable" fields::
+
+  >>> form = MyForm(context, request)
+  >>> form.update()
+  >>> data, errors = form.extractData()
+
+  >>> print data
+  {'identifier': <Marker NO_VALUE>, 'name': 'myname'}
+
+The `identifier` value is set to NO_VALUE, as the request was not
+containing any. As we consider the field immutable, we'll apply a
+simple display mode on it, allowing us to display the current value,
+without providing a way to edit it and without considering the field
+in the extraction process::
+
+  >>> form = MyForm(context, request)
+  >>> form.fields['identifier'].mode = markers.DISPLAY
+  >>> form.update()
+  >>> data, errors = form.extractData()
+  >>> print data
+  {'name': 'myname'}
+
+The `identifier` field is not extracted, as planned.
