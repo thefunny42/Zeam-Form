@@ -143,26 +143,27 @@ class IDataManager(interface.Interface):
 
 
 class IFormData(IFieldExtractionValueSetting):
-    """Data of a form. It is used to process and setup the form.
+    """Form data processing facilities.
     """
-    errors = interface.Attribute(u"List of all errors who might occurs")
-    status = interface.Attribute(u"Status message")
-    formError = interface.Attribute(u"Main error who occurred")
     dataManager = interface.Attribute(
-        u"Data manager class to use to access content")
+        u"Data manager class used to access content.")
+    status = interface.Attribute(
+        u"Form status message.")
+    errors = interface.Attribute(
+        u"Iterable of the errors that occured during the form processing.")
+    formError = interface.Attribute(
+        u"Main error that occurred during the form processing.")
 
     def getContentData():
-        """Return the data from the content that should be used by
-        the form.
+        """Returns the content that will be used for the form processing.
         """
 
     def setContentData(content):
-        """Use content as base to retrieve the data that should be
-        used by the form.
+        """Sets the content that will be used as the form processing context.
         """
 
     def extractData(fields):
-        """Return form data for the given fields.
+        """Returns the form data and errors for the given fields.
         """
 
 
@@ -306,10 +307,9 @@ class IGrokViewSupport(interface.Interface):
 
 
 class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IGrokViewSupport):
-    """Definition of a form it have a label, description, fields and
-    actions that you can update.
-
-    You can as well render it as a view.
+    """Definition of a form structure.
+    Form presentation : label, description
+    Form contents and actions : fields, actions and their related methods.
     """
     label = interface.Attribute(u"Form title")
     description = interface.Attribute(u"Form description")
