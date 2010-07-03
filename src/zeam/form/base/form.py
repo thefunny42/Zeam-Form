@@ -161,11 +161,9 @@ class FormData(Object):
 
         for field in fields:
 
-            # The field mode must be a valid IModeMarker
-            assert IModeMarker.providedBy(field.mode)
-
             # The field mode should be extractable or we skip it.
-            if field.mode.extractable is False:
+            if (IModeMarker.providedBy(field.mode) and
+                field.mode.extractable is False):
                 continue
             
             extractor = getWidgetExtractor(field, self, self.request)

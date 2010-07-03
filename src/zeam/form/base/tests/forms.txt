@@ -167,15 +167,6 @@ valid value extraction::
 
   >>> from zeam.form.base import markers
 
-The `default` mode is, by default, extractable::
-
-  >>> IModeMarker.providedBy(markers.DEFAULT)
-  True
-  >>> markers.DEFAULT.extractable
-  True
-  >>> print markers.DEFAULT
-  default
-
 The `input` mode is, logically, extractable, as the form submission
 are based on it::
 

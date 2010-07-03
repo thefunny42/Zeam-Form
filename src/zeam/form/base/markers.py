@@ -31,16 +31,16 @@ class ModeMarker(Marker):
 
 
 # Data extraction markers
-NO_VALUE = Marker('NO_VALUE')
-NO_CHANGE = Marker('NO_CHANGE')
-NOT_EXTRACTED = Marker('NOT_EXTRACTED')
 SUCCESS = Marker('SUCCESS')
 FAILURE = Marker('FAILURE')
+DEFAULT = Marker('DEFAULT')
+NO_VALUE = Marker('NO_VALUE')
+NO_CHANGE = Marker('NO_CHANGE')
 NOTHING_DONE = Marker('NOTHING_DONE')
+NOT_EXTRACTED = Marker('NOT_EXTRACTED')
 
 # Mode markers
 DISPLAY = ModeMarker('DISPLAY', extractable=False)
-DEFAULT = ModeMarker('DEFAULT')
 INPUT = ModeMarker('INPUT')
 HIDDEN = ModeMarker('HIDDEN')
 
