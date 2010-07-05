@@ -4,12 +4,20 @@ Changelog
 1.0b5 (unreleased)
 ------------------
 
+* The `ExtractData` method has been splitted in two, with the
+  introduction of the `validateForm` method, that allows the form to
+  override the global form validation process. This let the
+  widgets/fields validation at the very same place, and only involve
+  the general form validation process.
+
 * Created a new marker subclass for the form modes. This marker class
   defines a boolean allowing or not the extraction of the affected
   component, while the form is processed. Added tests for it.
+
 * Look for entry points ``zeam.form.components`` before adapting items
   into components in collection. This let you register adapters before
   they are used.
+
 
 1.0b4 (2010/06/22)
 ------------------
@@ -18,6 +26,7 @@ Changelog
   and it stacks, in this case. Added tests to demonstrate and fix the
   behavior.
 
+
 1.0b3 (2010/06/04)
 ------------------
 
@@ -25,11 +34,14 @@ Changelog
   no longer generating malformed ids/names. Added tests to fix that
   behavior.
 
+
 1.0b2 (2010/05/13)
 ------------------
 
-* Fix a bug in FormData initialization,
+* Fix a bug in FormData initialization.
+
 * Add a NO_CHANGE marker.
+
 
 1.0b1 (2010/05/03)
 ------------------
