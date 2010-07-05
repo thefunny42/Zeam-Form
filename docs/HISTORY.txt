@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0b5 (unreleased)
-------------------
+1.0rc1 (2010/07/05)
+-------------------
 
 * The `ExtractData` method has been splitted in two, with the
   introduction of the `validateData` method, that allows the form to
