@@ -5,9 +5,9 @@ Changelog
 ------------------
 
 * The `ExtractData` method has been splitted in two, with the
-  introduction of the `validateForm` method, that allows the form to
-  override the global form validation process. This let the
-  widgets/fields validation at the very same place, and only involve
+  introduction of the `validateData` method, that allows the form to
+  override the global form validation process. This lets the
+  fields validation at the very same place, and only involves
   the general form validation process.
 
 * Created a new marker subclass for the form modes. This marker class

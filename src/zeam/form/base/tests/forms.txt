@@ -71,10 +71,10 @@ data processing::
     extractData: Returns the form data and errors for the given fields.
     errors: Iterable of the errors that occured during the form processing.
     formError: Main error that occurred during the form processing.
-    validateForm: Validates the forms, in a global way, and returns a collection of errors if any occured or None.
     getContentData: Returns the content that will be used for the form processing.
     dataManager: Data manager class used to access content.
     setContentData: Sets the content that will be used as the form processing context.
+    validateData: Validates the form in a global way and returns a collection of errors (if any occured) or None.
 
 Data manager
 ------------

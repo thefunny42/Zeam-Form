@@ -154,7 +154,7 @@ class FormData(Object):
             content = self.dataManager(content)
         self.__content = content
 
-    def validateForm(self, fields, data):
+    def validateData(self, fields, data):
         if len(self.errors):
             if not self.prefix in self.errors:
                 self.errors.append(Error(u"There were errors", self.prefix))
@@ -183,7 +183,7 @@ class FormData(Object):
             data[field.identifier] = value
 
         # Generic form validation
-        errors = self.validateForm(fields, data)
+        errors = self.validateData(fields, data)
         return (data, errors)
 
 
