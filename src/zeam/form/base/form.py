@@ -154,6 +154,13 @@ class FormData(Object):
             content = self.dataManager(content)
         self.__content = content
 
+    def validateForm(self, fields, data):
+        if len(self.errors):
+            if not self.prefix in self.errors:
+                self.errors.append(Error(u"There were errors", self.prefix))
+            return self.errors
+        return None
+
     def extractData(self, fields):
         if self.__extracted is not NOT_EXTRACTED:
             return (self.__extracted, self.errors)
@@ -165,7 +172,8 @@ class FormData(Object):
             if (IModeMarker.providedBy(field.mode) and
                 field.mode.extractable is False):
                 continue
-            
+
+            # Widget extraction and validation
             extractor = getWidgetExtractor(field, self, self.request)
             value, error = extractor.extract()
             if error is None:
@@ -174,11 +182,8 @@ class FormData(Object):
                 self.errors.append(Error(error, field.identifier))
             data[field.identifier] = value
 
-        errors = None
-        if len(self.errors):
-            if not self.prefix in self.errors:
-                self.errors.append(Error(u"There were errors", self.prefix))
-            errors = self.errors
+        # Generic form validation
+        errors = self.validateForm(fields, data)
         return (data, errors)
 
 
