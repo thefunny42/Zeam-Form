@@ -8,6 +8,10 @@ Changelog
   defines a boolean allowing or not the extraction of the affected
   component, while the form is processed. Added tests for it.
 
+* Look for entry points ``zeam.form.components`` before adapting items
+  into components in collection. This let you register adapters before
+  they are used.
+
 1.0b4 (2010/06/22)
 ------------------
 
