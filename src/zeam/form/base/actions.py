@@ -74,9 +74,9 @@ class DecoratedAction(Action):
             return self._available(form)
         return True
 
-    def __call__(self, form):
+    def __call__(self, form, *args, **kwargs):
         assert self._callback is not None
-        return self._callback(form)
+        return self._callback(form, *args, **kwargs)
 
 
 # More convienent, extract the data before calling the action
@@ -88,7 +88,7 @@ class ExtractedDecoratedAction(DecoratedAction):
         if errors:
             return FAILURE
         # We directly give data.
-        return super(ExtractedDecoratedAction, self).__call__(data)
+        return super(ExtractedDecoratedAction, self).__call__(form, data)
 
 
 def action(title, identifier=None, validator=None,
