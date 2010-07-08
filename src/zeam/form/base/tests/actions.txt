@@ -256,6 +256,7 @@ the Actions list located on the form class:
    ...   @action(u"Change")
    ...   def change(self):
    ...       self.status = u"Just kidding"
+   ...       return SUCCESS
 
    >>> MyForm.actions
    <Actions>
@@ -275,6 +276,7 @@ This is like a regular action, but run the method when you call it:
    >>> d1.validate(f3)
    True
    >>> d1(f3)
+   <Marker SUCCESS>
    >>> f3.status
    u'Just kidding'
 

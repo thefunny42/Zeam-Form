@@ -76,12 +76,13 @@ class DecoratedAction(Action):
 
     def __call__(self, form):
         assert self._callback is not None
-        self._callback(form)
+        return self._callback(form)
 
 
-def action(title, identifier=None, validator=None, available=None):
+def action(title, identifier=None, validator=None,
+           available=None, factory=DecoratedAction):
     def createAction(callback):
-        new_action = DecoratedAction(
+        new_action = factory(
             title, callback, identifier, validator, available)
 
         # Magic to access the parent action list to add the action
