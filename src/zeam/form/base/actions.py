@@ -79,6 +79,18 @@ class DecoratedAction(Action):
         return self._callback(form)
 
 
+# More convienent, extract the data before calling the action
+
+class ExtractedDecoratedAction(DecoratedAction):
+
+    def __call__(self, form):
+        data, errors = form.extractData()
+        if errors:
+            return FAILURE
+        # We directly give data.
+        return super(ExtractedDecoratedAction, self).__call__(data)
+
+
 def action(title, identifier=None, validator=None,
            available=None, factory=DecoratedAction):
     def createAction(callback):
