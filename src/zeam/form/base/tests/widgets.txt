@@ -46,7 +46,7 @@ action, so by default you get a button:
 
    >>> print widget1.render()
    <input type="submit" id="form-action-do-something"
-          name="form.action.do-something" value="Do Something" />
+          name="form.action.do-something" value="Do Something" class="action" />
    <BLANKLINE>
 
 You can get its HTML id as well (to render any label for instance):

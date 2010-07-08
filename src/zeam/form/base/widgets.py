@@ -140,6 +140,10 @@ class ActionWidget(Widget):
     grok.name('input')
 
 
+    def htmlClass(self):
+        return 'action'
+
+
 def getWidgetExtractor(field, form, request):
     mode = str(getValue(field, 'mode', form))
     extractor = component.queryMultiAdapter(

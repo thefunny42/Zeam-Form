@@ -1,5 +1,6 @@
-<input type="submit" id="#" name="#" value="#"
+<input type="submit" id="#" name="#" value="#" class="#"
        tal:attributes="name widget.identifier;
                        value widget.title;
-                       id widget.htmlId()"
+                       id widget.htmlId();
+                       class widget.htmlClass()"
        i18n:attributes="value" />

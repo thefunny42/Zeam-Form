@@ -39,7 +39,7 @@ And we can render it:
         <div class="actions">
            <div class="action">
               <input type="submit" id="form-action-change-me"
-                     name="form.action.change-me" value="Change Me" />
+                     name="form.action.change-me" value="Change Me" class="action" />
            </div>
         </div>
       </form>
