@@ -382,6 +382,15 @@ class IZeamFormBaseAPI(interface.Interface):
     action = interface.Attribute(
         u"Decorator to use a form method as an Action")
 
+    ObjectDataManager = interface.Attribute(
+        u"Data manager to work with values as attribute of an object")
+    DictDataManager = interface.Attribute(
+        u"Data manager to work with values in dictionary")
+    NoneDataManager = interface.Attribute(
+        u"Data manager to work directly with a value")
+    makeAdaptiveDataManager  = interface.Attribute(
+        u"Data manager to work with from an simple adapter")
+
     context = interface.Attribute(
         u"Directive to map form to a context")
     name = interface.Attribute(
