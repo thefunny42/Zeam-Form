@@ -3,6 +3,7 @@
 from grokcore import component as grok
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
+from zeam.form.base.interfaces import IModeMarker
 from zeam.form.base.markers import NO_VALUE, getValue
 from zope import component
 from zope.interface import Interface
@@ -146,6 +147,12 @@ class ActionWidget(Widget):
 
 def getWidgetExtractor(field, form, request):
     mode = str(getValue(field, 'mode', form))
+
+    # The field mode should be extractable or we skip it.
+    if (IModeMarker.providedBy(field.mode) and
+        field.mode.extractable is False):
+        return None
+
     extractor = component.queryMultiAdapter(
         (field, form, request), interfaces.IWidgetExtractor, name=mode)
     if extractor is not None:
@@ -174,9 +181,10 @@ class FieldWidget(Widget):
         if not ignoreRequest:
             extractor = getWidgetExtractor(
                 self.component, self.form, self.request)
-            value = extractor.extractRaw()
-            if value:
-                return self.prepareRequestValue(value)
+            if extractor is not None:
+                value = extractor.extractRaw()
+                if value:
+                    return self.prepareRequestValue(value)
 
         # After, the context
         ignoreContent = getValue(self.component, 'ignoreContent', self.form)

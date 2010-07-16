@@ -10,7 +10,6 @@ from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
 from zeam.form.base.markers import INPUT, NOT_EXTRACTED
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
-from zeam.form.base.interfaces import IModeMarker
 
 from zope import component, i18n
 from zope.pagetemplate.interfaces import IPageTemplate
@@ -168,19 +167,15 @@ class FormData(Object):
 
         for field in fields:
 
-            # The field mode should be extractable or we skip it.
-            if (IModeMarker.providedBy(field.mode) and
-                field.mode.extractable is False):
-                continue
-
             # Widget extraction and validation
             extractor = getWidgetExtractor(field, self, self.request)
-            value, error = extractor.extract()
-            if error is None:
-                error = field.validate(value, self.context)
-            if error is not None:
-                self.errors.append(Error(error, field.identifier))
-            data[field.identifier] = value
+            if extractor is not None:
+                value, error = extractor.extract()
+                if error is None:
+                    error = field.validate(value, self.context)
+                if error is not None:
+                    self.errors.append(Error(error, field.identifier))
+                data[field.identifier] = value
 
         # Generic form validation
         errors = self.validateData(fields, data)
