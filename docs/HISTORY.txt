@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.0rc2 (2010/07/16)
+-------------------
+
+* The marker to allow extraction affect as well processing them rediplaying
+  values coming from the request.
+
+* DataManager API is exported by default.
+
+* DecoratedAction can be extended. You can provide your own implementation
+  with the ``factory`` parameter of the decorator.
+
 1.0rc1 (2010/07/05)
 -------------------
 
