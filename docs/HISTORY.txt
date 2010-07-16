@@ -4,7 +4,7 @@ Changelog
 1.0rc2 (2010/07/16)
 -------------------
 
-* The marker to allow extraction affect as well processing them rediplaying
+* The marker to allow extraction affect as well processing them redisplaying
   values coming from the request.
 
 * DataManager API is exported by default.
