@@ -16,15 +16,14 @@
          tal:condition="view.status"
          tal:content="view.status">Status</p>
 
-      <p class="form-error"
+      <div class="form-error"
          tal:condition="view.errors">
         There were errors:
-        <tal:error tal:define="formError view.formError"
-                   tal:condition="formError">
-          <br />
-          <span tal:replace="formError.title" />
-        </tal:error>
-      </p>
+          <ul tal:condition="view.formErrors"
+              tal:repeat="error view.formErrors">  
+            <li> <span tal:replace="error.title" /> </li>
+          </ul>  
+      </div>
 
       <div class="fields"
            tal:condition="view.fieldWidgets">

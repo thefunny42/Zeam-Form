@@ -70,7 +70,7 @@ data processing::
     status: Form status message.
     extractData: Returns the form data and errors for the given fields.
     errors: Iterable of the errors that occured during the form processing.
-    formError: Main error that occurred during the form processing.
+    formErrors: Main errors that occurred during the form processing.
     getContentData: Returns the content that will be used for the form processing.
     dataManager: Data manager class used to access content.
     setContentData: Sets the content that will be used as the form processing context.

@@ -151,8 +151,8 @@ class IFormData(IFieldExtractionValueSetting):
         u"Form status message.")
     errors = interface.Attribute(
         u"Iterable of the errors that occured during the form processing.")
-    formError = interface.Attribute(
-        u"Main error that occurred during the form processing.")
+    formErrors = interface.Attribute(
+        u"Main errors that occurred during the form processing.")
 
     def getContentData():
         """Returns the content that will be used for the form processing.

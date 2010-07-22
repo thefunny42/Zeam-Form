@@ -10,6 +10,7 @@ from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
 from zeam.form.base.markers import INPUT, NOT_EXTRACTED
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
+from zeam.form.base.interfaces import ICollection
 
 from zope import component, i18n
 from zope.pagetemplate.interfaces import IPageTemplate
@@ -142,8 +143,11 @@ class FormData(Object):
         self.__extracted = NOT_EXTRACTED
 
     @property
-    def formError(self):
-        return self.errors.get(self.prefix, None)
+    def formErrors(self):
+        error = self.errors.get(self.prefix, None)
+        if error is None or ICollection.providedBy(error):
+            return error
+        return [error]
 
     def getContentData(self):
         return self.__content

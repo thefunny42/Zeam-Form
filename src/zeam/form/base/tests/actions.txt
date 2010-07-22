@@ -200,7 +200,7 @@ Errors can be read from the submission:
 
    >>> list(s4.errors)
    []
-   >>> s4.formError
+   >>> s4.formErrors
 
 So the action doesn't work, and the error will be reported in the
 submission:
@@ -214,13 +214,13 @@ submission:
 
    >>> list(s4.errors)
    [<Error I can't take it anymore>]
-   >>> s4.formError
-   <Error I can't take it anymore>
+   >>> s4.formErrors
+   [<Error I can't take it anymore>]
 
 Errors implement an interface as well, and are components contained
 in a collection:
 
-   >>> verifyObject(interfaces.IError, s4.formError)
+   >>> verifyObject(interfaces.IError, s4.errors.get('form'))
    True
    >>> interfaces.IError.extends(interfaces.IComponent)
    True
@@ -231,8 +231,25 @@ in a collection:
    True
 
 
-Interfaces
-~~~~~~~~~~
+formErrors is a special property which only returns the MainErros of a form.
+A MainError is a Error which has the prefix of the form as identifier 
+instead of a custom identifier.
+
+   >>> from zeam.form.base.errors import Error
+   >>> s5 = FormData(object, r4)
+   >>> s5.errors.append(Error('Field Error', identifier='field'))
+   >>> s5.errors.append(Error('Main Error', identifier=s5.prefix))
+
+   >>> s5.formErrors
+   [<Error Main Error>]
+
+   [error.title for error in s5.errors]
+   ['Field Error', 'Main Error']
+
+
+
+Interface
+~~~~~~~~~
 
 Those Actions implement IActions and ICollection:
 
