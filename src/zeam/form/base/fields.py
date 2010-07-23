@@ -2,6 +2,7 @@
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.markers import NO_VALUE, DEFAULT
+from zeam.form.base import MF as _
 
 from zope.interface import implements
 
@@ -28,7 +29,7 @@ class Field(Component):
 
     def validate(self, value, context=None):
         if self.required and value is NO_VALUE:
-            return u"Missing required value"
+            return _('label_missing_required', default=u"Missing required value")
         return None
 
 
