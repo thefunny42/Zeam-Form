@@ -7,6 +7,7 @@ from zeam.form.base.interfaces import IModeMarker
 from zeam.form.base.markers import NO_VALUE, getValue
 from zope import component
 from zope.interface import Interface
+from zope.pagetemplate.interfaces import IPageTemplate
 
 
 def widget_id(form, component):
@@ -55,7 +56,14 @@ class Widget(Component, grok.MultiAdapter):
         pass
 
     def render(self):
-        return self.template.render(self)
+        # Try grok template first
+        template = getattr(self, 'template', None)
+        if template is not None:
+            return self.template.render(self)
+        # Fallback on IPageTemplate
+        template = component.getMultiAdapter(
+            (self, self.request), IPageTemplate)
+        return template()
 
 
 class WidgetExtractor(grok.MultiAdapter):
