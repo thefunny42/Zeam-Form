@@ -117,7 +117,7 @@ If the prefixes are empty:
    >>> action2.prefix = u""
    >>> widget3 = component.getMultiAdapter(
    ...         (action2, form2, request), interfaces.IWidget, name='input')
-   
+
    >>> print widget3.identifier
    some-action
 
@@ -140,6 +140,25 @@ via the widget:
    >>> form1.errors.append(Error('Missing value', 'title'))
    >>> widget2.error
    <Error Missing value>
+
+Widget are views that can be that can be renderered:
+
+   >>> widget2.update()
+   >>> widget2.render() #doctest: +NORMALIZE_WHITESPACE
+   u'<input type="text" id="form-field-title" name="form.field.title"
+   class="field" value="" />'
+
+If field is read only then field widget is read only as well.
+
+   >>> field1.readonly = True
+   >>> widget2 =component.getMultiAdapter(
+   ...         (field1, form1, request), interfaces.IWidget, name='input')
+   >>> widget2.readonly
+   True
+   >>> widget2.update()
+   >>> widget2.render() #doctest: +NORMALIZE_WHITESPACE
+   u'<input type="text" id="form-field-title" name="form.field.title"
+   class="field" value="" readonly="readonly" />'
 
 Field widget value
 ~~~~~~~~~~~~~~~~~~

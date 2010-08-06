@@ -13,6 +13,7 @@ class Field(Component):
     description = u''
     required = False
     prefix = 'field'
+    readonly = False
 
     ignoreContent = DEFAULT
     ignoreRequest = DEFAULT

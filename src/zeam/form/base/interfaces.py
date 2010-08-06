@@ -205,6 +205,8 @@ class IField(IRenderableComponent, IFieldExtractionValueSetting):
     description = interface.Attribute(u"Field description")
     required = interface.Attribute(
         u"Boolean indicating if the field is required")
+    readonly = interface.Attribute(
+        u"Boolean indicating if the field is read-only")
 
     def getDefaultValue():
         """Return the default value.
@@ -262,6 +264,7 @@ class IFieldWidget(IWidget):
     error = interface.Attribute(u"Field error, or None")
     required = interface.Attribute(
         u"Boolean indicating if the field is required")
+    readonly = interface.Attribute(u"Boolean indicating if field is read-only")
 
 
 class IWidgetExtractor(interface.Interface):
