@@ -8,7 +8,7 @@ from zeam.form.base.actions import Actions
 from zeam.form.base.datamanager import ObjectDataManager
 from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
-from zeam.form.base.markers import INPUT, NOT_EXTRACTED
+from zeam.form.base.markers import NO_VALUE, INPUT, NOT_EXTRACTED
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
 from zeam.form.base.interfaces import ICollection
 
@@ -115,6 +115,23 @@ def cloneFormData(original, content=_marker, prefix=None):
     return clone
 
 
+class FieldsValues(dict):
+    """Dictionary to contains values of fields. get default by default
+    on the default value of a field.
+    """
+
+    def __init__(self, fields):
+        self.fields = fields
+
+    def getDefault(self, key, default=None):
+        value = super(FieldsValues, self).get(key, default)
+        if value is NO_VALUE:
+            value = self.fields[key].getDefaultValue()
+            if value is NO_VALUE:
+                return default
+        return value
+
+
 class FormData(Object):
     """This represent a submission of a form. It can be used to update
     widgets and run actions.
@@ -167,7 +184,7 @@ class FormData(Object):
     def extractData(self, fields):
         if self.__extracted is not NOT_EXTRACTED:
             return (self.__extracted, self.errors)
-        self.__extracted = data = dict()
+        self.__extracted = data = FieldsValues(fields)
 
         for field in fields:
 
