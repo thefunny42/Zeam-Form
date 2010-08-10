@@ -12,7 +12,7 @@ from zeam.form.base.markers import NO_VALUE, INPUT, NOT_EXTRACTED
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
 from zeam.form.base.interfaces import ICollection
 
-from zope import component, i18n
+from zope import component, i18n, interface
 from zope.pagetemplate.interfaces import IPageTemplate
 from zope.publisher.browser import BrowserPage
 from zope.publisher.publish import mapply
@@ -43,6 +43,17 @@ class GrokViewSupport(Object):
         super(GrokViewSupport, self).__init__(context, request)
         self.context = context
         self.request = request
+
+        if getattr(self, 'module_info', None) is not None:
+            self.static = component.queryAdapter(
+                self.request,
+                interface.Interface,
+                name=self.module_info.package_dotted_name)
+            if self.static is not None:
+                # For security in Zope 2
+                self.static.__parent__ = self
+        else:
+            self.static = None
 
     @property
     def response(self):
