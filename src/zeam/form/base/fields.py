@@ -30,7 +30,7 @@ class Field(Component):
 
     def validate(self, value, context=None):
         if self.required and value is NO_VALUE:
-            return _('label_missing_required', default=u"Missing required value")
+            return _(u"Missing required value")
         return None
 
 

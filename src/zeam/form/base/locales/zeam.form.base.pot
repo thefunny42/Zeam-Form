@@ -24,7 +24,7 @@ msgstr ""
 
 #. Default: "Missing required value"
 #: ../fields.py:32
-msgid "label_missing_required"
+msgid "Missing required value"
 msgstr ""
 
 #. Default: "There were errors:"

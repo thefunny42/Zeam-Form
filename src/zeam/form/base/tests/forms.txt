@@ -50,7 +50,7 @@ label and description, its fields and actions and the related methods::
 
    >>> interfaces.ISimpleForm.isOrExtends(interfaces.IFormCanvas)
    True
-   
+
    >>> print interfaces.IFormCanvas.__doc__
    Definition of a form structure.
       Form presentation : label, description
@@ -65,16 +65,18 @@ data processing::
    >>> print interfaces.IFormData.__doc__
    Form data processing facilities.
 
-   >>> for name, attr in interfaces.IFormData.namesAndDescriptions():
+   >>> for name, attr in sorted(interfaces.IFormData.namesAndDescriptions()):
    ...     print "%s: %s" % (name, attr.getDoc())
-    status: Form status message.
-    extractData: Returns the form data and errors for the given fields.
-    errors: Iterable of the errors that occured during the form processing.
-    formErrors: Main errors that occurred during the form processing.
-    getContentData: Returns the content that will be used for the form processing.
-    dataManager: Data manager class used to access content.
-    setContentData: Sets the content that will be used as the form processing context.
-    validateData: Validates the form in a global way and returns a collection of errors (if any occured) or None.
+   dataManager: Data manager class used to access content.
+   errors: Iterable of the errors that occured during the form processing.
+   extractData: Returns the form data and errors for the given fields.
+   formErrors: Main errors that occurred during the form processing.
+   getContentData: Returns the content that will be used for the form processing.
+   setContentData: Sets the content that will be used as the form processing context.
+   status: Form status message.
+   validateData: Validates the form in a global way and returns a collection
+           of errors (if any occured) or None.
+
 
 Data manager
 ------------
