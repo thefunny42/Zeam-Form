@@ -13,7 +13,7 @@ A field is a simple input on a form::
    >>> field1
    <Field Age>
    >>> field1.title
-   'Age'
+   u'Age'
    >>> field1.description
    u''
 

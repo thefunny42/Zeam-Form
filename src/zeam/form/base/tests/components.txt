@@ -17,7 +17,7 @@ First let's see the component:
   >>> c1.identifier
   'sun'
   >>> c1.title
-  'The Sun'
+  u'The Sun'
 
 It correctly implement IComponent:
 
@@ -36,6 +36,12 @@ unicode title:
   'moon'
   >>> c2.title
   u'Moon'
+
+Or a number:
+
+  >>> c69 = Component(69)
+  >>> c69.title
+  u'69'
 
 If by doing so, the title contain spaces, they will be replaced by
 ``-``. If UTF-8 character are included, the identifiant will be
