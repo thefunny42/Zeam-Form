@@ -4,7 +4,7 @@ import sys
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.errors import Error
-from zeam.form.base.markers import NO_VALUE, NOTHING_DONE, DEFAULT, FAILURE
+from zeam.form.base.markers import NO_VALUE, NOTHING_DONE, FAILURE
 
 from zope.interface import implements
 from zope import component
@@ -16,7 +16,9 @@ class Action(Component):
     implements(interfaces.IAction)
 
     prefix = 'action'
-    mode = DEFAULT
+    # By default an action is always in input mode (there is not much
+    # sense otherwise).
+    mode = 'input'
 
     def available(self, context):
         return True
