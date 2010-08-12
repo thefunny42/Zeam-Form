@@ -92,7 +92,8 @@ class ExtractedDecoratedAction(DecoratedAction):
 
 
 def action(title, identifier=None, validator=None,
-           available=None, factory=DecoratedAction):
+           available=None, factory=DecoratedAction,
+           category='actions'):
     def createAction(callback):
         new_action = factory(
             title, callback, identifier, validator, available)
@@ -100,7 +101,7 @@ def action(title, identifier=None, validator=None,
         # Magic to access the parent action list to add the action
         frame = sys._getframe(1)
         f_locals = frame.f_locals
-        actions = f_locals.setdefault('actions', Actions())
+        actions = f_locals.setdefault(category, Actions())
 
         actions.append(new_action)
 
