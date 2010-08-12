@@ -15,7 +15,7 @@ _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 
 def createId(name):
     # Create a valid id from any string.
-    id = unicode(name.strip()).encode('utf-8')
+    id = unicode(name).strip().encode('utf-8')
     id = id.replace(' ', '-')
     if _valid_identifier.match(id):
         return id.lower()
@@ -32,7 +32,7 @@ class Component(object):
         if not title:
             # If the title is empty, use the identifier as title
             title = identifier
-        self.title = title
+        self.title = unicode(title)
 
     def clone(self, new_identifier=None):
         return self.__class__(self.title, new_identifier)
