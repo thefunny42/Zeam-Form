@@ -132,6 +132,10 @@ class IDataManager(interface.Interface):
         """Initialize the data manager for the given content.
         """
 
+    def getContent():
+        """Return the content managed by this data manager.
+        """
+
     def get(identifier):
         """Return content value associated to the given identifier or
         raise KeyError.

@@ -101,6 +101,9 @@ Object data manager
    >>> manager1
    <ObjectDataManager used for <MyContent object>>
 
+   >>> manager1.getContent()
+   <MyContent object>
+
 It correctly implements its interface:
 
    >>> verifyObject(interfaces.IDataManager, manager1)
@@ -138,6 +141,9 @@ There is a data manager which is able to work on dictionaries as well:
    >>> manager2 = DictDataManager(data)
    >>> manager2
    <DictDataManager used for {'value': 42, 'title': u'Content'}>
+
+   >>> manager2.getContent()
+   {'value': 42, 'title': u'Content'}
 
 It correctly implements its interface:
 

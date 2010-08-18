@@ -11,6 +11,9 @@ class BaseDataManager(object):
     def __init__(self, content):
         self.content = content
 
+    def getContent(self):
+        return self.content
+
     def get(self, identifier):
         raise NotImplementedError
 
