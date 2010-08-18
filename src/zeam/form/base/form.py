@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import operator
+
 from grokcore import component as grok
 from grokcore.view import util
 
@@ -236,6 +238,11 @@ class FormCanvas(GrokViewSupport, FormData):
         if fields is None:
             fields = self.fields
         return super(FormCanvas, self).extractData(fields)
+
+    def haveRequiredFields(self):
+        return reduce(
+            operator.or_,
+            [False] + map(operator.attrgetter('required'), self.fields))
 
     def updateActions(self):
         self.actions.process(self, self.request)
