@@ -19,6 +19,7 @@ class Action(Component):
     # By default an action is always in input mode (there is not much
     # sense otherwise).
     mode = 'input'
+    description = None
 
     def available(self, context):
         return True
@@ -59,12 +60,14 @@ class DecoratedAction(Action):
     """An action created by a decorator.
     """
 
-    def __init__(self, title, callback, identifier=None, validator=None,
-                 available=None):
+    def __init__(self, title, callback,
+                 identifier=None, description=None,
+                 validator=None, available=None):
         super(Action, self).__init__(title, identifier)
         self._callback = callback
         self._validator = validator
         self._available = available
+        self.description = description
 
     def validate(self, form):
         if self._validator is not None:
@@ -93,12 +96,12 @@ class ExtractedDecoratedAction(DecoratedAction):
         return super(ExtractedDecoratedAction, self).__call__(form, data)
 
 
-def action(title, identifier=None, validator=None,
-           available=None, factory=DecoratedAction,
-           category='actions'):
+def action(title, identifier=None, description=None,
+           validator=None, available=None,
+           factory=DecoratedAction, category='actions'):
     def createAction(callback):
         new_action = factory(
-            title, callback, identifier, validator, available)
+            title, callback, identifier, description, validator, available)
 
         # Magic to access the parent action list to add the action
         frame = sys._getframe(1)

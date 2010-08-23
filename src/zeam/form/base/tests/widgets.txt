@@ -103,7 +103,7 @@ Prefixes of the form and the component will alter the identifier:
    ...         (action2, form2, request), interfaces.IWidget, name='input')
 
    >>> widget3.identifier
-   u'something.else.some-action'
+   'something.else.some-action'
 
 If the prefixes are empty:
 
@@ -111,15 +111,15 @@ If the prefixes are empty:
    >>> widget3 = component.getMultiAdapter(
    ...         (action2, form2, request), interfaces.IWidget, name='input')
 
-   >>> print widget3.identifier
-   else.some-action
+   >>> widget3.identifier
+   'else.some-action'
 
    >>> action2.prefix = u""
    >>> widget3 = component.getMultiAdapter(
    ...         (action2, form2, request), interfaces.IWidget, name='input')
 
-   >>> print widget3.identifier
-   some-action
+   >>> widget3.identifier
+   'some-action'
 
 For convinience, the description and required is also available on the
 widget (to be used while rendering that last one):

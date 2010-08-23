@@ -184,6 +184,7 @@ class ActionError(Exception):
 class IAction(IRenderableComponent):
     """A form action.
     """
+    description = interface.Attribute(u"Describe the action")
 
     def validate(submission):
         """Self validation of values in order to run.

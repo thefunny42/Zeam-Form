@@ -15,24 +15,30 @@ _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 
 def createId(name):
     # Create a valid id from any string.
-    id = unicode(name).strip().encode('utf-8')
-    id = id.replace(' ', '-')
-    if _valid_identifier.match(id):
-        return id.lower()
-    return id.encode('hex')
+    identifier = name.strip().encode('utf-8').replace(' ', '-')
+    if _valid_identifier.match(identifier):
+        return identifier.lower()
+    return identifier.encode('hex')
 
 
 class Component(object):
     implements(interfaces.IComponent)
 
-    def __init__(self, title, identifier=None):
+    identifier = None
+    title = None
+
+    def __init__(self, title=None, identifier=None):
+        if not self.title:
+            if not title:
+                # If the title is empty, use the identifier as title
+                title = identifier
+                if title is None:
+                    raise ValueError(
+                        u"Need at least a title to build a component.")
+            self.title = unicode(title)
         if identifier is None:
-            identifier = createId(title)
-        self.identifier = identifier
-        if not title:
-            # If the title is empty, use the identifier as title
-            title = identifier
-        self.title = unicode(title)
+            identifier = createId(self.title)
+        self.identifier = str(identifier)
 
     def clone(self, new_identifier=None):
         return self.__class__(self.title, new_identifier)

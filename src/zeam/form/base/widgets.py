@@ -153,6 +153,9 @@ class ActionWidget(Widget):
         Interface)
     grok.name('input')
 
+    def __init__(self, component, form, request):
+        super(ActionWidget, self).__init__(component, form, request)
+        self.description = component.description
 
     def htmlClass(self):
         return 'action'
