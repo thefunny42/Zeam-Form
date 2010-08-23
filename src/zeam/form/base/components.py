@@ -15,7 +15,7 @@ _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 
 def createId(name):
     # Create a valid id from any string.
-    identifier = name.strip().encode('utf-8').replace(' ', '-')
+    identifier = unicode(name).strip().encode('utf-8').replace(' ', '-')
     if _valid_identifier.match(identifier):
         return identifier.lower()
     return identifier.encode('hex')
@@ -35,7 +35,7 @@ class Component(object):
                 if title is None:
                     raise ValueError(
                         u"Need at least a title to build a component.")
-            self.title = unicode(title)
+            self.title = title
         if identifier is None:
             identifier = createId(self.title)
         self.identifier = str(identifier)
