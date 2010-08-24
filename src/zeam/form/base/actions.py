@@ -39,6 +39,8 @@ class Actions(Collection):
     type = interfaces.IAction
 
     def process(self, form, request):
+        if form.postOnly and request.method != 'POST':
+            return FAILURE
         for action in self:
             extractor = component.getMultiAdapter(
                 (action, form, request), interfaces.IWidgetExtractor)

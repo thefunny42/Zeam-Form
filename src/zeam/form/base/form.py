@@ -120,6 +120,7 @@ def cloneFormData(original, content=_marker, prefix=None):
     clone.ignoreRequest = original.ignoreRequest
     clone.ignoreContent = original.ignoreContent
     clone.i18nLanguage = original.i18nLanguage
+    clone.postOnly = original.postOnly
     clone.mode = original.mode
     if prefix is None:
         clone.prefix = original.prefix
@@ -155,6 +156,7 @@ class FormData(Object):
     prefix = 'form'
     mode = INPUT
     dataManager = ObjectDataManager
+    postOnly = False
     i18nLanguage = None
 
     ignoreRequest = False
