@@ -156,6 +156,7 @@ class ActionWidget(Widget):
     def __init__(self, component, form, request):
         super(ActionWidget, self).__init__(component, form, request)
         self.description = component.description
+        self.accesskey = component.accesskey
 
     def htmlClass(self):
         return 'action'

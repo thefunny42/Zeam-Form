@@ -20,6 +20,7 @@ class Action(Component):
     # sense otherwise).
     mode = 'input'
     description = None
+    accesskey = None
 
     def available(self, context):
         return True
