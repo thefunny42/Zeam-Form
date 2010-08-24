@@ -9,7 +9,7 @@ Field
 A field is a simple input on a form::
 
    >>> from zeam.form.base.fields import Field
-   >>> field1 = Field('Age')
+   >>> field1 = Field(u'Age')
    >>> field1
    <Field Age>
    >>> field1.title

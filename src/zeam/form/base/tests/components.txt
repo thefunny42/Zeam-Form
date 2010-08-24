@@ -11,7 +11,7 @@ Components
 First let's see the component:
 
   >>> from zeam.form.base.components import Component
-  >>> c1 = Component('The Sun', 'sun')
+  >>> c1 = Component(u'The Sun', 'sun')
   >>> c1
   <Component The Sun>
   >>> c1.identifier
@@ -37,11 +37,12 @@ unicode title:
   >>> c2.title
   u'Moon'
 
-Or a number:
+Or a number (it won't be converted to string. Like this, this support
+Zope translation messages):
 
   >>> c69 = Component(69)
   >>> c69.title
-  u'69'
+  69
 
 If by doing so, the title contain spaces, they will be replaced by
 ``-``. If UTF-8 character are included, the identifiant will be

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import operator
+import sys
 
 from grokcore import component as grok
 from grokcore.view import util
@@ -293,3 +294,23 @@ class Form(FormCanvas, StandaloneForm):
     """
     grok.baseclass()
     grok.implements(interfaces.ISimpleForm)
+
+
+def extends(*forms, **opts):
+    # Extend a class with parents components
+    field_type = opts.get('fields', 'all')
+
+    def extendComponent(field_type):
+        factory = {'actions': Actions, 'fields': Fields}.get(field_type)
+        if factory is None:
+            raise ValueError(u"Invalid parameter fields to extends")
+        frame = sys._getframe(2)
+        f_locals = frame.f_locals
+        components = f_locals.setdefault(field_type, factory())
+        components.extend(*map(operator.attrgetter(field_type), forms))
+
+    if field_type == 'all':
+        extendComponent('actions')
+        extendComponent('fields')
+    else:
+        extendComponent(field_type)
