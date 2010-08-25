@@ -64,12 +64,13 @@ class DecoratedAction(Action):
     """
 
     def __init__(self, title, callback,
-                 identifier=None, description=None,
+                 identifier=None, description=None, accesskey=None,
                  validator=None, available=None):
         super(Action, self).__init__(title, identifier)
         self._callback = callback
         self._validator = validator
         self._available = available
+        self.accesskey = accesskey
         self.description = description
 
     def validate(self, form):
@@ -99,12 +100,13 @@ class ExtractedDecoratedAction(DecoratedAction):
         return super(ExtractedDecoratedAction, self).__call__(form, data)
 
 
-def action(title, identifier=None, description=None,
+def action(title, identifier=None, description=None, accesskey=None,
            validator=None, available=None,
            factory=DecoratedAction, category='actions'):
     def createAction(callback):
         new_action = factory(
-            title, callback, identifier, description, validator, available)
+            title, callback, identifier, description, accesskey,
+            validator, available)
 
         # Magic to access the parent action list to add the action
         frame = sys._getframe(1)
