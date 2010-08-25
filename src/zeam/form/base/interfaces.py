@@ -416,6 +416,8 @@ class IZeamFormBaseAPI(interface.Interface):
         u"Marker for mode to get display widgets")
     INPUT = interface.Attribute(
         u"Marker for mode to get input widgets")
+    HIDDEN = interface.Attribute(
+        u"Marker for mode to get hidden widgets")
     DEFAULT = interface.Attribute(
         u"Marker used to use the default value located on the form")
     SUCCESS = interface.Attribute(
