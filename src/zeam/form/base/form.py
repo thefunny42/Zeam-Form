@@ -248,7 +248,7 @@ class FormCanvas(GrokViewSupport, FormData):
             [False] + map(operator.attrgetter('required'), self.fields))
 
     def updateActions(self):
-        self.actions.process(self, self.request)
+        return self.actions.process(self, self.request)
 
     def updateWidgets(self):
         self.fieldWidgets.extend(self.fields)
