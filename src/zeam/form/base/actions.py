@@ -41,7 +41,7 @@ class Actions(Collection):
 
     def process(self, form, request):
         if form.postOnly and request.method != 'POST':
-            return FAILURE
+            return None, FAILURE
         for action in self:
             extractor = component.getMultiAdapter(
                 (action, form, request), interfaces.IWidgetExtractor)
@@ -50,11 +50,11 @@ class Actions(Collection):
             if value is not NO_VALUE:
                 try:
                     if action.validate(form):
-                        return action(form)
-                except interfaces.ActionError, e:
-                    form.errors.append(Error(e.args[0], form.prefix))
-                    return FAILURE
-        return NOTHING_DONE
+                        return action, action(form)
+                except interfaces.ActionError, error:
+                    form.errors.append(Error(error.args[0], form.prefix))
+                    return action, FAILURE
+        return None, NOTHING_DONE
 
 
 # Convience API, decorator to add action
