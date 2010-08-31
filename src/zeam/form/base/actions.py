@@ -6,7 +6,7 @@ from zeam.form.base.components import Component, Collection
 from zeam.form.base.errors import Error
 from zeam.form.base.markers import NO_VALUE, NOTHING_DONE, FAILURE
 
-from zope.interface import implements
+from zope.interface import implements, alsoProvides
 from zope import component
 
 
@@ -101,12 +101,14 @@ class ExtractedDecoratedAction(DecoratedAction):
 
 
 def action(title, identifier=None, description=None, accesskey=None,
-           validator=None, available=None,
+           validator=None, available=None, implements=None,
            factory=DecoratedAction, category='actions'):
     def createAction(callback):
         new_action = factory(
             title, callback, identifier, description, accesskey,
             validator, available)
+        if implements is not None:
+            alsoProvides(new_action, implements)
 
         # Magic to access the parent action list to add the action
         frame = sys._getframe(1)
