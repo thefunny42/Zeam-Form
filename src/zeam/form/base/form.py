@@ -159,7 +159,7 @@ class FormData(Object):
     parent = None
     mode = INPUT
     dataManager = ObjectDataManager
-    postOnly = False
+    postOnly = True
     i18nLanguage = None
 
     ignoreRequest = False
