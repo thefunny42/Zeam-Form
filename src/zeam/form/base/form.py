@@ -123,6 +123,7 @@ def cloneFormData(original, content=_marker, prefix=None):
     clone.i18nLanguage = original.i18nLanguage
     clone.postOnly = original.postOnly
     clone.mode = original.mode
+    clone.parent = original
     if prefix is None:
         clone.prefix = original.prefix
     else:
@@ -155,6 +156,7 @@ class FormData(Object):
     grok.implements(interfaces.IFormData)
 
     prefix = 'form'
+    parent = None
     mode = INPUT
     dataManager = ObjectDataManager
     postOnly = False
@@ -170,10 +172,11 @@ class FormData(Object):
         self.context = context
         self.request = request
         self.errors = Errors()
+        self.__extracted = NOT_EXTRACTED
+        self.__content = None
         if content is _marker:
             content = context
         self.setContentData(content)
-        self.__extracted = NOT_EXTRACTED
 
     @property
     def formErrors(self):
@@ -181,6 +184,14 @@ class FormData(Object):
         if error is None or ICollection.providedBy(error):
             return error
         return [error]
+
+    def htmlId(self):
+        return self.prefix.replace('.', '-')
+
+    def getContent(self):
+        # Shortcut for actions. You should not reimplement that method
+        # but getContentData.
+        return self.getContentData().getContent()
 
     def getContentData(self):
         return self.__content
