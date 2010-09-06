@@ -17,8 +17,8 @@ Forms are class, registered like views:
    >>> form1
    <zeam.form.base.form.Form object at ...>
 
-They implements `IForm` and `ISimpleForm`, `ISimpleForm` extending
-`IForm` and adding some form processing abilities::
+They implements ``IForm`` and ``ISimpleForm``, ``ISimpleForm`` extending
+``IForm`` and adding some form processing abilities:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
@@ -32,8 +32,8 @@ They implements `IForm` and `ISimpleForm`, `ISimpleForm` extending
    >>> interfaces.ISimpleForm.isOrExtends(interfaces.IForm)
    True
 
-The `IForm` extends the clearly defined Grok view component interface,
-`IGrokViewSupport`:
+The ``IForm`` extends the clearly defined Grok view component interface,
+``IGrokViewSupport``:
 
    >>> for attr in list(interfaces.IGrokViewSupport): print attr
    redirect
@@ -45,8 +45,8 @@ The `IForm` extends the clearly defined Grok view component interface,
 
 The ISimpleForm interface extends also two main components interfaces.
 
-The `IFormCanvas` interface defines the very core of a form : its
-label and description, its fields and actions and the related methods::
+The ``IFormCanvas`` interface defines the very core of a form : its
+label and description, its fields and actions and the related methods:
 
    >>> interfaces.ISimpleForm.isOrExtends(interfaces.IFormCanvas)
    True
