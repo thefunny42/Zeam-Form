@@ -40,14 +40,16 @@ class Actions(Collection):
     type = interfaces.IAction
 
     def process(self, form, request):
-        if form.postOnly and request.method != 'POST':
-            return None, FAILURE
         for action in self:
             extractor = component.getMultiAdapter(
                 (action, form, request), interfaces.IWidgetExtractor)
 
             value, error = extractor.extract()
             if value is not NO_VALUE:
+                if form.postOnly and request.method != 'POST':
+                    form.errors.append(
+                        Error('This form was not POSTed', form.prefix))
+                    return None, FAILURE
                 try:
                     if action.validate(form):
                         return action, action(form)

@@ -17,12 +17,12 @@ An action represent a single action of a form:
 An action is callable with a submission to be execuded:
 
    >>> from zope.publisher.browser import TestRequest
-   >>> request = TestRequest()
+   >>> request = TestRequest(REQUEST_METHOD='POST')
 
    >>> from zeam.form.base.form import FormData
-   >>> submission1 = FormData(object(), request)
+   >>> submission = FormData(object(), request)
 
-   >>> action1(submission1)
+   >>> action1(submission)
    Traceback (most recent call last):
      ...
    NotImplementedError
@@ -37,7 +37,7 @@ Of course you need to implement your own action:
    ...        return SUCCESS
 
    >>> myaction1 = MyAction("I like it")
-   >>> myaction1(submission1)
+   >>> myaction1(submission)
    Execute 'I like it'
    <Marker SUCCESS>
 
@@ -45,7 +45,7 @@ Action provide a validate method as well, which is called before the
 action is. If the validate method does return True, the action will
 not be processed:
 
-   >>> myaction1.validate(submission1)
+   >>> myaction1.validate(submission)
    True
 
 
@@ -57,36 +57,46 @@ actions to be processed and the widgets to be rendered:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
-   >>> verifyObject(interfaces.IFormData, submission1)
+   >>> verifyObject(interfaces.IFormData, submission)
    True
 
 You have an helper function to clone them:
 
    >>> from zeam.form.base.form import cloneFormData
-   >>> clone1 = cloneFormData(submission1)
-   >>> clone1 is submission1
+   >>> first_clone = cloneFormData(submission)
+   >>> submission.parent
+   >>> first_clone is submission
    False
-   >>> verifyObject(interfaces.IFormData, clone1)
+   >>> verifyObject(interfaces.IFormData, first_clone)
+   True
+   >>> first_clone.postOnly
    True
 
 Settings are cloned as well:
 
-   >>> clone1.ignoreRequest = True
-   >>> clone1.ignoreContent = False
-   >>> clone1.mode = 'carambar'
-   >>> clone1.prefix = 'form.advanced'
-   >>> clone2 = cloneFormData(clone1)
-   >>> clone2 is clone1
-   False
-   >>> clone2.ignoreRequest
+   >>> first_clone.ignoreRequest = True
+   >>> first_clone.ignoreContent = False
+   >>> first_clone.mode = 'carambar'
+   >>> first_clone.prefix = 'form.advanced'
+   >>> first_clone.postOnly = False
+   >>> first_clone.parent is submission
    True
-   >>> clone2.ignoreContent
+   >>> second_clone = cloneFormData(first_clone)
+   >>> second_clone is first_clone
    False
-   >>> clone2.mode
+   >>> second_clone.parent is first_clone
+   True
+   >>> second_clone.ignoreRequest
+   True
+   >>> second_clone.ignoreContent
+   False
+   >>> second_clone.mode
    'carambar'
-   >>> clone2.prefix
+   >>> second_clone.prefix
    'form.advanced'
-   >>> verifyObject(interfaces.IFormData, clone2)
+   >>> second_clone.postOnly
+   False
+   >>> verifyObject(interfaces.IFormData, second_clone)
    True
 
 Interface
@@ -120,24 +130,33 @@ Processing of actions
 ~~~~~~~~~~~~~~~~~~~~~
 
 It add a ``process`` method, which takes a form and a request and
-execute actions that need to be. Let's create a set of action with
-real actions and try it:
+execute actions that need to be. Let's create a set of actions:
 
-   >>> myaction2 = MyAction("Make it nicer")
-   >>> as2 = Actions(myaction1, myaction2)
-   >>> list(as2)
+   >>> nice_action = MyAction("Make it nicer")
+   >>> nice_actions = Actions(myaction1, nice_action)
+   >>> list(nice_actions)
    [<MyAction I like it>, <MyAction Make it nicer>]
 
-   >>> as2.process(submission1, request)
-   <Marker NOTHING_DONE>
+The result of processing actions is a tuple with the executed action
+and its status (``SUCCESS``, ``FAILURE``, ``NOTHING_DONE``). With no
+data in the request, nothing is done:
 
-   >>> r2 = TestRequest(form={'form.action.%s' %
-   ...      myaction2.identifier: myaction2.title})
-   >>> submission2 = FormData(object(), r2)
+   >>> nice_actions.process(submission, request)
+   (None, <Marker NOTHING_DONE>)
 
-   >>> as2.process(submission2, r2)
+
+With the corresponding input in the request the action is executed,
+and succeed:
+
+   >>> nice_request = TestRequest(
+   ...     form={'form.action.%s' % nice_action.identifier:
+   ...           nice_action.title},
+   ...     REQUEST_METHOD='POST')
+   >>> nice_form = FormData(object(), nice_request)
+
+   >>> nice_actions.process(nice_form, nice_request)
    Execute 'Make it nicer'
-   <Marker SUCCESS>
+   (<MyAction Make it nicer>, <Marker SUCCESS>)
 
 
 Validation
@@ -150,34 +169,41 @@ which doesn't validate unless there is a key 'valid' in the request:
    ...     def validate(self, submission):
    ...         return submission.request.has_key('valid')
 
-   >>> m3 = MyNeverHappyAction("I am unhappy")
-   >>> as3 = Actions(m3)
+   >>> validated_action = MyNeverHappyAction("I am unhappy")
+   >>> validated_actions = Actions(validated_action)
 
 And a test submission for it, which validate the action:
 
-   >>> r3 = TestRequest(form={'form.action.%s' % m3.identifier: m3.title,
-   ...                        'valid': True})
-   >>> submission3 = FormData(object(), r3)
+   >>> working_request = TestRequest(
+   ...     form={'form.action.%s' % validated_action.identifier:
+   ...           validated_action.title,
+   ...           'valid': True},
+   ...     REQUEST_METHOD='POST')
+   >>> working_form = FormData(object(), working_request)
 
 The action works:
 
-   >>> m3(submission3)
+   >>> validated_action(working_form)
    Execute 'I am unhappy'
    <Marker SUCCESS>
-   >>> as3.process(submission3, r3)
+   >>> validated_actions.process(working_form, working_request)
+   Execute 'I am unhappy'
+   (<MyNeverHappyAction I am unhappy>, <Marker SUCCESS>)
+
+However if the validation fail, the actions list still works and
+doesn't report any error:
+
+   >>> wrong_request = TestRequest(
+   ...      form={'form.action.%s' % validated_action.identifier:
+   ...            validated_action.title},
+   ...      REQUEST_METHOD='POST')
+   >>> wrong_form = FormData(object(), wrong_request)
+
+   >>> validated_action(wrong_form)
    Execute 'I am unhappy'
    <Marker SUCCESS>
-
-However if the validation fail, it is not:
-
-   >>> r31 = TestRequest(form={'form.action.%s' % m3.identifier: m3.title})
-   >>> s31 = FormData(object(), r31)
-
-   >>> m3(s31)
-   Execute 'I am unhappy'
-   <Marker SUCCESS>
-   >>> as3.process(s31, r31)
-   <Marker NOTHING_DONE>
+   >>> validated_actions.process(wrong_form, wrong_request)
+   (None, <Marker NOTHING_DONE>)
 
 
 Errors
@@ -190,62 +216,94 @@ action like that:
    ...     def __call__(self, submission):
    ...         raise interfaces.ActionError, "I can't take it anymore"
 
-   >>> m4 = MyFailingAction("Do it")
-   >>> as4 = Actions(m4)
+   >>> failing_action = MyFailingAction("Do it")
+   >>> failing_actions = Actions(failing_action)
 
 Errors can be read from the submission:
 
-   >>> r4 = TestRequest(form={'form.action.%s' % m4.identifier: m4.title})
-   >>> s4 = FormData(object(), r4)
+   >>> failing_request = TestRequest(
+   ...     form={'form.action.%s' % failing_action.identifier:
+   ...           failing_action.title},
+   ...     REQUEST_METHOD='POST')
+   >>> failing_form = FormData(object(), failing_request)
 
-   >>> list(s4.errors)
+   >>> list(failing_form.errors)
    []
-   >>> s4.formErrors
+   >>> failing_form.formErrors
 
 So the action doesn't work, and the error will be reported in the
 submission:
 
-   >>> m4(s4)
+   >>> failing_action(failing_request)
    Traceback (most recent call last):
      ...
    ActionError: I can't take it anymore
-   >>> as4.process(s4, r4)
-   <Marker FAILURE>
+   >>> failing_actions.process(failing_form, failing_request)
+   (<MyFailingAction Do it>, <Marker FAILURE>)
 
-   >>> list(s4.errors)
+   >>> list(failing_form.errors)
    [<Error I can't take it anymore>]
-   >>> s4.formErrors
+   >>> failing_form.formErrors
    [<Error I can't take it anymore>]
 
 Errors implement an interface as well, and are components contained
 in a collection:
 
-   >>> verifyObject(interfaces.IError, s4.errors.get('form'))
+   >>> verifyObject(interfaces.IError, failing_form.errors.get('form'))
    True
    >>> interfaces.IError.extends(interfaces.IComponent)
    True
 
-   >>> verifyObject(interfaces.IErrors, s4.errors)
+   >>> verifyObject(interfaces.IErrors, failing_form.errors)
    True
    >>> interfaces.IErrors.extends(interfaces.ICollection)
    True
 
 
-formErrors is a special property which only returns the MainErros of a form.
-A MainError is a Error which has the prefix of the form as identifier 
-instead of a custom identifier.
+formErrors is a special property which only returns the main error of
+a form.  A main error is a Error which has the prefix of the form as
+identifier instead of a custom identifier.
 
    >>> from zeam.form.base.errors import Error
-   >>> s5 = FormData(object, r4)
-   >>> s5.errors.append(Error('Field Error', identifier='field'))
-   >>> s5.errors.append(Error('Main Error', identifier=s5.prefix))
+   >>> error_form = FormData(object, failing_request)
+   >>> error_form.errors.append(
+   ...    Error('Field Error', identifier='field'))
+   >>> error_form.errors.append(
+   ...    Error('Main Error', identifier=error_form.prefix))
 
-   >>> s5.formErrors
+   >>> error_form.formErrors
    [<Error Main Error>]
 
-   [error.title for error in s5.errors]
+   >>> [error.title for error in error_form.errors]
    ['Field Error', 'Main Error']
 
+By default, actions only work in the request was a POST request. If it
+was not a POST request, a main error will be created reporting this incident:
+
+   >>> get_request = TestRequest(
+   ...     form={'form.action.%s' % nice_action.identifier:
+   ...           nice_action.title},
+   ...     REQUEST_METHOD='GET')
+   >>> get_form = FormData(object(), get_request)
+
+   >>> nice_actions.process(get_form, get_request)
+   (None, <Marker FAILURE>)
+
+   >>> get_form.formErrors
+   [<Error This form was not POSTed>]
+
+If you switch the flag ``postOnly`` to False on the form, it will work:
+
+   >>> working_get_form = FormData(object(), get_request)
+   >>> working_get_form.postOnly
+   True
+   >>> working_get_form.postOnly = False
+
+   >>> nice_actions.process(working_get_form, get_request)
+   Execute 'Make it nicer'
+   (<MyAction Make it nicer>, <Marker SUCCESS>)
+
+   >>> working_get_form.formErrors
 
 
 Interface
