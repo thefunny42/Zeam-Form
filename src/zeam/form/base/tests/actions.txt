@@ -81,7 +81,10 @@ Settings are cloned as well:
    >>> first_clone.postOnly = False
    >>> first_clone.parent is submission
    True
-   >>> second_clone = cloneFormData(first_clone)
+
+However you can specify a different prefix:
+
+   >>> second_clone = cloneFormData(first_clone, prefix='form.clone')
    >>> second_clone is first_clone
    False
    >>> second_clone.parent is first_clone
@@ -93,7 +96,7 @@ Settings are cloned as well:
    >>> second_clone.mode
    'carambar'
    >>> second_clone.prefix
-   'form.advanced'
+   'form.clone'
    >>> second_clone.postOnly
    False
    >>> verifyObject(interfaces.IFormData, second_clone)
@@ -109,7 +112,6 @@ Action implements IAction, and IComponent:
    >>> verifyObject(interfaces.IComponent, action1)
    True
 
-
 Actions
 -------
 
@@ -124,7 +126,6 @@ Action are added to an Actions collection:
 
 That Actions is a collection, so all collection operation are
 available.
-
 
 Processing of actions
 ~~~~~~~~~~~~~~~~~~~~~
@@ -157,7 +158,6 @@ and succeed:
    >>> nice_actions.process(nice_form, nice_request)
    Execute 'Make it nicer'
    (<MyAction Make it nicer>, <Marker SUCCESS>)
-
 
 Validation
 ~~~~~~~~~~
@@ -204,7 +204,6 @@ doesn't report any error:
    <Marker SUCCESS>
    >>> validated_actions.process(wrong_form, wrong_request)
    (None, <Marker NOTHING_DONE>)
-
 
 Errors
 ~~~~~~
@@ -259,7 +258,6 @@ in a collection:
    >>> interfaces.IErrors.extends(interfaces.ICollection)
    True
 
-
 formErrors is a special property which only returns the main error of
 a form.  A main error is a Error which has the prefix of the form as
 identifier instead of a custom identifier.
@@ -305,7 +303,6 @@ If you switch the flag ``postOnly`` to False on the form, it will work:
 
    >>> working_get_form.formErrors
 
-
 Interface
 ~~~~~~~~~
 
@@ -315,7 +312,6 @@ Those Actions implement IActions and ICollection:
    True
    >>> interfaces.IActions.extends(interfaces.ICollection)
    True
-
 
 Defining actions on a form
 --------------------------

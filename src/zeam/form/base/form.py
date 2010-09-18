@@ -139,13 +139,16 @@ class FieldsValues(dict):
     def __init__(self, fields):
         self.fields = fields
 
-    def getDefault(self, key, default=None):
+    def getWithDefault(self, key, default=None):
         value = super(FieldsValues, self).get(key, default)
         if value is NO_VALUE:
             value = self.fields[key].getDefaultValue()
             if value is NO_VALUE:
                 return default
         return value
+
+    # BBB
+    getDefault = getWithDefault
 
 
 class FormData(Object):

@@ -4,17 +4,17 @@ zeam.form.base
 Forms are class, registered like views:
 
    >>> from zeam.form.base.form import Form
-
    >>> from zope.publisher.browser import TestRequest
-   >>> request = TestRequest()
 
    >>> class Content(object):
    ...     def __repr__(self):
    ...         return '<%s object>' % self.__class__.__name__
+
+   >>> request = TestRequest()
    >>> context = Content()
 
-   >>> form1 = Form(context, request)
-   >>> form1
+   >>> form = Form(context, request)
+   >>> form
    <zeam.form.base.form.Form object at ...>
 
 They implements ``IForm`` and ``ISimpleForm``, ``ISimpleForm`` extending
@@ -23,10 +23,10 @@ They implements ``IForm`` and ``ISimpleForm``, ``ISimpleForm`` extending
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
 
-   >>> verifyObject(interfaces.IForm, form1)
+   >>> verifyObject(interfaces.IForm, form)
    True
 
-   >>> verifyObject(interfaces.ISimpleForm, form1)
+   >>> verifyObject(interfaces.ISimpleForm, form)
    True
 
    >>> interfaces.ISimpleForm.isOrExtends(interfaces.IForm)
@@ -86,7 +86,6 @@ manager. A data manager will transparently allow you to access different
 kind of contents, such as dictionaries, data structures or directly
 attributes.
 
-
 Object data manager
 ~~~~~~~~~~~~~~~~~~~
 
@@ -97,38 +96,37 @@ Object data manager
    ...    value = 42
    >>> mycontent = MyContent()
 
-   >>> manager1 = ObjectDataManager(mycontent)
-   >>> manager1
+   >>> manager = ObjectDataManager(mycontent)
+   >>> manager
    <ObjectDataManager used for <MyContent object>>
 
-   >>> manager1.getContent()
+   >>> manager.getContent()
    <MyContent object>
 
 It correctly implements its interface:
 
-   >>> verifyObject(interfaces.IDataManager, manager1)
+   >>> verifyObject(interfaces.IDataManager, manager)
    True
 
 And you can use it to access content value:
 
-   >>> manager1.get('title')
+   >>> manager.get('title')
    u'Content'
-   >>> manager1.get('value')
+   >>> manager.get('value')
    42
 
 Inexisting content value raises KeyError
 
-   >>> manager1.get('foobar')
+   >>> manager.get('foobar')
    Traceback (most recent call last):
      ...
    KeyError: 'foobar'
 
 You can set values as well:
 
-   >>> manager1.set('ready', True)
+   >>> manager.set('ready', True)
    >>> mycontent.ready
    True
-
 
 Dictionary data manager
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,38 +136,37 @@ There is a data manager which is able to work on dictionaries as well:
    >>> from zeam.form.base.datamanager import DictDataManager
 
    >>> data = {'title': u'Content', 'value': 42}
-   >>> manager2 = DictDataManager(data)
-   >>> manager2
+   >>> dict_manager = DictDataManager(data)
+   >>> dict_manager
    <DictDataManager used for {'value': 42, 'title': u'Content'}>
 
-   >>> manager2.getContent()
+   >>> dict_manager.getContent()
    {'value': 42, 'title': u'Content'}
 
 It correctly implements its interface:
 
-   >>> verifyObject(interfaces.IDataManager, manager2)
+   >>> verifyObject(interfaces.IDataManager, dict_manager)
    True
 
 And you can use it to access content value:
 
-   >>> manager2.get('title')
+   >>> dict_manager.get('title')
    u'Content'
-   >>> manager2.get('value')
+   >>> dict_manager.get('value')
    42
 
 Inexisting content value raises KeyError
 
-   >>> manager2.get('foobar')
+   >>> dict_manager.get('foobar')
    Traceback (most recent call last):
      ...
    KeyError: 'foobar'
 
 You can set values as well:
 
-   >>> manager2.set('ready', True)
+   >>> dict_manager.set('ready', True)
    >>> data.get('ready')
    True
-
 
 Using a data manager on a form
 ------------------------------
@@ -177,28 +174,31 @@ Using a data manager on a form
 You can use a data manager on every FormData:
 
    >>> from zeam.form.base.form import cloneFormData
-   >>> formdata1 = cloneFormData(form1)
+   >>> form_data = cloneFormData(form)
 
 By default you will get a data manager for the context:
 
-   >>> manager3 = formdata1.getContentData()
-   >>> manager3
+   >>> form_manager = form_data.getContentData()
+   >>> form_manager
    <ObjectDataManager used for <Content object>>
-   >>> manager3.content is context
+   >>> form_manager.content is context
    True
 
 However you modify it and give directly a content:
 
-   >>> formdata1.setContentData(mycontent)
-   >>> formdata1.getContentData()
+   >>> form_data.setContentData(mycontent)
+   >>> form_data.getContentData()
    <ObjectDataManager used for <MyContent object>>
+   >>> form_data.getContent()
+   <MyContent object>
 
 Or directly a data manager:
 
-   >>> formdata1.setContentData(manager2)
-   >>> formdata1.getContentData() is manager2
+   >>> form_data.setContentData(dict_manager)
+   >>> form_data.getContentData() is dict_manager
    True
-
+   >>> form_data.getContent()
+   {'ready': True, 'value': 42, 'title': u'Content'}
 
 Modes & extraction
 ------------------
@@ -256,7 +256,6 @@ used for presentation purpose only::
   >>> print markers.DISPLAY
   display
 
-
 Extraction
 ~~~~~~~~~~
 
@@ -264,11 +263,14 @@ The extraction process will rely on the fields' mode or, if not defined
 locally, on the form's mode. Let's define a form with 2 fields::
 
   >>> from zeam.form.base.fields import Field, Fields
-  >>> id = Field('identifier')
+
+  >>> identifier = Field('identifier')
+  >>> identifier.defaultValue = 'new identifier'
   >>> name = Field('name')
+  >>> mail = Field('mail')
 
   >>> class MyForm(Form):
-  ...    fields = Fields(id, name)
+  ...    fields = Fields(identifier, name, mail)
 
 Now, we create a request with some data, for the `name` field. We
 consider the `id` field immutable.
@@ -283,8 +285,18 @@ the "extractable" fields::
   >>> form.update()
   >>> data, errors = form.extractData()
 
-  >>> print data
-  {'identifier': <Marker NO_VALUE>, 'name': 'myname'}
+  >>> data
+  {'mail': <Marker NO_VALUE>, 'identifier': <Marker NO_VALUE>, 'name': 'myname'}
+
+You can get the default value instead of the marker if available, None
+otherwise:
+
+  >>> data.getWithDefault('identifier')
+  'new identifier'
+  >>> data.getWithDefault('name')
+  'myname'
+  >>> data.getWithDefault('mail', default='mail default')
+  'mail default'
 
 The `identifier` value is set to NO_VALUE, as the request was not
 containing any. As we consider the field immutable, we'll apply a
@@ -296,7 +308,19 @@ in the extraction process::
   >>> form.fields['identifier'].mode = markers.DISPLAY
   >>> form.update()
   >>> data, errors = form.extractData()
-  >>> print data
-  {'name': 'myname'}
+  >>> data
+  {'mail': <Marker NO_VALUE>, 'name': 'myname'}
 
 The `identifier` field is not extracted, as planned.
+
+Usefull methods
+---------------
+
+A method on the form tells if the form have any required fields:
+
+  >>> form.haveRequiredFields()
+  False
+
+  >>> identifier.required = True
+  >>> form.haveRequiredFields()
+  True
