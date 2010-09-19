@@ -293,7 +293,7 @@ otherwise:
 
   >>> data.getWithDefault('identifier')
   'new identifier'
-  >>> data.getWithDefault('name')
+  >>> data.getWithDefault('name', default='name default')
   'myname'
   >>> data.getWithDefault('mail', default='mail default')
   'mail default'
@@ -324,3 +324,13 @@ A method on the form tells if the form have any required fields:
   >>> identifier.required = True
   >>> form.haveRequiredFields()
   True
+
+An another one gives a identifier that can be used in the HTML code to
+identify the form (computed from the prefix):
+
+  >>> form.htmlId()
+  'form'
+
+  >>> form.prefix = 'form.settings.network'
+  >>> form.htmlId()
+  'form-settings-network'

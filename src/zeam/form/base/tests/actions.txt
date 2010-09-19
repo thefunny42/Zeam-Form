@@ -288,7 +288,7 @@ was not a POST request, a main error will be created reporting this incident:
    (None, <Marker FAILURE>)
 
    >>> get_form.formErrors
-   [<Error This form was not POSTed>]
+   [<Error This form was not submitted properly>]
 
 If you switch the flag ``postOnly`` to False on the form, it will work:
 
@@ -296,6 +296,20 @@ If you switch the flag ``postOnly`` to False on the form, it will work:
    >>> working_get_form.postOnly
    True
    >>> working_get_form.postOnly = False
+
+   >>> nice_actions.process(working_get_form, get_request)
+   Execute 'Make it nicer'
+   (<MyAction Make it nicer>, <Marker SUCCESS>)
+
+   >>> working_get_form.formErrors
+
+A other solution is to set the flag ``postOnly`` only on the action:
+
+   >>> working_post_form = FormData(object(), get_request)
+   >>> working_post_form.postOnly
+   True
+
+   >>> nice_action.postOnly = False
 
    >>> nice_actions.process(working_get_form, get_request)
    Execute 'Make it nicer'

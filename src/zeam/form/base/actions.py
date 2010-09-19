@@ -5,6 +5,7 @@ from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.errors import Error
 from zeam.form.base.markers import NO_VALUE, NOTHING_DONE, FAILURE
+from zeam.form.base.markers import getValue, DEFAULT
 
 from zope.interface import implements, alsoProvides
 from zope import component
@@ -21,6 +22,7 @@ class Action(Component):
     mode = 'input'
     description = None
     accesskey = None
+    postOnly = DEFAULT
 
     def available(self, context):
         return True
@@ -46,9 +48,11 @@ class Actions(Collection):
 
             value, error = extractor.extract()
             if value is not NO_VALUE:
-                if form.postOnly and request.method != 'POST':
+                isPostOnly = getValue(action, 'postOnly', form)
+                if isPostOnly and request.method != 'POST':
                     form.errors.append(
-                        Error('This form was not POSTed', form.prefix))
+                        Error('This form was not submitted properly',
+                              form.prefix))
                     return None, FAILURE
                 try:
                     if action.validate(form):

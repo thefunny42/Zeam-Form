@@ -330,6 +330,15 @@ class IFormCanvas(IPrefixable, IFieldExtractionValueSetting, IGrokViewSupport):
     actions = interface.Attribute(u"Form actions")
     fields = interface.Attribute(u"Form fields")
 
+    def htmlId():
+        """Return an identifier that can be used in the HTML code to
+        identify the form.
+        """
+
+    def haveRequiredFields():
+        """Return an boolean True if any of the fields are required.
+        """
+
     def updateActions():
         """Set up and run form actions.
         """

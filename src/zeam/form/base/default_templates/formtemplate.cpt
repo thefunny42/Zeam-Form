@@ -22,9 +22,9 @@
             There were errors:</span>
 
           <ul tal:condition="view.formErrors"
-              tal:repeat="error view.formErrors">  
+              tal:repeat="error view.formErrors">
             <li> <span tal:replace="error.title" /> </li>
-          </ul>  
+          </ul>
       </div>
 
       <div class="fields"
