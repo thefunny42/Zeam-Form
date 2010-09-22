@@ -25,7 +25,7 @@ class Field(Component):
 
     def getDefaultValue(self, form):
         if callable(self.defaultValue):
-            return self.defaultValue()
+            return self.defaultValue(form)
         return self.defaultValue
 
     def isEmpty(self, value):
