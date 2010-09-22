@@ -222,7 +222,7 @@ class FieldWidget(Widget):
                 pass
 
         # Take any default value
-        value = self.component.getDefaultValue()
+        value = self.component.getDefaultValue(self.form)
         return self.prepareContentValue(value)
 
     def valueToUnicode(self, value):

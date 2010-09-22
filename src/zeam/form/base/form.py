@@ -136,13 +136,14 @@ class FieldsValues(dict):
     on the default value of a field.
     """
 
-    def __init__(self, fields):
+    def __init__(self, form, fields):
+        self.form = form
         self.fields = fields
 
     def getWithDefault(self, key, default=None):
         value = super(FieldsValues, self).get(key, default)
         if value is NO_VALUE:
-            value = self.fields[key].getDefaultValue()
+            value = self.fields[key].getDefaultValue(self.form)
             if value is NO_VALUE:
                 return default
         return value
@@ -214,7 +215,7 @@ class FormData(Object):
     def extractData(self, fields):
         if self.__extracted is not NOT_EXTRACTED:
             return (self.__extracted, self.errors)
-        self.__extracted = data = FieldsValues(fields)
+        self.__extracted = data = FieldsValues(self, fields)
 
         for field in fields:
 
