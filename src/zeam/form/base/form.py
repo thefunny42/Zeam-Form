@@ -218,6 +218,8 @@ class FormData(Object):
         self.__extracted = data = FieldsValues(self, fields)
 
         for field in fields:
+            if not field.available(self):
+                continue
 
             # Widget extraction and validation
             extractor = getWidgetExtractor(field, self, self.request)
