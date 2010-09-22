@@ -109,7 +109,7 @@ class IRenderableComponent(IPrefixable, IComponent):
     mode = interface.Attribute(
         u"Mode should be used to render the component")
 
-    def available(context):
+    def available(form):
         """Return a boolean to qualify if the component wants to be
         rendered in the given context (i.e. form).
         """
@@ -186,11 +186,11 @@ class IAction(IRenderableComponent):
     """
     description = interface.Attribute(u"Describe the action")
 
-    def validate(submission):
+    def validate(form):
         """Self validation of values in order to run.
         """
 
-    def __call__(submission):
+    def __call__(form):
         """Execute the action.
         """
 
@@ -213,7 +213,7 @@ class IField(IRenderableComponent, IFieldExtractionValueSetting):
     readonly = interface.Attribute(
         u"Boolean indicating if the field is read-only")
 
-    def getDefaultValue():
+    def getDefaultValue(form):
         """Return the default value.
         """
 

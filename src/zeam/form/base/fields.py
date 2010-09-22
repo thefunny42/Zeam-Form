@@ -20,10 +20,10 @@ class Field(Component):
     mode = DEFAULT
     defaultValue = NO_VALUE
 
-    def available(self, context):
+    def available(self, form):
         return True
 
-    def getDefaultValue(self):
+    def getDefaultValue(self, form):
         if callable(self.defaultValue):
             return self.defaultValue()
         return self.defaultValue

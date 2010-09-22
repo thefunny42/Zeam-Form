@@ -24,10 +24,10 @@ class Action(Component):
     accesskey = None
     postOnly = DEFAULT
 
-    def available(self, context):
+    def available(self, form):
         return True
 
-    def validate(self, submission):
+    def validate(self, form):
         return True
 
     def __call__(self, submission):
