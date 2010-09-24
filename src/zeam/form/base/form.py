@@ -216,9 +216,7 @@ class FormData(Object):
                 self.errors.append(Error(error.args[0], self.prefix))
         if len(self.errors):
             if self.prefix not in self.errors:
-                self.errors.append(
-                    Error(_(u"There were errors.")),
-                    self.prefix)
+                self.errors.append(Error(_(u"There were errors."), self.prefix))
             return self.errors
         return None
 
