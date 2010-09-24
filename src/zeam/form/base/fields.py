@@ -2,9 +2,11 @@
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.markers import NO_VALUE, DEFAULT
-from zeam.form.base import MF as _
 
 from zope.interface import implements
+from zope.i18nmessageid import MessageFactory
+
+_ = MessageFactory('zeam.form.base')
 
 
 class Field(Component):

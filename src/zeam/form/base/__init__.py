@@ -1,5 +1,3 @@
-from zope.i18nmessageid import MessageFactory
-MF = MessageFactory('zeam.form.base')
 
 from zeam.form.base.actions import Action, Actions, action
 from zeam.form.base.fields import Field, Fields

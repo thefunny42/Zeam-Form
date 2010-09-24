@@ -19,6 +19,9 @@ from zope import component, i18n, interface
 from zope.pagetemplate.interfaces import IPageTemplate
 from zope.publisher.browser import BrowserPage
 from zope.publisher.publish import mapply
+from zope.i18nmessageid import MessageFactory
+
+_ = MessageFactory('zeam.form.base')
 
 
 class Object(object):
@@ -163,6 +166,7 @@ class FormData(Object):
     parent = None
     mode = INPUT
     dataManager = ObjectDataManager
+    dataValidators = []
     postOnly = True
     i18nLanguage = None
 
@@ -206,13 +210,20 @@ class FormData(Object):
         self.__content = content
 
     def validateData(self, fields, data):
+        for factory in self.dataValidators:
+            validator = factory(fields)
+            for error in validator.validate(data):
+                self.errors.append(Error(error.args[0], self.prefix))
         if len(self.errors):
-            if not self.prefix in self.errors:
-                self.errors.append(Error(u"There were errors", self.prefix))
+            if self.prefix not in self.errors:
+                self.errors.append(
+                    Error(_(u"There were errors.")),
+                    self.prefix)
             return self.errors
         return None
 
     def extractData(self, fields):
+        # XXX this cache is bugged if fields are not the same
         if self.__extracted is not NOT_EXTRACTED:
             return (self.__extracted, self.errors)
         self.__extracted = data = FieldsValues(self, fields)

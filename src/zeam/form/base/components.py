@@ -168,6 +168,9 @@ class Collection(object):
     def __getitem__(self, id):
         return self.get(id)
 
+    def __contains__(self, id):
+        return id in self.__ids
+
     def __iter__(self):
         return self.__components.__iter__()
 

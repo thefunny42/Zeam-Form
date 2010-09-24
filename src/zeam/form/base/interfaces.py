@@ -88,6 +88,11 @@ class ICollection(interface.Interface):
         KeyError.
         """
 
+    def __contains__(id):
+        """Return true if the collection contains a component
+        identified by id.
+        """
+
     def __iter__():
         """Return an iterator on the components.
         """
