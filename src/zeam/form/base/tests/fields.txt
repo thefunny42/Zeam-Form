@@ -34,9 +34,13 @@ required, ``NO_VALUE`` should not be accepted as a valid value::
    u'Missing required value'
    >>> field1.validate(42)
 
-A field can provide a default value::
+A field can provide a default value. A context (the form) is given if
+the default value is computed::
 
-   >>> field1.getDefaultValue()
+   >>> class FormContext(object):
+   ...    value = 51
+
+   >>> field1.getDefaultValue(FormContext())
    <Marker NO_VALUE>
 
 You can modify the defalut value of a field by setting defaultValue to
@@ -44,12 +48,12 @@ be it or a callable. In case of a callable it will be called each a
 new default value is needed::
 
    >>> field1.defaultValue = 42
-   >>> field1.getDefaultValue()
+   >>> field1.getDefaultValue(FormContext())
    42
 
-   >>> field1.defaultValue = lambda: u'NOW'
-   >>> field1.getDefaultValue()
-   u'NOW'
+   >>> field1.defaultValue = lambda f: f.value * 2
+   >>> field1.getDefaultValue(FormContext())
+   102
 
 A Field implement IField, and is an IComponent::
 
