@@ -37,7 +37,6 @@ DEFAULT = Marker('DEFAULT')
 NO_VALUE = Marker('NO_VALUE')
 NO_CHANGE = Marker('NO_CHANGE')
 NOTHING_DONE = Marker('NOTHING_DONE')
-NOT_EXTRACTED = Marker('NOT_EXTRACTED')
 
 # Mode markers
 DISPLAY = ModeMarker('DISPLAY', extractable=False)
