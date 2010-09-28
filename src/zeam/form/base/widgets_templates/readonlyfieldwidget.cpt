@@ -1,0 +1,8 @@
+<tal:widget>
+  <span tal:replace="widget.inputValue()" />
+  <input id="#" name="#" class="#" type="hidden" value=""
+         tal:attributes="name widget.identifier;
+                         id widget.htmlId();
+                         class widget.htmlClass();
+                         value widget.inputValue()" />
+</tal:widget>
