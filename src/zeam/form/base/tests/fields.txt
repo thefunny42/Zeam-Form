@@ -31,7 +31,7 @@ required, ``NO_VALUE`` should not be accepted as a valid value::
    >>> field1.validate(42)
    >>> field1.required = True
    >>> field1.validate(NO_VALUE)
-   u'Missing required value'
+   u'Missing required value.'
    >>> field1.validate(42)
 
 A field can provide a default value. A context (the form) is given if
