@@ -213,6 +213,13 @@ You can get all components ids:
   >>> s3.keys()
   ['sun', 'moon', 'jupiter', 'saturn', 'venus', 'uranus']
 
+You can test if a component id is in the collection:
+
+  >>> 'moon' in s3
+  True
+  >>> 'earth' in s3
+  False
+
 You can get a new collection with some of the components of the first
 one:
 
