@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: Tue Oct  5 14:10:42 2010\n"
-"PO-Revision-Date: 2010-10-05 14:17+0200\n"
+"PO-Revision-Date: 2010-10-05 22:48+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -39,7 +39,7 @@ msgstr "Il n'y a pas d'élément."
 
 #: zeam.form.ztk:/actions.py:43
 msgid "Modification saved."
-msgstr "Modifications sauvegardés."
+msgstr "Modifications sauvegardées."
 
 #: zeam.form.ztk:/fields.py:130
 msgid "Invalid value."
