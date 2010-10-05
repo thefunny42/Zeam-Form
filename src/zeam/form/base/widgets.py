@@ -99,6 +99,10 @@ class HiddenWidgetExtractor(WidgetExtractor):
     grok.name('hidden')
 
 
+class ReadOnlyWidgetExtractor(WidgetExtractor):
+    grok.name('readonly')
+
+
 def createWidget(field, form, request):
     """Create a widget (or return None) for the given form and
     request.
@@ -124,9 +128,12 @@ class Widgets(Collection):
         assert self.__dict__.get('request', None) is not None
 
         for arg in args:
-            if interfaces.ICollection.providedBy(arg):
-                for item in arg:
-                    widget = createWidget(item, self.form, self.request)
+            if interfaces.IWidgets.providedBy(arg):
+                for widget in arg:
+                    self.append(widget)
+            elif interfaces.ICollection.providedBy(arg):
+                for field in arg:
+                    widget = createWidget(field, self.form, self.request)
                     if widget is not None:
                         self.append(widget)
             elif interfaces.IWidget.providedBy(arg):
@@ -254,3 +261,7 @@ class DisplayFieldWidget(FieldWidget):
 
 class HiddenFieldWidget(FieldWidget):
     grok.name('hidden')
+
+
+class ReadOnlyFieldWidget(FieldWidget):
+    grok.name('readonly')

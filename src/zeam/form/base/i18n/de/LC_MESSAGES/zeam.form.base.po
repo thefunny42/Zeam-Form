@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: Tue Oct  5 14:10:42 2010\n"
+"PO-Revision-Date: 2010-10-05 14:13+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: de\n"
+"Language-Name: German\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: zeam.form.base:/default_templates/formtemplate.cpt:35
+#: zeam.form.composed:/default_templates/subformtemplate.cpt:32
+#: zeam.form.viewlet:/default_templates/formtemplate.cpt:31
+msgid "(required)"
+msgstr "erforderlich"
+
+#: zeam.form.base:/fields.py:38
+msgid "Missing required value."
+msgstr "Dieses Feld muss gefüllt werden."
+
+#: zeam.form.base:/form.py:219
+msgid "There were errors."
+msgstr "Es sind Fehler aufgetreten."
+
+#: zeam.form.table:/actions.py:43
+msgid "You didn't select any item!"
+msgstr ""
+
+#: zeam.form.table:/form.py:30
+msgid "There are no items."
+msgstr ""
+
+#: zeam.form.ztk:/actions.py:43
+msgid "Modification saved."
+msgstr ""
+
+#: zeam.form.ztk:/fields.py:130
+msgid "Invalid value."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/bool.py:28
+msgid "Yes"
+msgstr ""
+
+#: zeam.form.ztk:/widgets/bool.py:29
+msgid "No"
+msgstr ""
+
+#: zeam.form.ztk:/widgets/collection.py:272
+msgid "The selected value is not available."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/collection_templates/multigenericfieldwidget.cpt:18
+#: zeam.form.ztk:/widgets/collection_templates/multiobjectfieldwidget.cpt:36
+msgid "Add"
+msgstr ""
+
+#: zeam.form.ztk:/widgets/collection_templates/multigenericfieldwidget.cpt:22
+#: zeam.form.ztk:/widgets/collection_templates/multiobjectfieldwidget.cpt:40
+msgid "Remove"
+msgstr ""

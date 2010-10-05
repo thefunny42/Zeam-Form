@@ -11,7 +11,7 @@ from zeam.form.base.actions import Actions
 from zeam.form.base.datamanager import ObjectDataManager
 from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
-from zeam.form.base.markers import NO_VALUE, INPUT, NOT_EXTRACTED
+from zeam.form.base.markers import NO_VALUE, INPUT
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
 from zeam.form.base.interfaces import ICollection
 
@@ -179,8 +179,8 @@ class FormData(Object):
         super(FormData, self).__init__(context, request)
         self.context = context
         self.request = request
-        self.errors = Errors()
-        self.__extracted = NOT_EXTRACTED
+        self.errors = Errors()  # This should move to FormCanvas
+        self.__extracted = {}
         self.__content = None
         if content is _marker:
             content = context
@@ -209,22 +209,24 @@ class FormData(Object):
             content = self.dataManager(content)
         self.__content = content
 
-    def validateData(self, fields, data):
+    def validateData(self, fields, data, errors):
         for factory in self.dataValidators:
             validator = factory(fields)
             for error in validator.validate(data):
-                self.errors.append(Error(error.args[0], self.prefix))
-        if len(self.errors):
-            if self.prefix not in self.errors:
-                self.errors.append(Error(_(u"There were errors."), self.prefix))
-            return self.errors
-        return None
+                errors.append(Error(error.args[0], self.prefix))
+        if len(errors):
+            if self.prefix not in errors:
+                errors.append(Error(_(u"There were errors."), self.prefix))
+        return errors
 
     def extractData(self, fields):
-        # XXX this cache is bugged if fields are not the same
-        if self.__extracted is not NOT_EXTRACTED:
-            return (self.__extracted, self.errors)
-        self.__extracted = data = FieldsValues(self, fields)
+        # XXX to review this
+        cached = self.__extracted.get(fields)
+        if cached is not None:
+            return cached
+        data = FieldsValues(self, fields)
+        errors = Errors()
+        self.__extracted[fields] = (data, errors)
 
         for field in fields:
             if not field.available(self):
@@ -237,11 +239,12 @@ class FormData(Object):
                 if error is None:
                     error = field.validate(value, self.context)
                 if error is not None:
-                    self.errors.append(Error(error, field.identifier))
+                    errors.append(Error(error, field.identifier))
                 data[field.identifier] = value
 
         # Generic form validation
-        errors = self.validateData(fields, data)
+        errors = self.validateData(fields, data, errors)
+        self.errors = errors
         return (data, errors)
 
 

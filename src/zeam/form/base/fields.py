@@ -35,7 +35,7 @@ class Field(Component):
 
     def validate(self, value, context=None):
         if self.required and self.isEmpty(value):
-            return _(u"Missing required value")
+            return _(u"Missing required value.")
         return None
 
 
