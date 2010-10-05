@@ -16,6 +16,6 @@
   <grok:grok package=".form_templates" />
   <grok:grok package=".widgets" />
 
-  <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="i18n" />
 
 </configure>
