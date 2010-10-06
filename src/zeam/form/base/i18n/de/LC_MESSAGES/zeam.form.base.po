@@ -31,38 +31,38 @@ msgstr "Es sind Fehler aufgetreten."
 
 #: zeam.form.table:/actions.py:43
 msgid "You didn't select any item!"
-msgstr ""
+msgstr "Bitte wählen Sie ein Objekt!"
 
 #: zeam.form.table:/form.py:30
 msgid "There are no items."
-msgstr ""
+msgstr "Keine Objekte ausgewählt"
 
 #: zeam.form.ztk:/actions.py:43
 msgid "Modification saved."
-msgstr ""
+msgstr "Die Änderungen wurden gespeichert."
 
 #: zeam.form.ztk:/fields.py:130
 msgid "Invalid value."
-msgstr ""
+msgstr "Falscher Wert"
 
 #: zeam.form.ztk:/widgets/bool.py:28
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: zeam.form.ztk:/widgets/bool.py:29
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: zeam.form.ztk:/widgets/collection.py:272
 msgid "The selected value is not available."
-msgstr ""
+msgstr "Der ausgewählte Wert ist nicht Verfügbar."
 
 #: zeam.form.ztk:/widgets/collection_templates/multigenericfieldwidget.cpt:18
 #: zeam.form.ztk:/widgets/collection_templates/multiobjectfieldwidget.cpt:36
 msgid "Add"
-msgstr ""
+msgstr "Hinzufügen"
 
 #: zeam.form.ztk:/widgets/collection_templates/multigenericfieldwidget.cpt:22
 #: zeam.form.ztk:/widgets/collection_templates/multiobjectfieldwidget.cpt:40
 msgid "Remove"
-msgstr ""
+msgstr "Löschen"
