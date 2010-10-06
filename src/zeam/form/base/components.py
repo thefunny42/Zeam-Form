@@ -99,6 +99,14 @@ class Collection(object):
         if len(components):
             self.extend(*components)
 
+    def reverse(self):
+        self.__components = [c for c in reversed(self.__components)]
+        self.__ids = [c.identifier for c in self.__components]
+
+    def sort(self, cmp=cmp, key=lambda c: c.identifier, reverse=False):
+        self.__components.sort(cmp=cmp, key=key, reverse=reverse)
+        self.__ids = [c.identifier for c in self.__components]
+
     def clear(self):
         self.__ids = []
         self.__components = []

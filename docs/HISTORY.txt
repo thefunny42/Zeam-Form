@@ -4,11 +4,19 @@ Changelog
 1.0rc3 (unrelease)
 ------------------
 * Changed the attribute formError to formErrors which now  a list of errors 
-  instead of a single error. Because it's possilbe to have more then one 
+  instead of a single error. Because it's possible to have more then one 
   main erros in a form. Think on invariants for example.
 
-* Changed the formtemplate to display the new formError in an <ul> <li> structure
-  instead of the ... tal:replace ... for a single error
+* Changed the formtemplate to display the new formError in an <ul>
+  <li> structure instead of the ... tal:replace ... for a single
+  error.
+
+* Added the ``sort`` and ``reverse`` methods on the `Collection`
+  component. Tests have been added accordingly.
+
+* Provided a `cmp` function to order components in a
+  `Collection`. This is now thoroughly tested and demonstrated.
+
 
 1.0rc2 (2010/07/16)
 -------------------
@@ -20,6 +28,7 @@ Changelog
 
 * DecoratedAction can be extended. You can provide your own implementation
   with the ``factory`` parameter of the decorator.
+
 
 1.0rc1 (2010/07/05)
 -------------------

@@ -105,3 +105,77 @@ another component it need to be a Field::
       ...
    TypeError: (u'Invalid type', 42)
 
+
+Ordering
+~~~~~~~~
+
+It is possible to order the fields of a Fields collection using
+the given sort functions::
+
+  >>> from zeam.form.base import sort_components
+
+  >>> s2 = Fields(Field('Size'), Field('Weight'), Field('Height'),
+  ...             Field('Parents'), field1)
+  >>> print list(s2)
+  [<Field Size>, <Field Weight>, <Field Height>, <Field Parents>,
+   <Field Age>]
+
+  >>> s2.sort(sort_components(['age', 'size', 'height']))
+  >>> print list(s2)
+  [<Field Age>, <Field Size>, <Field Height>, <Field Weight>,
+   <Field Parents>]
+
+The keys are sorted in the process::
+
+  >>> print s2.keys()
+  ['age', 'size', 'height', 'weight', 'parents']
+
+Successive sortings will leave unspecified fields at their relative places::
+
+  >>> s2.sort(sort_components(['size', 'parents']))
+  >>> print list(s2)
+  [<Field Size>, <Field Parents>, <Field Age>, <Field Height>,
+   <Field Weight>]
+
+We can also revert the sorting, as the standard python behavior (the
+usefulness of this, for fields ordering is yet to be proven, though)::
+
+  >>> s2.sort(sort_components(['age', 'parents']), reverse=True)
+  >>> print list(s2)
+  [<Field Size>, <Field Height>, <Field Weight>, <Field Parents>,
+   <Field Age>]
+
+The basic sort call works as the standard python list's one::
+
+  >>> s2.sort()
+  >>> print list(s2)
+  [<Field Age>, <Field Height>, <Field Parents>, <Field Size>,
+   <Field Weight>]
+
+Yet again, we can use the standard arguments (cmp, key and reverse)::
+
+  >>> s2.sort(reverse=True)
+  >>> print list(s2)
+  [<Field Weight>, <Field Size>, <Field Parents>, <Field Height>,
+   <Field Age>]
+
+  >>> s2.sort(reverse=True, key=lambda el: el.identifier[-1:])
+  >>> print list(s2)
+  [<Field Weight>, <Field Height>, <Field Parents>, <Field Size>,
+   <Field Age>]
+
+  >>> def myLengthSort(a1, a2):
+  ...   return cmp(len(a1), len(a2))
+
+  >>> s2.sort(reverse=True, key=lambda el: el.identifier, cmp=myLengthSort)
+  >>> print list(s2)
+  [<Field Parents>, <Field Weight>, <Field Height>, <Field Size>,
+   <Field Age>]
+
+
+The collection can be reversed too, as standard lists::
+
+  >>> s2.reverse()
+  >>> print list(s2)
+  [<Field Age>, <Field Size>, <Field Height>, <Field Weight>,
+   <Field Parents>]

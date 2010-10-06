@@ -10,6 +10,7 @@ from zeam.form.base.widgets import Widgets
 from zeam.form.base.datamanager import ObjectDataManager, DictDataManager
 from zeam.form.base.datamanager import NoneDataManager
 from zeam.form.base.datamanager import makeAdaptiveDataManager
+from zeam.form.base.sorters import sort_components
 
 from grokcore.component import context, name
 from grokcore.view import layer, template, require
