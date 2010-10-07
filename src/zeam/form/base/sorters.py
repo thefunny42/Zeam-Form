@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 def sort_components(order):
-    if not isinstance(order, list):
+    if not isinstance(order, list) and not isinstance(order, tuple):
         raise ValueError(
-            "Please provide a valid list of component identifiers.")
+            "Please provide a valid list or tuple of component identifiers.")
     if len(order) < 2:
         raise ValueError(
             "Please provide a list of, at least, two component identifiers.")

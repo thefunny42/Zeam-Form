@@ -241,6 +241,96 @@ Or the other way around some components of a collection:
    <Component Venus>, <Component Uranus>]
 
 
+Sorting components in a collection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Collection sort call works as the standard python list's one::
+
+  >>> s5.sort()
+  >>> print list(s5)
+  [<Component Jupiter>, <Component Saturn>, <Component Uranus>,
+   <Component Venus>]
+
+
+We can use the standard arguments (cmp, key and reverse)::
+
+  >>> s5.sort(reverse=True)
+  >>> print list(s5)
+  [<Component Venus>, <Component Uranus>, <Component Saturn>,
+   <Component Jupiter>]
+
+  >>> s5.sort(reverse=True, key=lambda el: el.identifier[-1:])
+  >>> print list(s5)
+  [<Component Venus>, <Component Uranus>, <Component Jupiter>,
+   <Component Saturn>]
+
+  >>> def myLengthSort(a1, a2):
+  ...   return cmp(len(a1), len(a2))
+
+  >>> s5.sort(reverse=True, key=lambda el: el.identifier, cmp=myLengthSort)
+  >>> print list(s5)
+  [<Component Jupiter>, <Component Uranus>, <Component Saturn>,
+   <Component Venus>]
+
+The collection can be reversed too, as standard lists::
+
+  >>> s5.reverse()
+  >>> print list(s5)
+  [<Component Venus>, <Component Saturn>, <Component Uranus>,
+   <Component Jupiter>]
+
+
+It is possible to order the components of a Collection using
+a given list of ids and the `sort_components` cmp function::
+
+  >>> from zeam.form.base import sort_components
+
+  >>> s5.sort(sort_components(['uranus', 'venus', 'jupiter']))
+  >>> print list(s5)
+  [<Component Uranus>, <Component Venus>, <Component Jupiter>,
+   <Component Saturn>]
+
+The keys are sorted in the process::
+
+  >>> print s5.keys()
+  ['uranus', 'venus', 'jupiter', 'saturn']
+
+Successive sortings will leave unspecified fields at their relative places::
+
+  >>> s5.sort(sort_components(['saturn', 'uranus']))
+  >>> print list(s5)
+  [<Component Saturn>, <Component Uranus>, <Component Venus>,
+   <Component Jupiter>]
+
+We can also revert the sorting, as the standard python behavior::
+
+  >>> s5.sort(sort_components(['uranus', 'venus']), reverse=True)
+  >>> print list(s5)
+  [<Component Saturn>, <Component Jupiter>, <Component Venus>,
+   <Component Uranus>]
+
+Errors are raised if the provided list is malformed or smaller than 2
+elements::
+
+  >>> s5.sort(sort_components(['uranus']))
+  Traceback (most recent call last):
+  ...
+  ValueError: Please provide a list of, at least, two component identifiers.
+
+  >>> s5.sort(sort_components('something'))
+  Traceback (most recent call last):
+  ...
+  ValueError: Please provide a valid list or tuple of component identifiers.
+
+
+The behavior, if unknow ids are provided, is unchanged::
+
+  >>> s5.sort(sort_components(['venus', 'uranus', 'cardassia', 'bajor']))
+  >>> print list(s5)
+  [<Component Venus>, <Component Uranus>, <Component Saturn>,
+   <Component Jupiter>]
+
+
 Parameters on collections
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
