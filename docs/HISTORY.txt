@@ -10,27 +10,28 @@ Changelog
 * An infrastructure to write generic validatators on all fields have
   been added (``dataValidators`` on a ``FormData``).
 
-* Field ``getDefaultValue`` and ``defaultValue`` now takes a
-  parameter, the form itself. That let you compute a default value
+* Field ``getDefaultValue`` and ``defaultValue`` now take a
+  parameter, the form itself. It allows you to compute a default value
   that needs the context.
 
-* Few issues on extraction have been corrected: a field which is not
-  available is not extracted, the ``extractData`` method can be called
-  multiple times with different collection of fields.
+* Some extraction issues have been fixed: a field which is not
+  available is no longer extracte and the ``extractData`` method can
+  now be called multiple times with different collection of fields.
 
-* Some options have been added to actions: a postOnly flags that
-  requires the form was submitted with the POST method (setting
-  available on the form as well), and adescription and accesskey poperties.
+* Some options have been added to Actions: a ``postOnly`` flag that
+  requires the form to be submitted via the `POST` method only, and a
+  ``description`` and ``accesskey`` properties. The ``postOnly``
+  option is also available at the form level.
 
-* Actions return a status flag telling that if they succeeded or not.
+* Actions return a status flag for the success or the failure.
 
 * Some helpers have been added to a form: ``haveRequiredFields`` and
   ``htmlId``. Default forms as well have a ``static`` attribute like
-  Grok view does.
+  Grok views do.
 
 * Changed the attribute formError to formErrors which now  a list of errors
   instead of a single error. Because it's possible to have more then one
-  main erros in a form. Think on invariants for example.
+  main error in a form (eg. invariants).
 
 * Changed the formtemplate to display the new formError in an <ul>
   <li> structure instead of the ... tal:replace ... for a single
