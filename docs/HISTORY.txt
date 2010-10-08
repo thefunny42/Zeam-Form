@@ -1,10 +1,35 @@
 Changelog
 =========
 
-1.0rc3 (unrelease)
-------------------
-* Changed the attribute formError to formErrors which now  a list of errors 
-  instead of a single error. Because it's possible to have more then one 
+1.0 (unreleased)
+----------------
+
+* Translation have been completed and reviewed in Dutch, French and
+  German.
+
+* An infrastructure to write generic validatators on all fields have
+  been added (``dataValidators`` on a ``FormData``).
+
+* Field ``getDefaultValue`` and ``defaultValue`` now takes a
+  parameter, the form itself. That let you compute a default value
+  that needs the context.
+
+* Few issues on extraction have been corrected: a field which is not
+  available is not extracted, the ``extractData`` method can be called
+  multiple times with different collection of fields.
+
+* Some options have been added to actions: a postOnly flags that
+  requires the form was submitted with the POST method (setting
+  available on the form as well), and adescription and accesskey poperties.
+
+* Actions return a status flag telling that if they succeeded or not.
+
+* Some helpers have been added to a form: ``haveRequiredFields`` and
+  ``htmlId``. Default forms as well have a ``static`` attribute like
+  Grok view does.
+
+* Changed the attribute formError to formErrors which now  a list of errors
+  instead of a single error. Because it's possible to have more then one
   main erros in a form. Think on invariants for example.
 
 * Changed the formtemplate to display the new formError in an <ul>
