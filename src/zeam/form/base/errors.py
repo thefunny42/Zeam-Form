@@ -26,7 +26,7 @@ class Errors(Collection):
                 previous = self[component.identifier]
                 if not interfaces.IErrors.providedBy(previous):
                     previous.identifier += '.0'
-                    collection = self.__class(
+                    collection = self.__class__(
                         previous, identifier=component.identifier)
                     self[component.identifier] = collection
                 else:
