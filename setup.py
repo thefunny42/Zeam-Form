@@ -4,20 +4,12 @@ import os
 version = '1.0'
 
 tests_require = [
+    'zope.app.authentication',
     'zope.app.testing',
+    'zope.app.zcmlfiles',
     'zope.configuration',
     'zope.securitypolicy',
     'zope.testbrowser',
-    'zope.annotation',
-    'zope.app.appsetup',
-    'zope.app.publication',
-    'zope.browserpage',
-    'zope.browserresource',
-    'zope.container',
-    'zope.principalregistry',
-    'zope.security',
-    'zope.site',
-    'zope.traversing',
     ]
 
 setup(name='zeam.form.base',
@@ -49,7 +41,6 @@ setup(name='zeam.form.base',
           'setuptools',
           'zope.component',
           'zope.i18n',
-          'zope.i18nmessageid',
           'zope.interface',
           'zope.pagetemplate',
           'zope.publisher',

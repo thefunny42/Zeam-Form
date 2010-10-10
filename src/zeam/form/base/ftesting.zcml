@@ -3,30 +3,13 @@
     xmlns:grok="http://namespaces.zope.org/grok"
    i18n_domain="zeamform">
 
-  <!-- meta files -->
-  <include package="zope.component" file="meta.zcml" />
-  <include package="zope.i18n" file="meta.zcml" />
-  <include package="zope.principalregistry" file="meta.zcml" />
-  <include package="zope.security" file="meta.zcml" />
+  <include package="zope.app.zcmlfiles" file="meta.zcml" />
   <include package="zope.securitypolicy" file="meta.zcml" />
-  <include package="zope.publisher" file="meta.zcml" />
-  <include package="zope.browserpage" file="meta.zcml" />
-  <include package="zope.app.publication" file="meta.zcml" />
-
-  <!-- Packages with needed components -->
-  <include package="zope.i18n" />
-  <include package="zope.security" />
-  <include package="zope.publisher" />
-  <include package="zope.principalregistry" />
-  <include package="zope.annotation" />
-  <include package="zope.site" />
-  <include package="zope.browserresource" />
-  <include package="zope.traversing" />
-  <include package="zope.container" />
-  <include package="zope.app.appsetup" />
-  <include package="zope.app.publication" />
 
   <include package="zeam.form.base" />
+
+  <include package="zope.app.zcmlfiles" />
+  <include package="zope.app.authentication" />
 
   <securityPolicy
       component="zope.securitypolicy.zopepolicy.ZopeSecurityPolicy"
