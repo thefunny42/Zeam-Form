@@ -102,6 +102,23 @@ class ICollection(interface.Interface):
         """
 
 
+class IMutableCollection(ICollection):
+    """A collection that can be changed.
+    """
+
+    def set(id , value):
+        """Change component associated to this id.
+        """
+
+    def __setitem__(id, value):
+        """Change component associated to this id.
+        """
+
+    def __delitem__(id):
+        """Remove the component associated to this id.
+        """
+
+
 class IPrefixable(interface.Interface):
     """An object with a prefix.
     """
@@ -244,7 +261,7 @@ class IError(IComponent):
     """
 
 
-class IErrors(ICollection):
+class IErrors(IMutableCollection):
     """A collection of errors.
     """
 

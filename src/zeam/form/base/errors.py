@@ -20,6 +20,24 @@ class Errors(Collection):
         if 'identifier' in options:
             directlyProvides(self, interfaces.IError)
 
+    def append(self, component):
+        if self.type.providedBy(component):
+            if component.identifier in self:
+                previous = self[component.identifier]
+                if not interfaces.IErrors.providedBy(previous):
+                    previous.identifier += '.0'
+                    collection = self.__class(
+                        previous, identifier=component.identifier)
+                    self[component.identifier] = collection
+                else:
+                    collection = previous
+                component.identifier += '.%d' % len(collection)
+                collection.append(component)
+            else:
+                super(Errors, self).append(component)
+        else:
+            raise TypeError(u"Invalid type", component)
+
     def clone(self, new_identifier=None):
         raise NotImplementedError(u'Errors collections are not clonable.')
 

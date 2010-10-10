@@ -119,6 +119,16 @@ class Collection(object):
                 raise KeyError(id)
             return default
 
+    def set(self, id, value):
+        if not interfaces.IMutableCollection.providedBy(self):
+            raise NotImplementedError
+        if not self.type.providedBy(value):
+            raise TypeError(value)
+        try:
+            self.__components[self.__ids.index(id)] = value
+        except ValueError:
+            raise KeyError(id)
+
     def append(self, component):
         if self.type.providedBy(component):
             if component.identifier not in self.__ids:
@@ -175,6 +185,19 @@ class Collection(object):
 
     def __getitem__(self, id):
         return self.get(id)
+
+    def __setitem__(self, id, value):
+        self.set(id, value)
+
+    def __delitem__(self, id):
+        if not interfaces.IMutableCollection.providedBy(self):
+            raise NotImplementedError
+        try:
+            index = self.__ids.index(id)
+            self.__ids.remove(id)
+            del self.__components[index]
+        except ValueError:
+            raise KeyError(id)
 
     def __contains__(self, id):
         return id in self.__ids
