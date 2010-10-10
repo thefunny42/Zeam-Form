@@ -2,12 +2,22 @@
 
 import os.path
 import re
+import zope.component
 import zeam.form.base
 
-from zope.testing import renormalizing
-from zope.app.testing.functional import ZCMLLayer, FunctionalTestSetup
-from zope.configuration.config import ConfigurationMachine
 from grokcore.component import zcml
+
+from zope.app.testing.functional import ZCMLLayer, FunctionalTestSetup
+from zope.component.interfaces import IComponentLookup
+from zope.configuration.config import ConfigurationMachine
+from zope.container.interfaces import ISimpleReadContainer
+from zope.container.traversal import ContainerTraversable
+from zope.interface import Interface
+from zope.site.folder import rootFolder
+from zope.site.site import LocalSiteManager, SiteManagerAdapter
+from zope.testing import renormalizing
+from zope.traversing.interfaces import ITraversable
+
 
 ftesting_zcml = os.path.join(
     os.path.dirname(zeam.form.base.__file__), 'ftesting.zcml')
@@ -16,6 +26,18 @@ FunctionalLayer = ZCMLLayer(
 
 
 def setUp(test):
+    # Set up site manager adapter
+    zope.component.provideAdapter(
+        SiteManagerAdapter, (Interface,), IComponentLookup)
+
+    # Set up traversal
+    zope.component.provideAdapter(
+        ContainerTraversable, (ISimpleReadContainer,), ITraversable)
+
+    # Set up site
+    site = rootFolder()
+    site.setSiteManager(LocalSiteManager(site))
+    zope.component.hooks.setSite(site)
     FunctionalTestSetup().setUp()
 
 

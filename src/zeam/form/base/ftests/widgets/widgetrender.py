@@ -37,9 +37,7 @@ And we are able now to call its render method:
 from zeam.form.base.fields import Field
 from zeam.form.base.widgets import Widget
 from zeam.form.base import interfaces
-
 from zope.interface import Interface
-
 from grokcore import component as grok
 
 
@@ -52,7 +50,6 @@ class MyWidget(Widget):
     """Custom widget to render my field
     """
     grok.adapts(MyField, interfaces.IFormCanvas, Interface)
-
 
     def render(self):
         return u"<p>Too complicated widget for %s</p>" % (

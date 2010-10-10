@@ -410,7 +410,7 @@ class IZeamFormBaseAPI(interface.Interface):
         u"Data manager to work with values in dictionary")
     NoneDataManager = interface.Attribute(
         u"Data manager to work directly with a value")
-    makeAdaptiveDataManager  = interface.Attribute(
+    makeAdaptiveDataManager = interface.Attribute(
         u"Data manager to work with from an simple adapter")
 
     context = interface.Attribute(

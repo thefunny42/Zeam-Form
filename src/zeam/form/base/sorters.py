@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 def sort_components(order):
     if not isinstance(order, list) and not isinstance(order, tuple):
         raise ValueError(
@@ -10,14 +11,20 @@ def sort_components(order):
 
     def compare(c1, c2, order=order):
 
-        try: o1 = order.index(c1)
-        except ValueError: return 1
+        try:
+            o1 = order.index(c1)
+        except ValueError:
+            return 1
 
-        try: o2 = order.index(c2)
-        except ValueError: return -1
+        try:
+            o2 = order.index(c2)
+        except ValueError:
+            return -1
 
-        if o1 - o2 > 1: return 1
-        if o1 - o2 < 1: return -1
+        if o1 - o2 > 1:
+            return 1
+        if o1 - o2 < 1:
+            return -1
 
         return 0
 

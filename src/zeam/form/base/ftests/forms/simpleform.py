@@ -53,13 +53,13 @@ Integration tests
 Let's try to take a browser and submit that form:
 
   >>> root = getRootFolder()
-  >>> root['content'] = context
+  >>> root['test_content'] = context
 
   >>> from zope.testbrowser.testing import Browser
   >>> browser = Browser()
   >>> browser.handleErrors = False
 
-  >>> browser.open('http://localhost/content/change')
+  >>> browser.open('http://localhost/test_content/change')
   >>> action = browser.getControl('Change Me')
   >>> action
   <SubmitControl name='form.action.change-me' type='submit'>
