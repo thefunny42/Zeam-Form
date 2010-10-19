@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0 (unreleased)
+1.0 (2010/10/19)
 ----------------
 
 * Translation have been completed and reviewed in Dutch, French and
