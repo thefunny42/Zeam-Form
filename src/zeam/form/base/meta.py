@@ -6,6 +6,7 @@ import grokcore.component
 import grokcore.security
 
 from grokcore.security.util import protect_getattr
+from grokcore.view.meta.views import TemplateGrokker
 
 from zeam.form.base.widgets import Widget
 from zeam.form.base.form import StandaloneForm, GrokViewSupport
@@ -15,69 +16,24 @@ from zope.publisher.interfaces.browser import IBrowserPage
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
-class WidgetTemplateGrokker(martian.ClassGrokker):
+class WidgetTemplateGrokker(TemplateGrokker):
     martian.component(Widget)
 
-    def grok(self, name, factory, module_info, **kw):
-        # Need to store the module info object on the view class so that it
-        # can look up the 'static' resource directory.
-        factory.module_info = module_info
-        return super(WidgetTemplateGrokker, self).grok(
-            name, factory, module_info, **kw)
+    def has_render(self, factory):
+        return factory.render != Widget.render
 
-    def execute(self, factory, config):
-        templates = factory.module_info.getAnnotation('grok.templates', None)
-        if templates is not None:
-            config.action(
-                discriminator=None,
-                callable=self.checkTemplates,
-                args=(templates, factory.module_info, factory))
-            return True
-        return False
-
-    def checkTemplates(self, templates, module_info, factory):
-
-        def has_render(factory):
-            return factory.render != Widget.render
-
-        def has_no_render(factory):
-            return not has_render(factory)
-
-        templates.checkTemplates(
-            module_info, factory, 'widget', has_render, has_no_render)
+    def has_no_render(self, factory):
+        return not self.has_render(factory)
 
 
-class FormTemplateGrokker(martian.ClassGrokker):
+class FormTemplateGrokker(TemplateGrokker):
     martian.component(GrokViewSupport)
 
-    def grok(self, name, factory, module_info, **kw):
-        # Need to store the module info object on the view class so that it
-        # can look up the 'static' resource directory.
-        factory.module_info = module_info
-        return super(FormTemplateGrokker, self).grok(
-            name, factory, module_info, **kw)
+    def has_render(self, factory):
+        return factory.render != GrokViewSupport.render
 
-    def execute(self, factory, config, **kw):
-        # find templates
-        templates = factory.module_info.getAnnotation('grok.templates', None)
-        if templates is not None:
-            config.action(
-                discriminator=None,
-                callable=self.checkTemplates,
-                args=(templates, factory.module_info, factory))
-            return True
+    def has_no_render(self, factory):
         return False
-
-    def checkTemplates(self, templates, module_info, factory):
-
-        def has_render(factory):
-            return factory.render != GrokViewSupport.render
-
-        def has_no_render(factory):
-            return False
-
-        templates.checkTemplates(
-            module_info, factory, 'form', has_render, has_no_render)
 
 
 class FormGrokker(grokcore.view.meta.views.ViewGrokker):
