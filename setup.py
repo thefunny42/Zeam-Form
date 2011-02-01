@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1dev'
+version = '1.1'
 
 tests_require = [
     'zope.app.authentication',
@@ -34,10 +34,10 @@ setup(name='zeam.form.base',
       install_requires=[
           'grokcore.component',
           'grokcore.security',
-          'grokcore.view',
+          'grokcore.view >= 2.2',
           'martian',
           'megrok.chameleon',
-          'megrok.pagetemplate',
+          'megrok.pagetemplate >= 0.7',
           'setuptools',
           'zope.component',
           'zope.i18n',
