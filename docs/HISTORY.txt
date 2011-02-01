@@ -1,10 +1,15 @@
 Changelog
 =========
 
-1.1 (unreleased)
+1.1 (2011/02/01)
 ----------------
 
-* ...
+* ``zeam.form.base`` now uses the latest ``grokcore.view`` template
+  grokker.
+
+* Dependencies have been updated for the latest grokcore and megrok
+  packages.
+
 
 1.0 (2010/10/19)
 ----------------
