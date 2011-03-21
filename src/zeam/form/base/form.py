@@ -11,7 +11,7 @@ from zeam.form.base.actions import Actions
 from zeam.form.base.datamanager import ObjectDataManager
 from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
-from zeam.form.base.markers import NO_VALUE, INPUT
+from zeam.form.base.markers import NO_VALUE, INPUT, getValue
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
 from zeam.form.base.interfaces import ICollection
 
@@ -134,6 +134,8 @@ def cloneFormData(original, content=_marker, prefix=None):
     return clone
 
 
+marker = object()
+
 class FieldsValues(dict):
     """Dictionary to contains values of fields. get default by default
     on the default value of a field.
@@ -144,11 +146,23 @@ class FieldsValues(dict):
         self.fields = fields
 
     def getWithDefault(self, key, default=None):
-        value = super(FieldsValues, self).get(key, default)
+        value = super(FieldsValues, self).get(key, NO_VALUE)
+        if value is not NO_VALUE:
+            return value
+ 
+        component = self.fields.get(key, marker)
+        if component is marker or \
+           not getValue(component, 'ignoreContent', self.form):
+            try:
+                value = self.form.getContentData().get(key)
+            except KeyError:
+                value = NO_VALUE
+            if value is not NO_VALUE:
+                return value
+
+        value = component.getDefaultValue(self.form)
         if value is NO_VALUE:
-            value = self.fields[key].getDefaultValue(self.form)
-            if value is NO_VALUE:
-                return default
+            return default
         return value
 
     # BBB
