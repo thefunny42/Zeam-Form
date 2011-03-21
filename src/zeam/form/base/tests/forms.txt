@@ -223,7 +223,7 @@ valid value extraction::
   >>> print IModeMarker['extractable'].__doc__
   Boolean allowing or not the extraction of the data, for components in that mode.
 
-``zeam.form.base`` provides 4 base mode markers. Letr's review them::
+``zeam.form.base`` provides 4 base mode markers. Let's review them::
 
   >>> from zeam.form.base import markers
 
