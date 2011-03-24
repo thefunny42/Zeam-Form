@@ -4,9 +4,7 @@ Changelog
 1.2 (unreleased)
 ----------------
 
-* getWithDefault gets the value from the dataManager if not found in the
-  extracted data of the form. This is necessary for invariant that
-  need a field value not included in the form.
+* ...
 
 
 1.1 (2011/02/01)
