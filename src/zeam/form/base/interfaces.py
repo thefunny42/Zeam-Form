@@ -442,7 +442,9 @@ class IZeamFormBaseAPI(interface.Interface):
         u"Directive to require a permission to access the form")
 
     NO_VALUE = interface.Attribute(
-        u"Marker to mark the absence of value")
+        u"Marker to mark the absence of a value")
+    NO_CHANGE = interface.Attribute(
+        u"Marker to mark the non-modification of a value")
     DISPLAY = interface.Attribute(
         u"Marker for mode to get display widgets")
     INPUT = interface.Attribute(
@@ -455,3 +457,5 @@ class IZeamFormBaseAPI(interface.Interface):
         u"Marker used by actions to report a success")
     FAILURE = interface.Attribute(
         u"Marker used by actions to report a failure")
+    NOTHING_DONE = interface.Attribute(
+        u"Marker used by actions to report the absence of activity")
