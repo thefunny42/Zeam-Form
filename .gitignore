@@ -6,6 +6,8 @@
 *~
 *.pyc
 *.egg-info
+*.cpt.py
+*.cpt.pyc
 .installed.cfg
 bin/
 parts/
