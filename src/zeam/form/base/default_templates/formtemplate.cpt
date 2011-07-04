@@ -27,28 +27,31 @@
       <div class="fields"
            tal:condition="view.fieldWidgets">
         <div class="field" tal:repeat="widget view.fieldWidgets">
-          <label class="field-label" for="#"
-                 tal:attributes="for widget.htmlId()"
-                 tal:content="widget.title">
-            Label
-          </label>
-          <span class="field-required"
-                i18n:translate=""
-                tal:condition="widget.required">(required)</span>
-          <br />
-          <tal:description tal:condition="widget.description">
-            <span class="field-description"
-                  tal:content="widget.description">
-            </span><br />
-          </tal:description>
-          <tal:error tal:define="error widget.error"
-                     tal:condition="error">
-            <span class="field-error"
-                  tal:content="error.title">
-              Error
-            </span>
+          <tal:presentation
+             tal:condition="widget.isVisible()">
+            <label class="field-label" for="#"
+                   tal:attributes="for widget.htmlId()"
+                   tal:content="widget.title">
+              Label
+            </label>
+            <span class="field-required"
+                  i18n:translate=""
+                  tal:condition="widget.required">(required)</span>
             <br />
-          </tal:error>
+            <tal:description tal:condition="widget.description">
+              <span class="field-description"
+                    tal:content="widget.description">
+              </span><br />
+            </tal:description>
+            <tal:error tal:define="error widget.error"
+                       tal:condition="error">
+              <span class="field-error"
+                    tal:content="error.title">
+                Error
+              </span>
+              <br />
+            </tal:error>
+          </tal:presentation>
           <tal:widget tal:content="structure widget.render()" />
         </div>
       </div>

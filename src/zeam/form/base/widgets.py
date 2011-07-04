@@ -4,7 +4,7 @@ from grokcore import component as grok
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.interfaces import IModeMarker
-from zeam.form.base.markers import NO_VALUE, getValue
+from zeam.form.base.markers import NO_VALUE, getValue, HiddenMarker
 from zope import component
 from zope.interface import Interface
 from zope.pagetemplate.interfaces import IPageTemplate
@@ -40,6 +40,9 @@ class Widget(Component, grok.MultiAdapter):
 
     def htmlClass(self):
         return 'field'
+
+    def isVisible(self):
+        return not isinstance(self.component.mode, HiddenMarker)
 
     def default_namespace(self):
         namespace = {'widget': self,

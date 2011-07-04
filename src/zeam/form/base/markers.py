@@ -30,6 +30,12 @@ class ModeMarker(Marker):
         self.extractable = extractable
 
 
+class HiddenMarker(ModeMarker):
+    """A marker that hides a field.
+    """
+    pass
+
+
 # Data extraction markers
 SUCCESS = Marker('SUCCESS')
 FAILURE = Marker('FAILURE')
@@ -41,7 +47,7 @@ NOTHING_DONE = Marker('NOTHING_DONE')
 # Mode markers
 DISPLAY = ModeMarker('DISPLAY', extractable=False)
 INPUT = ModeMarker('INPUT')
-HIDDEN = ModeMarker('HIDDEN')
+HIDDEN = HiddenMarker('HIDDEN')
 
 
 def getValue(object, attr, default_object):
