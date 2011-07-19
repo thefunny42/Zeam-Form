@@ -4,12 +4,8 @@ import os
 version = '1.2dev'
 
 tests_require = [
-    'zope.app.authentication',
-    'zope.app.testing',
-    'zope.app.zcmlfiles',
-    'zope.configuration',
-    'zope.securitypolicy',
-    'zope.testbrowser',
+    'zope.app.wsgi',
+    'grokcore.view [test]',
     ]
 
 setup(name='zeam.form.base',

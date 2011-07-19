@@ -55,7 +55,7 @@ Let's try to take a browser and submit that form:
   >>> root = getRootFolder()
   >>> root['test_content'] = context
 
-  >>> from zope.testbrowser.testing import Browser
+  >>> from zope.app.wsgi.testlayer import Browser
   >>> browser = Browser()
   >>> browser.handleErrors = False
 
