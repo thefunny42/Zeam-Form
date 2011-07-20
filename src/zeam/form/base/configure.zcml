@@ -9,6 +9,12 @@
   <include package="megrok.chameleon" />
   <include package="megrok.pagetemplate" file="meta.zcml" />
 
+<<<<<<< HEAD
+=======
+  <!-- Translations -->
+  <include package="zope.i18n" file="meta.zcml" />
+
+>>>>>>> e3fe032... Fix ZCML for Zope 2 compatiblity.
   <!-- Grok da grokkers -->
   <grok:grok package=".meta" />
 
