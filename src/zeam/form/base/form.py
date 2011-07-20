@@ -123,14 +123,18 @@ def cloneFormData(original, content=_marker, prefix=None):
     clone = FormData(original.context, original.request, content)
     clone.ignoreRequest = original.ignoreRequest
     clone.ignoreContent = original.ignoreContent
-    clone.i18nLanguage = original.i18nLanguage
-    clone.postOnly = original.postOnly
     clone.mode = original.mode
     clone.parent = original
     if prefix is None:
         clone.prefix = original.prefix
     else:
         clone.prefix = prefix
+    # XXX Those fields are not checked by the interface
+    clone.i18nLanguage = original.i18nLanguage
+    clone.postOnly = original.postOnly
+    errors = original.errors.get(clone.prefix, None)
+    if errors is not None:
+        clone.errors = errors
     return clone
 
 
@@ -179,7 +183,7 @@ class FormData(Object):
         super(FormData, self).__init__(context, request)
         self.context = context
         self.request = request
-        self.errors = Errors()  # This should move to FormCanvas
+        self.errors = Errors()
         self.__extracted = {}
         self.__content = None
         if content is _marker:
