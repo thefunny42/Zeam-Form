@@ -11,7 +11,6 @@
 
   <!-- Translations -->
   <include package="zope.i18n" file="meta.zcml" />
-  <include package="zope.i18n" />
 
   <!-- Grok da grokkers -->
   <grok:grok package=".meta" />

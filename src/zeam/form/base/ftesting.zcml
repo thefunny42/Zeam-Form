@@ -3,7 +3,13 @@
    xmlns:grok="http://namespaces.zope.org/grok"
    i18n_domain="zeamform">
 
+  <!-- Load testing environement -->
   <include package="grokcore.view" file="ftesting.zcml" />
+
+  <!-- Load translation support. We cannot do it configure.zcml as
+       this differ on Zope 2 -->
+  <include package="zope.i18n" />
+
   <include package="zeam.form.base" />
 
 </configure>
