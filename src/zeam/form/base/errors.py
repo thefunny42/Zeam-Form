@@ -13,12 +13,20 @@ class Errors(Collection):
     implements(interfaces.IErrors)
 
     type = interfaces.IError
-    title = u""
 
     def __init__(self, *components, **options):
         Collection.__init__(self, *components, **options)
         if 'identifier' in options:
             directlyProvides(self, interfaces.IError)
+
+    @property
+    def title(self):
+        if interfaces.IError.providedBy(self):
+            default_error = self.get(self.identifier, None)
+            if default_error is not None:
+                return default_error.title
+            return u''
+        raise AttributeError('property')
 
     def append(self, component):
         if self.type.providedBy(component):
