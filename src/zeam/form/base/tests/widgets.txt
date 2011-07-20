@@ -135,9 +135,9 @@ via the widget:
    >>> widget2.error
 
    >>> from zeam.form.base.errors import Error
-   >>> form1.errors.append(Error('Not Happy', 'someone'))
+   >>> form1.errors.append(Error('Not Happy', 'form.field.someone'))
    >>> widget2.error
-   >>> form1.errors.append(Error('Missing value', 'title'))
+   >>> form1.errors.append(Error('Missing value', 'form.field.title'))
    >>> widget2.error
    <Error Missing value>
 

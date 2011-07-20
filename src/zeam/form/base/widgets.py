@@ -201,7 +201,7 @@ class FieldWidget(Widget):
 
     @property
     def error(self):
-        return self.form.errors.get(self.component.identifier, None)
+        return self.form.errors.get(self.identifier, None)
 
     def computeValue(self):
         # First lookup the request

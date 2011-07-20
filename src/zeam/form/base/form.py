@@ -240,7 +240,7 @@ class FormData(Object):
                     error = field.validate(value, self.context)
                 if error is not None:
                     if not IError.providedBy(error):
-                        error = Error(error, field.identifier)
+                        error = Error(error, extractor.identifier)
                     errors.append(error)
                 data[field.identifier] = value
 
