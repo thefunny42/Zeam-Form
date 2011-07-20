@@ -13,7 +13,7 @@ from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
 from zeam.form.base.markers import NO_VALUE, INPUT
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
-from zeam.form.base.interfaces import ICollection
+from zeam.form.base.interfaces import ICollection, IError
 
 from zope import component, i18n, interface
 from zope.pagetemplate.interfaces import IPageTemplate
@@ -239,7 +239,9 @@ class FormData(Object):
                 if error is None:
                     error = field.validate(value, self.context)
                 if error is not None:
-                    errors.append(Error(error, field.identifier))
+                    if not IError.providedBy(error):
+                        error = Error(error, field.identifier)
+                    errors.append(error)
                 data[field.identifier] = value
 
         # Generic form validation
