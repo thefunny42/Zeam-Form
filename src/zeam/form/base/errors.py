@@ -3,6 +3,9 @@
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zope.interface import implements, directlyProvides
+from zope.i18nmessageid import MessageFactory
+
+_ = MessageFactory('zeam.form.base')
 
 
 class Error(Component):
@@ -25,7 +28,7 @@ class Errors(Collection):
             default_error = self.get(self.identifier, None)
             if default_error is not None:
                 return default_error.title
-            return u''
+            return _(u"There were errors.")
         raise AttributeError('property')
 
     def append(self, component):
