@@ -215,7 +215,7 @@ class FieldWidget(Widget):
             if extractor is not None:
                 value = extractor.extractRaw()
                 if value:
-                    return self.prepareRequestValue(value)
+                    return self.prepareRequestValue(value, extractor)
 
         # After, the context
         ignoreContent = getValue(self.component, 'ignoreContent', self.form)
@@ -238,7 +238,7 @@ class FieldWidget(Widget):
     def valueToUnicode(self, value):
         return unicode(value)
 
-    def prepareRequestValue(self, value):
+    def prepareRequestValue(self, value, extractor):
         return value
 
     def prepareContentValue(self, value):
