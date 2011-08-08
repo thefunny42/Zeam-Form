@@ -217,7 +217,9 @@ class FormData(Object):
         for factory in self.dataValidators:
             validator = factory(self, fields)
             for error in validator.validate(data):
-                errors.append(Error(error.args[0], self.prefix))
+                if not IError.providedBy(error):
+                    error = Error(error, self.prefix)
+                errors.append(error)
         if len(errors):
             if self.prefix not in errors:
                 errors.append(Error(_(u"There were errors."), self.prefix))
