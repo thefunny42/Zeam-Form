@@ -215,7 +215,7 @@ class FormData(Object):
 
     def validateData(self, fields, data, errors):
         for factory in self.dataValidators:
-            validator = factory(fields)
+            validator = factory(self, fields)
             for error in validator.validate(data):
                 errors.append(Error(error.args[0], self.prefix))
         if len(errors):
