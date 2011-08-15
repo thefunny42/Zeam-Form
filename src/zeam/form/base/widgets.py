@@ -134,7 +134,7 @@ class Widgets(Collection):
             if interfaces.IWidgets.providedBy(arg):
                 for widget in arg:
                     self.append(widget)
-            elif interfaces.ICollection.providedBy(arg):
+            elif interfaces.IIterable.providedBy(arg):
                 for field in arg:
                     widget = createWidget(field, self.form, self.request)
                     if widget is not None:

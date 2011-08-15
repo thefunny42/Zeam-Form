@@ -1,5 +1,6 @@
 
 import sys
+import itertools
 
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
@@ -61,6 +62,44 @@ class Actions(Collection):
                     form.errors.append(Error(error.args[0], form.prefix))
                     return action, FAILURE
         return None, NOTHING_DONE
+
+
+class CompoundActions(object):
+    """Compound different types of actions together.
+    """
+    implements(interfaces.IIterable)
+
+    def __init__(self, *new_actions):
+        self.__actions = []
+        self.extend(new_actions)
+
+    def extend(self, new_actions):
+        for actions in new_actions:
+            self.append(actions)
+
+    def append(self, actions):
+        assert interfaces.IActions.providedBy(actions), u"Invalid actions"
+        self.__actions.append(actions)
+
+    def copy(self):
+        copy = self.__class__()
+        copy.extend(self.__actions)
+        return copy
+
+    def process(self, form, request):
+        for actions in self.__actions:
+            action, status = actions.process(form, request)
+            if status != NOTHING_DONE:
+                break
+        return action, status
+
+    def __add__(self, actions):
+        copy = self.copy()
+        copy.extend(actions)
+        return copy
+
+    def __iter__(self):
+        return itertools.chain(*self.__actions)
 
 
 # Convience API, decorator to add action

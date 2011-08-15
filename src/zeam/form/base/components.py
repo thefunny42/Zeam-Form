@@ -144,7 +144,7 @@ class Collection(object):
         for cmp in components:
             if self.type.providedBy(cmp):
                 self.append(cmp)
-            elif interfaces.ICollection.providedBy(cmp):
+            elif interfaces.IIterable.providedBy(cmp):
                 for item in cmp:
                     self.append(item)
             else:

@@ -1,5 +1,5 @@
 
-from zeam.form.base.actions import Action, Actions, action
+from zeam.form.base.actions import Action, Actions, action, CompoundActions
 from zeam.form.base.fields import Field, Fields
 from zeam.form.base.form import Form, FormData, extends
 from zeam.form.base.interfaces import ActionError

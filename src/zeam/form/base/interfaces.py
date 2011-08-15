@@ -34,7 +34,16 @@ class IComponentFactory(interface.Interface):
         """
 
 
-class ICollection(interface.Interface):
+class IIterable(interface.Interface):
+    """An iterable that return a component upon each iteration.
+    """
+
+    def __iter__():
+        """Return an iterator on the components.
+        """
+
+
+class ICollection(IIterable):
     """Support to manage a collection of ordered named components.
     """
     type = interface.Attribute(
@@ -91,10 +100,6 @@ class ICollection(interface.Interface):
     def __contains__(id):
         """Return true if the collection contains a component
         identified by id.
-        """
-
-    def __iter__():
-        """Return an iterator on the components.
         """
 
     def __len__():
@@ -405,6 +410,8 @@ class IZeamFormBaseAPI(interface.Interface):
         u"A form action")
     Actions = interface.Attribute(
         u"A collection of actions")
+    CompoundActions = interface.Attribute(
+        u"A collection of actions that can be managed differently")
     Field = interface.Attribute(
         u"A form field")
     Fields = interface.Attribute(
