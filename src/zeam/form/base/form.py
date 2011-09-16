@@ -193,7 +193,9 @@ class FormData(Object):
     @property
     def formErrors(self):
         error = self.errors.get(self.prefix, None)
-        if error is None or ICollection.providedBy(error):
+        if error is None:
+            return []
+        if ICollection.providedBy(error):
             return error
         return [error]
 
