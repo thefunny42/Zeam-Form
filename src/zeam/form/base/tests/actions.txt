@@ -143,7 +143,7 @@ and its status (``SUCCESS``, ``FAILURE``, ``NOTHING_DONE``). With no
 data in the request, nothing is done:
 
    >>> nice_actions.process(submission, request)
-   (None, <Marker NOTHING_DONE>)
+   (..., None, <Marker NOTHING_DONE>)
 
 
 With the corresponding input in the request the action is executed,
@@ -157,7 +157,7 @@ and succeed:
 
    >>> nice_actions.process(nice_form, nice_request)
    Execute 'Make it nicer'
-   (<MyAction Make it nicer>, <Marker SUCCESS>)
+   (..., <MyAction Make it nicer>, <Marker SUCCESS>)
 
 Validation
 ~~~~~~~~~~
@@ -188,7 +188,7 @@ The action works:
    <Marker SUCCESS>
    >>> validated_actions.process(working_form, working_request)
    Execute 'I am unhappy'
-   (<MyNeverHappyAction I am unhappy>, <Marker SUCCESS>)
+   (..., <MyNeverHappyAction I am unhappy>, <Marker SUCCESS>)
 
 However if the validation fail, the actions list still works and
 doesn't report any error:
@@ -203,7 +203,7 @@ doesn't report any error:
    Execute 'I am unhappy'
    <Marker SUCCESS>
    >>> validated_actions.process(wrong_form, wrong_request)
-   (None, <Marker NOTHING_DONE>)
+   (..., None, <Marker NOTHING_DONE>)
 
 Errors
 ~~~~~~
@@ -238,7 +238,7 @@ submission:
      ...
    ActionError: I can't take it anymore
    >>> failing_actions.process(failing_form, failing_request)
-   (<MyFailingAction Do it>, <Marker FAILURE>)
+   (..., <MyFailingAction Do it>, <Marker FAILURE>)
 
    >>> list(failing_form.errors)
    [<Error I can't take it anymore>]
@@ -285,7 +285,7 @@ was not a POST request, a main error will be created reporting this incident:
    >>> get_form = FormData(object(), get_request)
 
    >>> nice_actions.process(get_form, get_request)
-   (None, <Marker FAILURE>)
+   (..., None, <Marker FAILURE>)
 
    >>> get_form.formErrors
    [<Error This form was not submitted properly>]
@@ -299,7 +299,7 @@ If you switch the flag ``postOnly`` to False on the form, it will work:
 
    >>> nice_actions.process(working_get_form, get_request)
    Execute 'Make it nicer'
-   (<MyAction Make it nicer>, <Marker SUCCESS>)
+   (..., <MyAction Make it nicer>, <Marker SUCCESS>)
 
    >>> working_get_form.formErrors
 
@@ -313,7 +313,7 @@ A other solution is to set the flag ``postOnly`` only on the action:
 
    >>> nice_actions.process(working_get_form, get_request)
    Execute 'Make it nicer'
-   (<MyAction Make it nicer>, <Marker SUCCESS>)
+   (..., <MyAction Make it nicer>, <Marker SUCCESS>)
 
    >>> working_get_form.formErrors
 

@@ -301,7 +301,7 @@ class StandaloneForm(GrokViewSupport, BrowserPage):
     grok.baseclass()
 
     def updateActions(self):
-        return None, None
+        return self, None, None
 
     def updateWidgets(self):
         pass

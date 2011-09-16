@@ -54,14 +54,14 @@ class Actions(Collection):
                     form.errors.append(
                         Error('This form was not submitted properly',
                               form.prefix))
-                    return None, FAILURE
+                    return form, None, FAILURE
                 try:
                     if action.validate(form):
-                        return action, action(form)
+                        return form, action, action(form)
                 except interfaces.ActionError, error:
                     form.errors.append(Error(error.args[0], form.prefix))
-                    return action, FAILURE
-        return None, NOTHING_DONE
+                    return form, action, FAILURE
+        return form, None, NOTHING_DONE
 
 
 class CompoundActions(object):
