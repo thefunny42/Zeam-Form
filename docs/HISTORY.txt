@@ -4,7 +4,21 @@ Changelog
 1.2 (unreleased)
 ----------------
 
-* ...
+* This version no longer support Zope 2 before 2.12.
+
+* And an helper to know if a field is hidden (so you don't display the
+  label).
+
+* Improve error reporting. A widget can now return a collection of
+  error (usefull is the widget is composed of more sub-widgets).
+
+* Extend API for ``dataValidator`` and widget ``prepareRequestValue``.
+
+* Add support for CompoundActions (actions implemented by different
+  action collections).
+
+* ``updateActions`` now return the form on which the action have been
+  executed. This is usefull in case of sub-forms.
 
 
 1.1 (2011/02/01)
