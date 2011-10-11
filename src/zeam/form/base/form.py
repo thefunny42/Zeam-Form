@@ -125,6 +125,8 @@ def cloneFormData(original, content=_marker, prefix=None):
     clone.ignoreContent = original.ignoreContent
     clone.mode = original.mode
     clone.parent = original
+    clone.dataManager = original.dataManager
+    clone.dataValidators = original.dataValidators
     if prefix is None:
         clone.prefix = original.prefix
     else:
@@ -215,9 +217,11 @@ class FormData(Object):
 
     def validateData(self, fields, data, errors):
         for factory in self.dataValidators:
-            validator = factory(fields)
+            validator = factory(self, fields)
             for error in validator.validate(data):
-                errors.append(Error(error.args[0], self.prefix))
+                if not IError.providedBy(error):
+                    error = Error(error, self.prefix)
+                errors.append(error)
         if len(errors):
             if self.prefix not in errors:
                 errors.append(Error(_(u"There were errors."), self.prefix))
