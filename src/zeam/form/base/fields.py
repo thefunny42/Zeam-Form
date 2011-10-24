@@ -25,6 +25,11 @@ class Field(Component):
     def available(self, form):
         return True
 
+    def isRequired(self, form):
+        if callable(self.required):
+            return self.required(form)
+        return self.required
+
     def getDefaultValue(self, form):
         if callable(self.defaultValue):
             return self.defaultValue(form)

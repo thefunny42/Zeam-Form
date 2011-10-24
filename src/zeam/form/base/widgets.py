@@ -199,7 +199,7 @@ class FieldWidget(Widget):
     def __init__(self, component, form, request):
         super(FieldWidget, self).__init__(component, form, request)
         self.description = component.description
-        self.required = component.required
+        self.required = component.isRequired(form)
         self.readonly = component.readonly
 
     @property
