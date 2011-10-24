@@ -155,6 +155,12 @@ class FieldsValues(dict):
                 return default
         return value
 
+    def getDictWithDefault(self, default=None):
+        result = {}
+        for key in self.keys():
+            result[key] = self.getWithDefault(key, default=default)
+        return result
+
     # BBB
     getDefault = getWithDefault
 
