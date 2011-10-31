@@ -146,7 +146,7 @@ Widget are views that can be that can be renderered:
    >>> widget2.update()
    >>> widget2.render() #doctest: +NORMALIZE_WHITESPACE
    u'<input type="text" id="form-field-title" name="form.field.title"
-   class="field" value="" />'
+            class="field" value="" required="required" />'
 
 If field is read only then field widget is read only as well.
 
@@ -158,7 +158,7 @@ If field is read only then field widget is read only as well.
    >>> widget2.update()
    >>> widget2.render() #doctest: +NORMALIZE_WHITESPACE
    u'<input type="text" id="form-field-title" name="form.field.title"
-   class="field" value="" readonly="readonly" />'
+            class="field" value="" required="required" readonly="readonly" />'
 
 Field widget value
 ~~~~~~~~~~~~~~~~~~
