@@ -27,12 +27,22 @@ required, ``NO_VALUE`` should not be accepted as a valid value::
 
    >>> field1.required
    False
-   >>> field1.validate(NO_VALUE)
-   >>> field1.validate(42)
+   >>> field1.validate(NO_VALUE, None)
+   >>> field1.validate(42, None)
    >>> field1.required = True
-   >>> field1.validate(NO_VALUE)
+   >>> field1.validate(NO_VALUE, None)
    u'Missing required value.'
-   >>> field1.validate(42)
+   >>> field1.validate(42, None)
+
+On a field, you can set ``required`` to be a callable, that takes the
+form as parameters. That let you define more advanced condition to
+know if the field is required or not::
+
+   >>> my_form = object()
+   >>> field1.required = lambda f: f is my_form
+   >>> field1.validate(NO_VALUE, None)
+   >>> field1.validate(NO_VALUE, my_form)
+   u'Missing required value.'
 
 A field can provide a default value. A context (the form) is given if
 the default value is computed::

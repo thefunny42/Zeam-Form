@@ -38,8 +38,8 @@ class Field(Component):
     def isEmpty(self, value):
         return value is NO_VALUE
 
-    def validate(self, value, context=None):
-        if self.required and self.isEmpty(value):
+    def validate(self, value, form):
+        if self.isRequired(form) and self.isEmpty(value):
             return _(u"Missing required value.")
         return None
 

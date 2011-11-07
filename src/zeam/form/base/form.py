@@ -251,7 +251,7 @@ class FormData(Object):
             if extractor is not None:
                 value, error = extractor.extract()
                 if error is None:
-                    error = field.validate(value, self.context)
+                    error = field.validate(value, self)
                 if error is not None:
                     if not IError.providedBy(error):
                         error = Error(error, extractor.identifier)

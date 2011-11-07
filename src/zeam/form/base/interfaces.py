@@ -244,7 +244,7 @@ class IField(IRenderableComponent, IFieldExtractionValueSetting):
         """Return the default value.
         """
 
-    def validate(value, context=None):
+    def validate(value, form):
         """Validate that the given value fullfil the field
         requirement.
         """
@@ -264,6 +264,11 @@ class IFields(ICollection):
 class IError(IComponent):
     """A error.
     """
+
+    def get(prefix, default=None):
+        """Return a sub error identified by the given prefix if
+        available.
+        """
 
 
 class IErrors(IMutableCollection):

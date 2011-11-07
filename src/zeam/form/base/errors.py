@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from zeam.form.base import interfaces
-from zeam.form.base.components import Component, Collection
+from zeam.form.base.components import Component, Collection, _marker
 from zope.interface import implements, directlyProvides
 from zope.i18nmessageid import MessageFactory
 
@@ -10,6 +10,14 @@ _ = MessageFactory('zeam.form.base')
 
 class Error(Component):
     implements(interfaces.IError)
+
+    def get(self, prefix, default=_marker):
+        # We implements get to be compatible with the sub-error protocol.
+        if self.identifier == prefix:
+            return self
+        if default is _marker:
+            raise KeyError(prefix)
+        return default
 
 
 class Errors(Collection):
