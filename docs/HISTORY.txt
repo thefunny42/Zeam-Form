@@ -9,6 +9,12 @@ Changelog
 * And an helper to know if a field is hidden (so you don't display the
   label).
 
+* Support a callable to know if a field is required (the callable
+  takes the form as parameter).
+
+* Add the HTML 5 attribute required by default in the widgets. Use
+  novalidate attribute on your form tag if you want to disable it.
+
 * Improve error reporting. A widget can now return a collection of
   error (usefull is the widget is composed of more sub-widgets).
 
