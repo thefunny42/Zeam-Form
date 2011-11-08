@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2 (unreleased)
+1.2 (2011/11/08)
 ----------------
 
 * This version no longer support Zope 2 before 2.12.
