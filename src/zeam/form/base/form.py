@@ -13,7 +13,7 @@ from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
 from zeam.form.base.markers import NO_VALUE, INPUT
 from zeam.form.base.widgets import Widgets, getWidgetExtractor
-from zeam.form.base.interfaces import ICollection, IError
+from zeam.form.base.interfaces import ICollection, IError, IFieldLookup
 
 from zope import component, i18n, interface
 from zope.pagetemplate.interfaces import IPageTemplate
@@ -301,6 +301,22 @@ class FormCanvas(GrokViewSupport, FormData):
 
         self.fieldWidgets.update()
         self.actionWidgets.update()
+
+
+class FormCanvasFieldLookup(grok.Adapter):
+    grok.context(FormCanvas)
+    grok.implements(IFieldLookup)
+
+    def get(self, identifier, default=None):
+        prefix = self.context.prefix + '.fields.'
+        if identifier.startswith(prefix):
+            field_full_identifier = identifier[len(prefix):]
+            field_identifier = field_full_identifier.split('.')[0]
+            if field_identifier in self.context.fields:
+                return IFieldLookup(
+                    self.context.fields[field_identifier]).get(
+                    field_full_identifier, default=default)
+        return default
 
 
 class StandaloneForm(GrokViewSupport, BrowserPage):

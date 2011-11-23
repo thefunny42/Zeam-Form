@@ -313,6 +313,7 @@ in the extraction process::
 
 The `identifier` field is not extracted, as planned.
 
+
 Usefull methods
 ---------------
 
@@ -334,3 +335,40 @@ identify the form (computed from the prefix):
   >>> form.prefix = 'form.settings.network'
   >>> form.htmlId()
   'form-settings-network'
+
+  >>> form.prefix = 'form'
+  >>> form.htmlId()
+  'form'
+
+
+Field Lookup
+------------
+
+You can lookup a field on a form (clever hein):
+
+   >>> from zeam.form.base.interfaces import IFieldLookup
+
+   >>> lookup = IFieldLookup(form)
+   >>> verifyObject(IFieldLookup, lookup)
+   True
+
+   >>> lookup.get('form.fields.identifier')
+   <Field identifier>
+   >>> lookup.get('form.fields.name', 42)
+   <Field name>
+
+   >>> lookup.get('form.fields.foo')
+   >>> lookup.get('foo')
+
+   >>> lookup.get('form.fields.foo', 42)
+   42
+   >>> lookup.get('foo', 42)
+   42
+
+If you change the prefix of the form that still works:
+
+   >>> form.prefix = 'form.settings.network'
+   >>> lookup.get('form.settings.network.fields.identifier')
+   <Field identifier>
+   >>> lookup.get('form.fields.identifier', 51)
+   51
