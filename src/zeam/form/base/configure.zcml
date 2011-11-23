@@ -16,7 +16,8 @@
   <grok:grok package=".meta" />
 
   <!-- Grok this package -->
-  <grok:grok package="." exclude="meta" />
+  <grok:grok package=".form_templates" />
+  <grok:grok package=".widgets" />
 
   <i18n:registerTranslations directory="i18n" />
 

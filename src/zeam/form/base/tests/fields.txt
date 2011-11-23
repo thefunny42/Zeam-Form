@@ -9,20 +9,13 @@ Field
 A field is a simple input on a form::
 
    >>> from zeam.form.base.fields import Field
-   >>> from zeam.form.base.interfaces import IField
-   >>> from zope.interface.verify import verifyObject
-
    >>> field1 = Field(u'Age')
    >>> field1
    <Field Age>
-   >>> field1.identifier
-   'age'
    >>> field1.title
    u'Age'
    >>> field1.description
    u''
-   >>> verifyObject(IField, field1)
-   True
 
 Field value
 ~~~~~~~~~~~
@@ -81,26 +74,6 @@ A Field implement IField, and is an IComponent::
    >>> interfaces.IField.extends(interfaces.IComponent)
    True
 
-
-Field Lookup
-~~~~~~~~~~~~
-
-You can lookup a field on a field (clever hein):
-
-   >>> from zeam.form.base.interfaces import IFieldLookup
-
-   >>> lookup1 = IFieldLookup(field1)
-   >>> verifyObject(IFieldLookup, lookup1)
-   True
-
-   >>> lookup1.get('age')
-   <Field Age>
-   >>> lookup1.get('age', default=42)
-   <Field Age>
-
-   >>> lookup1.get('test')
-   >>> lookup1.get('test', default=42)
-   42
 
 Fields
 ------

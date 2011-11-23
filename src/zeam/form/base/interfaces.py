@@ -261,15 +261,6 @@ class IFields(ICollection):
     """
 
 
-class IFieldLookup(interface.Interface):
-    """Adapt a form or a field to find the field identified by the given id.
-    """
-
-    def get(identifier, default=None):
-        """Return the identified by identifier or default.
-        """
-
-
 class IError(IComponent):
     """A error.
     """

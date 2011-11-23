@@ -1,6 +1,4 @@
 
-from grokcore import component as grok
-
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.markers import NO_VALUE, DEFAULT
@@ -44,16 +42,6 @@ class Field(Component):
         if self.isRequired(form) and self.isEmpty(value):
             return _(u"Missing required value.")
         return None
-
-
-class FieldFieldLookup(grok.Adapter):
-    grok.context(interfaces.IField)
-    grok.implements(interfaces.IFieldLookup)
-
-    def get(self, identifier, default=None):
-        if self.context.identifier == identifier:
-            return self.context
-        return default
 
 
 class Fields(Collection):
