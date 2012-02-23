@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.0.1 (2012/02/23)
+------------------
+
+* Improve errors API to be more flexible. That fixes error reporting
+  in nested widgets.
+
+* Improve cloneFormData, in order to make more things customizable
+  (validators, data manager).
+
 1.0 (2010/10/19)
 ----------------
 
