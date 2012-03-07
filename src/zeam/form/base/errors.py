@@ -24,6 +24,7 @@ class Errors(Collection):
     implements(interfaces.IErrors)
 
     type = interfaces.IError
+    order = 0
 
     def __init__(self, *components, **options):
         Collection.__init__(self, *components, **options)

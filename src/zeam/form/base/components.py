@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import operator
 
 from pkg_resources import iter_entry_points
 from zope import component
@@ -11,7 +12,7 @@ from zeam.form.base import interfaces
 
 
 _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
-
+_default_sort_key = operator.attrgetter('order')
 
 def createId(name):
     # Create a valid id from any string.
@@ -26,6 +27,8 @@ class Component(object):
 
     identifier = None
     title = None
+    # This help to reorder components.
+    order = 0
 
     def __init__(self, title=None, identifier=None):
         if not self.title:
@@ -103,7 +106,7 @@ class Collection(object):
         self.__components = [c for c in reversed(self.__components)]
         self.__ids = [c.identifier for c in self.__components]
 
-    def sort(self, cmp=cmp, key=lambda c: c.identifier, reverse=False):
+    def sort(self, cmp=cmp, key=_default_sort_key, reverse=False):
         self.__components.sort(cmp=cmp, key=key, reverse=reverse)
         self.__ids = [c.identifier for c in self.__components]
 
@@ -132,6 +135,8 @@ class Collection(object):
     def append(self, component):
         if self.type.providedBy(component):
             if component.identifier not in self.__ids:
+                if not component.order:
+                    component.order = 10 * (len(self.__ids) + 1)
                 self.__ids.append(component.identifier)
                 self.__components.append(component)
             else:
