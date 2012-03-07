@@ -289,7 +289,7 @@ identifier_key::
 
   >>> from zeam.form.base import sort_components
 
-  >>> s5.sort(sort_components(['uranus', 'venus', 'jupiter']), key=identifier_key)
+  >>> sort_components(s5, ['uranus', 'venus', 'jupiter'])
   >>> print list(s5)
   [<Component Uranus>, <Component Venus>, <Component Jupiter>,
    <Component Saturn>]
@@ -301,14 +301,14 @@ The keys are sorted in the process::
 
 Successive sortings will leave unspecified fields at their relative places::
 
-  >>> s5.sort(sort_components(['saturn', 'uranus']), key=identifier_key)
+  >>> sort_components(s5, ['saturn', 'uranus'])
   >>> print list(s5)
   [<Component Saturn>, <Component Uranus>, <Component Venus>,
    <Component Jupiter>]
 
 We can also revert the sorting, as the standard python behavior::
 
-  >>> s5.sort(sort_components(['uranus', 'venus']), key=identifier_key, reverse=True)
+  >>> sort_components(s5, ['uranus', 'venus'], reverse=True)
   >>> print list(s5)
   [<Component Saturn>, <Component Jupiter>, <Component Venus>,
    <Component Uranus>]
@@ -316,12 +316,12 @@ We can also revert the sorting, as the standard python behavior::
 Errors are raised if the provided list is malformed or smaller than 2
 elements::
 
-  >>> s5.sort(sort_components(['uranus']), key=identifier_key)
+  >>> sort_components(s5, ['uranus'])
   Traceback (most recent call last):
   ...
   ValueError: Please provide a list of, at least, two component identifiers.
 
-  >>> s5.sort(sort_components('something'), key=identifier_key)
+  >>> sort_components(s5, 'something')
   Traceback (most recent call last):
   ...
   ValueError: Please provide a valid list or tuple of component identifiers.
@@ -329,7 +329,7 @@ elements::
 
 The behavior, if unknow ids are provided, is unchanged::
 
-  >>> s5.sort(sort_components(['venus', 'uranus', 'cardassia', 'bajor']), key=identifier_key)
+  >>> sort_components(s5, ['venus', 'uranus', 'cardassia', 'bajor'])
   >>> print list(s5)
   [<Component Venus>, <Component Uranus>, <Component Saturn>,
    <Component Jupiter>]

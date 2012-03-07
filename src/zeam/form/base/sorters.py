@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import operator
 
-def sort_components(order):
+def sort_components(components, order, reverse=False):
     if not isinstance(order, list) and not isinstance(order, tuple):
         raise ValueError(
             "Please provide a valid list or tuple of component identifiers.")
@@ -28,4 +29,7 @@ def sort_components(order):
 
         return 0
 
-    return compare
+    return components.sort(
+        cmp=compare,
+        key=operator.attrgetter('identifier'),
+        reverse=reverse)
