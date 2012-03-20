@@ -18,6 +18,7 @@ class IComponent(interface.Interface):
     """
     identifier = interface.Attribute(u"Component id")
     title = interface.Attribute(u"Component title")
+    order = interface.Attribute(u"Integer used to specify component order")
 
     def clone(new_identifier=None):
         """Return a clone of the new component, with identifier
@@ -172,6 +173,10 @@ class IDataManager(interface.Interface):
         """Modifiy content value associated to the given identifier.
         """
 
+    def delete(identifier):
+        """Return the content value associated with the given identifier.
+        """
+
 
 class IFormData(IFieldExtractionValueSetting):
     """Form data processing facilities.
@@ -287,6 +292,15 @@ class IWidget(IComponent):
 
     def htmlClass():
         """Return an HTML class to mark the widget with.
+        """
+
+    def isVisible():
+        """Return True if the widget will render something visible in
+        the rendered HTML.
+        """
+
+    def update():
+        """Update the widget. This must be called before render.
         """
 
     def render():
@@ -421,6 +435,10 @@ class IZeamFormBaseAPI(interface.Interface):
         u"A form field")
     Fields = interface.Attribute(
         u"A collection of fields")
+    Error = interface.Attribute(
+        u"An error")
+    Errors = interface.Attribute(
+        u"A collection of errors")
     Widgets = interface.Attribute(
         u"A collection of widgets")
     FormData = interface.Attribute(
