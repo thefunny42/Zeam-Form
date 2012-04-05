@@ -93,6 +93,7 @@ class GrokViewSupport(Object):
     def default_namespace(self):
         namespace = {'view': self,
                      'context': self.context,
+                     'static': self.static,
                      'request': self.request}
         if self.i18nLanguage is not None:
             namespace['target_language'] = self.i18nLanguage
