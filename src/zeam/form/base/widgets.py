@@ -31,7 +31,7 @@ class Widget(Component, grok.MultiAdapter):
         self.form = form
         self.request = request
 
-    def clone(new_identifier=None):
+    def clone(self, new_identifier=None):
         raise NotImplementedError
 
     def htmlId(self):
