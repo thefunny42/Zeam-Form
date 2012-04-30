@@ -50,7 +50,7 @@ class FormGrokker(grokcore.view.meta.views.ViewGrokker):
 
         config.action(
             discriminator=('adapter', adapts, interface.Interface, name),
-            callable=component.provideAdapter,
+            callable=grokcore.component.util.provideAdapter,
             args=(factory, adapts, interface.Interface, name))
         return True
 

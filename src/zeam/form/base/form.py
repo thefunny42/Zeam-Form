@@ -50,11 +50,12 @@ class GrokViewSupport(Object):
         self.context = context
         self.request = request
 
-        if getattr(self, 'module_info', None) is not None:
+        static_name = getattr(self, '__static_name__', None)
+        if static_name is not None:
             self.static = component.queryAdapter(
                 self.request,
                 interface.Interface,
-                name=self.module_info.package_dotted_name)
+                name=static_name)
             if self.static is not None:
                 # For security in Zope 2
                 self.static.__parent__ = self
