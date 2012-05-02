@@ -1,10 +1,11 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.3dev'
+version = '1.2.2'
 
 tests_require = [
     'zope.app.wsgi',
+    'zope.configuration',
     'grokcore.view [test]',
     ]
 
@@ -28,15 +29,16 @@ setup(name='zeam.form.base',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'grokcore.component',
+          'grokcore.component >= 2.5',
           'grokcore.security',
-          'grokcore.view >= 2.2',
+          'grokcore.view >= 2.7',
           'martian',
           'grokcore.chameleon',
           'megrok.pagetemplate >= 0.7',
           'setuptools',
           'zope.component',
           'zope.i18n',
+          'zope.i18nmessageid',
           'zope.interface',
           'zope.pagetemplate',
           'zope.publisher',
