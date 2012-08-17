@@ -43,8 +43,6 @@ class GrokViewSupport(Object):
     grok.baseclass()
     grok.implements(interfaces.IGrokViewSupport)
 
-    i18nLanguage = None
-
     def __init__(self, context, request):
         super(GrokViewSupport, self).__init__(context, request)
         self.context = context
@@ -96,8 +94,6 @@ class GrokViewSupport(Object):
                      'context': self.context,
                      'static': self.static,
                      'request': self.request}
-        if self.i18nLanguage is not None:
-            namespace['target_language'] = self.i18nLanguage
         return namespace
 
     def namespace(self):
@@ -132,7 +128,6 @@ def cloneFormData(original, content=_marker, prefix=None):
     else:
         clone.prefix = prefix
     # XXX Those fields are not checked by the interface
-    clone.i18nLanguage = original.i18nLanguage
     clone.postOnly = original.postOnly
     errors = original.errors.get(clone.prefix, None)
     if errors is not None:
@@ -180,7 +175,6 @@ class FormData(Object):
     dataManager = ObjectDataManager
     dataValidators = []
     postOnly = True
-    i18nLanguage = None
 
     ignoreRequest = False
     ignoreContent = True
@@ -327,8 +321,6 @@ class StandaloneForm(GrokViewSupport, BrowserPage):
             # continue processing the form
             return
 
-        if self.i18nLanguage is None:
-            self.i18nLanguage = i18n.negotiate(self.request)
         self.updateForm()
         if self.response.getStatus() in (302, 303):
             return

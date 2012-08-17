@@ -344,8 +344,6 @@ class IGrokViewSupport(interface.Interface):
     """
     response = interface.Attribute(
         u"Response object that is associated with the current request.")
-    i18nLanguage = interface.Attribute(
-        u"Language code to translate view content to.")
 
     def redirect(url):
         """Redirect to given URL.

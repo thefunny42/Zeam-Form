@@ -35,13 +35,12 @@ They implements ``IForm`` and ``ISimpleForm``, ``ISimpleForm`` extending
 The ``IForm`` extends the clearly defined Grok view component interface,
 ``IGrokViewSupport``:
 
-   >>> for attr in list(interfaces.IGrokViewSupport): print attr
+   >>> for attr in sorted(interfaces.IGrokViewSupport): print attr
    redirect
-   i18nLanguage
    render
-   url
-   update
    response
+   update
+   url
 
 The ISimpleForm interface extends also two main components interfaces.
 

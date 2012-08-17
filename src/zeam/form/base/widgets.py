@@ -47,9 +47,6 @@ class Widget(Component, grok.MultiAdapter):
     def default_namespace(self):
         namespace = {'widget': self,
                      'request': self.request}
-        if self.form.i18nLanguage is not None:
-            # i18n support for Chameleon
-            namespace['target_language'] = self.form.i18nLanguage
         return namespace
 
     def namespace(self):
