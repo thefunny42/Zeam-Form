@@ -67,14 +67,17 @@ data processing::
    >>> for name, attr in sorted(interfaces.IFormData.namesAndDescriptions()):
    ...     print "%s: %s" % (name, attr.getDoc())
    dataManager: Data manager class used to access content.
+   dataValidators: List of extra validators that must be called.
    errors: Iterable of the errors that occured during the form processing.
    extractData: Returns the form data and errors for the given fields.
    formErrors: Main errors that occurred during the form processing.
-   getContentData: Returns the content that will be used for the form processing.
+   getContent: Return the content that is used by the form.
+   getContentData: Returns a data manager that work on the content used by the form.
    setContentData: Sets the content that will be used as the form processing context.
    status: Form status message.
    validateData: Validates the form in a global way and returns a collection
-           of errors (if any occured) or None.
+           of errors (if any occured).
+   widgetFactory: Callable used to create new widgets.Called with the form, field and request.
 
 
 Data manager

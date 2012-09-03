@@ -10,7 +10,7 @@ from zope.interface import Interface
 from zope.pagetemplate.interfaces import IPageTemplate
 
 
-def widget_id(form, component):
+def widgetId(form, component):
     """Create an unique ID for a widget.
     """
     return '.'.join(
@@ -19,13 +19,89 @@ def widget_id(form, component):
          if iditem))
 
 
+class WidgetFactory(object):
+    """Generic API to create widgets and extractors.
+    """
+
+    def __init__(self, form, request):
+        self.form = form
+        self.request = request
+
+    def widget(self, field):
+        """Create a widget for the given field.
+        """
+        if not field.available(self.form):
+            return None
+        mode = str(getValue(field, 'mode', self.form))
+        return component.getMultiAdapter(
+            (field, self.form, self.request),
+            interfaces.IWidget,
+            name=mode)
+
+    def extractor(self, field):
+        """Create a widget extract for the given field.
+        """
+        mode = getValue(field, 'mode', self.form)
+
+        # The field mode should be extractable or we skip it.
+        if (IModeMarker.providedBy(mode) and mode.extractable is False):
+            return None
+
+        extractor = component.queryMultiAdapter(
+            (field, self.form, self.request),
+            interfaces.IWidgetExtractor,
+            name=str(mode))
+        if extractor is not None:
+            return extractor
+        # Default to the default extractor
+        return component.getMultiAdapter(
+            (field, self.form, self.request),
+            interfaces.IWidgetExtractor)
+
+
+class Widgets(Collection):
+    grok.implements(interfaces.IWidgets)
+
+    type = interfaces.IWidget
+
+    def extend(self, *args):
+        if not args:
+            return
+
+        # Ensure the user created us with the right options
+        assert self.__dict__.get('form', None) is not None
+        factory = self.form.widgetFactory.widget
+
+        for arg in args:
+            if interfaces.IWidgets.providedBy(arg):
+                for widget in arg:
+                    self.append(widget)
+            elif interfaces.IIterable.providedBy(arg):
+                for field in arg:
+                    widget = factory(field)
+                    if widget is not None:
+                        self.append(widget)
+            elif interfaces.IWidget.providedBy(arg):
+                self.append(arg)
+            elif interfaces.IRenderableComponent.providedBy(arg):
+                widget = factory(arg)
+                if widget is not None:
+                    self.append(widget)
+            else:
+                raise TypeError(u'Invalid type', arg)
+
+    def update(self):
+        for widget in self:
+            widget.update()
+
+
 class Widget(Component, grok.MultiAdapter):
     grok.baseclass()
     grok.implements(interfaces.IWidget)
     grok.provides(interfaces.IWidget)
 
     def __init__(self, component, form, request):
-        identifier = widget_id(form, component)
+        identifier = widgetId(form, component)
         super(Widget, self).__init__(component.title, identifier)
         self.component = component
         self.form = form
@@ -75,7 +151,7 @@ class WidgetExtractor(grok.MultiAdapter):
         Interface)
 
     def __init__(self, component, form, request):
-        self.identifier = widget_id(form, component)
+        self.identifier = widgetId(form, component)
         self.component = component
         self.form = form
         self.request = request
@@ -103,53 +179,6 @@ class ReadOnlyWidgetExtractor(WidgetExtractor):
     grok.name('readonly')
 
 
-def createWidget(field, form, request):
-    """Create a widget (or return None) for the given form and
-    request.
-    """
-    if not field.available(form):
-        return None
-    mode = str(getValue(field, 'mode', form))
-    return component.getMultiAdapter(
-        (field, form, request), interfaces.IWidget, name=mode)
-
-
-class Widgets(Collection):
-    grok.implements(interfaces.IWidgets)
-
-    type = interfaces.IWidget
-
-    def extend(self, *args):
-        if not args:
-            return
-
-        # Ensure the user created us with the right options
-        assert self.__dict__.get('form', None) is not None
-        assert self.__dict__.get('request', None) is not None
-
-        for arg in args:
-            if interfaces.IWidgets.providedBy(arg):
-                for widget in arg:
-                    self.append(widget)
-            elif interfaces.IIterable.providedBy(arg):
-                for field in arg:
-                    widget = createWidget(field, self.form, self.request)
-                    if widget is not None:
-                        self.append(widget)
-            elif interfaces.IWidget.providedBy(arg):
-                self.append(arg)
-            elif interfaces.IRenderableComponent.providedBy(arg):
-                widget = createWidget(arg, self.form, self.request)
-                if widget is not None:
-                    self.append(widget)
-            else:
-                raise TypeError(u'Invalid type', arg)
-
-    def update(self):
-        for widget in self:
-            widget.update()
-
-
 # After follow the implementation of some really generic default
 # widgets
 
@@ -167,22 +196,6 @@ class ActionWidget(Widget):
 
     def htmlClass(self):
         return 'action'
-
-
-def getWidgetExtractor(field, form, request):
-    mode = str(getValue(field, 'mode', form))
-
-    # The field mode should be extractable or we skip it.
-    if (IModeMarker.providedBy(field.mode) and
-        field.mode.extractable is False):
-        return None
-
-    extractor = component.queryMultiAdapter(
-        (field, form, request), interfaces.IWidgetExtractor, name=mode)
-    if extractor is not None:
-        return extractor
-    return component.getMultiAdapter(
-        (field, form, request), interfaces.IWidgetExtractor)
 
 
 class FieldWidget(Widget):
@@ -207,8 +220,7 @@ class FieldWidget(Widget):
         # First lookup the request
         ignoreRequest = getValue(self.component, 'ignoreRequest', self.form)
         if not ignoreRequest:
-            extractor = getWidgetExtractor(
-                self.component, self.form, self.request)
+            extractor = self.form.widgetFactory.extractor(self.component)
             if extractor is not None:
                 value = extractor.extractRaw()
                 if value:

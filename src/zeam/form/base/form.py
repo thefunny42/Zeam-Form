@@ -12,10 +12,11 @@ from zeam.form.base.datamanager import ObjectDataManager
 from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
 from zeam.form.base.markers import NO_VALUE, INPUT
-from zeam.form.base.widgets import Widgets, getWidgetExtractor
+from zeam.form.base.widgets import Widgets, WidgetFactory
 from zeam.form.base.interfaces import ICollection, IError
 
-from zope import component, i18n, interface
+from zope import component, interface
+from zope.cachedescriptors.property import Lazy
 from zope.pagetemplate.interfaces import IPageTemplate
 from zope.publisher.browser import BrowserPage
 from zope.publisher.publish import mapply
@@ -129,6 +130,7 @@ def cloneFormData(original, content=_marker, prefix=None):
         clone.prefix = prefix
     # XXX Those fields are not checked by the interface
     clone.postOnly = original.postOnly
+    clone.widgetFactoryFactory = original.widgetFactoryFactory
     errors = original.errors.get(clone.prefix, None)
     if errors is not None:
         clone.errors = errors
@@ -174,6 +176,7 @@ class FormData(Object):
     mode = INPUT
     dataManager = ObjectDataManager
     dataValidators = []
+    widgetFactoryFactory = WidgetFactory
     postOnly = True
 
     ignoreRequest = False
@@ -191,6 +194,10 @@ class FormData(Object):
         if content is _marker:
             content = context
         self.setContentData(content)
+
+    @Lazy
+    def widgetFactory(self):
+        return self.widgetFactoryFactory(self, self.request)
 
     @property
     def formErrors(self):
@@ -217,16 +224,14 @@ class FormData(Object):
             content = self.dataManager(content)
         self.__content = content
 
-    def validateData(self, fields, data, errors):
+    def validateData(self, fields, data):
+        errors = Errors()
         for factory in self.dataValidators:
             validator = factory(self, fields)
             for error in validator.validate(data):
                 if not IError.providedBy(error):
                     error = Error(error, self.prefix)
                 errors.append(error)
-        if len(errors):
-            if self.prefix not in errors:
-                errors.append(Error(_(u"There were errors."), self.prefix))
         return errors
 
     def extractData(self, fields):
@@ -243,7 +248,7 @@ class FormData(Object):
                 continue
 
             # Widget extraction and validation
-            extractor = getWidgetExtractor(field, self, self.request)
+            extractor = self.widgetFactory.extractor(field)
             if extractor is not None:
                 value, error = extractor.extract()
                 if error is None:
@@ -255,7 +260,11 @@ class FormData(Object):
                 data[field.identifier] = value
 
         # Generic form validation
-        errors = self.validateData(fields, data, errors)
+        errors.extend(self.validateData(fields, data))
+        if len(errors):
+            # Add a form level error if not already present
+            if self.prefix not in errors:
+                errors.append(Error(_(u"There were errors."), self.prefix))
         self.errors = errors
         return (data, errors)
 

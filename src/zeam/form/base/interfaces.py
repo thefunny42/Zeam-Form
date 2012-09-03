@@ -183,24 +183,34 @@ class IFormData(IFieldExtractionValueSetting):
     """
     dataManager = interface.Attribute(
         u"Data manager class used to access content.")
+    dataValidators = interface.Attribute(
+        u"List of extra validators that must be called.")
     status = interface.Attribute(
         u"Form status message.")
     errors = interface.Attribute(
         u"Iterable of the errors that occured during the form processing.")
     formErrors = interface.Attribute(
         u"Main errors that occurred during the form processing.")
+    widgetFactory = interface.Attribute(
+        u"Callable used to create new widgets."
+        u"Called with the form, field and request.")
+
+    def getContent():
+        """Return the content that is used by the form.
+        """
 
     def getContentData():
-        """Returns the content that will be used for the form processing.
+        """Returns a data manager that work on the content used by the
+        form.
         """
 
     def setContentData(content):
         """Sets the content that will be used as the form processing context.
         """
 
-    def validateData(fields, data, errors):
+    def validateData(fields, data):
         """Validates the form in a global way and returns a collection
-        of errors (if any occured) or None.
+        of errors (if any occured).
         """
 
     def extractData(fields):
@@ -305,6 +315,19 @@ class IWidget(IComponent):
 
     def render():
         """Return the rendered HTML of the widget.
+        """
+
+
+class IWidgetFactory(object):
+    """Adapt a form to create widgets.
+    """
+
+    def __init__(form, request):
+        """Create a factory.
+        """
+
+    def __call__(field):
+        """Return a new widget.
         """
 
 
