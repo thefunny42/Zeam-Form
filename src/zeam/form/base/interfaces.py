@@ -318,7 +318,7 @@ class IWidget(IComponent):
         """
 
 
-class IWidgetFactory(object):
+class IWidgetFactory(interface.Interface):
     """Adapt a form to create widgets.
     """
 
@@ -326,8 +326,12 @@ class IWidgetFactory(object):
         """Create a factory.
         """
 
-    def __call__(field):
-        """Return a new widget.
+    def widget(field):
+        """Create a widget for the given field.
+        """
+
+    def extractor(field):
+        """Create a widget extractor for the given field.
         """
 
 

@@ -3,7 +3,7 @@
 from grokcore import component as grok
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
-from zeam.form.base.interfaces import IModeMarker
+from zeam.form.base.interfaces import IModeMarker, IWidgetFactory
 from zeam.form.base.markers import NO_VALUE, getValue, HiddenMarker
 from zope import component
 from zope.interface import Interface
@@ -22,6 +22,7 @@ def widgetId(form, component):
 class WidgetFactory(object):
     """Generic API to create widgets and extractors.
     """
+    grok.implements(IWidgetFactory)
 
     def __init__(self, form, request):
         self.form = form
@@ -39,7 +40,7 @@ class WidgetFactory(object):
             name=mode)
 
     def extractor(self, field):
-        """Create a widget extract for the given field.
+        """Create a widget extractor for the given field.
         """
         mode = getValue(field, 'mode', self.form)
 
