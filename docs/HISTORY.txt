@@ -1,11 +1,14 @@
 Changelog
 =========
 
-1.3.0 (unreleased)
+1.2.3 (2012/09/24)
 ------------------
 
 * ``grokcore.chameleon`` is able to negociate i18n by himself. Remove
   the ``i18nLanguage`` attribute that was an hack.
+
+* Refactor how the widgets and extractors are created. This is now
+  done via the form data, and is customizable.
 
 1.2.2 (2012/05/02)
 ------------------
