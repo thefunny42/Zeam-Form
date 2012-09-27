@@ -110,6 +110,8 @@ class Widget(Component, grok.MultiAdapter):
     grok.implements(interfaces.IWidget)
     grok.provides(interfaces.IWidget)
 
+    defaultHtmlClass = ['field']
+
     def __init__(self, component, form, request):
         identifier = widgetId(form, component)
         super(Widget, self).__init__(component.title, identifier)
@@ -117,15 +119,6 @@ class Widget(Component, grok.MultiAdapter):
         self.form = form
         self.request = request
         self._htmlAttributes = {}
-
-    def htmlAttribute(self, name):
-        value = self._htmlAttributes.get(name)
-        if value:
-            # Boolean return as value the name of the property
-            if isinstance(value, bool):
-                return name
-            return value
-        return None
 
     def clone(self, new_identifier=None):
         raise NotImplementedError
@@ -135,7 +128,19 @@ class Widget(Component, grok.MultiAdapter):
         return self.identifier.replace('.', '-')
 
     def htmlClass(self):
-        return 'field'
+        result = self.defaultHtmlClass
+        if self.required:
+            result = result + ['field-required',]
+        return ' '.join(result)
+
+    def htmlAttribute(self, name):
+        value = self._htmlAttributes.get(name)
+        if value:
+            # Boolean return as value the name of the property
+            if isinstance(value, bool):
+                return name
+            return value
+        return None
 
     def isVisible(self):
         return not isinstance(self.component.mode, HiddenMarker)

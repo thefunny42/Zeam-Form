@@ -112,31 +112,31 @@ Like for an action, all identifier and title are set correctly:
 
 Prefixes of the form and the component will alter the identifier:
 
-   >>> form2 = Form(None, request)
-   >>> form2.prefix = u"something"
+   >>> form_prefix = Form(None, request)
+   >>> form_prefix.prefix = u"something"
 
    >>> action2 = Action(u"Some action")
    >>> action2.prefix = u"else"
-   >>> form2.actions += action2
+   >>> form_prefix.actions += action2
 
    >>> widget3 = component.getMultiAdapter(
-   ...         (action2, form2, request), interfaces.IWidget, name='input')
+   ...         (action2, form_prefix, request), interfaces.IWidget, name='input')
 
    >>> widget3.identifier
    'something.else.some-action'
 
 If the prefixes are empty:
 
-   >>> form2.prefix = u""
+   >>> form_prefix.prefix = u""
    >>> widget3 = component.getMultiAdapter(
-   ...         (action2, form2, request), interfaces.IWidget, name='input')
+   ...         (action2, form_prefix, request), interfaces.IWidget, name='input')
 
    >>> widget3.identifier
    'else.some-action'
 
    >>> action2.prefix = u""
    >>> widget3 = component.getMultiAdapter(
-   ...         (action2, form2, request), interfaces.IWidget, name='input')
+   ...         (action2, form_prefix, request), interfaces.IWidget, name='input')
 
    >>> widget3.identifier
    'some-action'
@@ -164,9 +164,9 @@ via the widget:
 Widget are views that can be that can be renderered:
 
    >>> field_widget.update()
-   >>> field_widget.render() #doctest: +NORMALIZE_WHITESPACE
-   u'<input type="text" id="form-field-title" name="form.field.title"
-            class="field" value="" required="required" />\n'
+   >>> print field_widget.render() #doctest: +NORMALIZE_WHITESPACE
+   <input type="text" id="form-field-title" name="form.field.title"
+          class="field field-required" value="" required="required" />
 
 If field is read only then field widget is read only as well:
 
@@ -182,10 +182,10 @@ Switch the readonly flag on:
    >>> field_widget.htmlAttribute('readonly')
    'readonly'
    >>> field_widget.update()
-   >>> field_widget.render() #doctest: +NORMALIZE_WHITESPACE
-   u'<input type="text" id="form-field-title" name="form.field.title"
-            class="field" value="" required="required"
-            readonly="readonly" />\n'
+   >>> print field_widget.render() #doctest: +NORMALIZE_WHITESPACE
+   <input type="text" id="form-field-title" name="form.field.title"
+          class="field field-required" value="" required="required"
+          readonly="readonly" />
 
 The field can provide some valid extra html attributes:
 
@@ -201,11 +201,11 @@ The field can provide some valid extra html attributes:
    >>> field_widget.htmlAttribute('autocomplete')
    'autocomplete'
    >>> field_widget.update()
-   >>> field_widget.render() #doctest: +NORMALIZE_WHITESPACE
-   u'<input type="text" id="form-field-title" name="form.field.title"
-            class="field" value="" required="required"
-            autocomplete="autocomplete" readonly="readonly"
-            placeholder="Name ..." size="40" />\n'
+   >>> print field_widget.render() #doctest: +NORMALIZE_WHITESPACE
+   <input type="text" id="form-field-title" name="form.field.title"
+          class="field field-required" value="" required="required"
+          autocomplete="autocomplete" readonly="readonly"
+          placeholder="Name ..." size="40" />
 
 
 Field widget value
