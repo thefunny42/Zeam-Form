@@ -16,6 +16,7 @@ class Field(Component):
     required = False
     prefix = 'field'
     readonly = False
+    htmlAttributes = {}
 
     ignoreContent = DEFAULT
     ignoreRequest = DEFAULT

@@ -107,6 +107,16 @@ class Widget(Component, grok.MultiAdapter):
         self.component = component
         self.form = form
         self.request = request
+        self._htmlAttributes = {}
+
+    def htmlAttribute(self, name):
+        value = self._htmlAttributes.get(name)
+        if value:
+            # Boolean return as value the name of the property
+            if isinstance(value, bool):
+                return name
+            return value
+        return None
 
     def clone(self, new_identifier=None):
         raise NotImplementedError
@@ -193,7 +203,7 @@ class ActionWidget(Widget):
     def __init__(self, component, form, request):
         super(ActionWidget, self).__init__(component, form, request)
         self.description = component.description
-        self.accesskey = component.accesskey
+        self._htmlAttributes.update({'accesskey': component.accesskey})
 
     def htmlClass(self):
         return 'action'
@@ -211,7 +221,9 @@ class FieldWidget(Widget):
         super(FieldWidget, self).__init__(component, form, request)
         self.description = component.description
         self.required = component.isRequired(form)
-        self.readonly = component.readonly
+        self._htmlAttributes.update(component.htmlAttributes)
+        self._htmlAttributes.update({'readonly': component.readonly,
+                                     'required': self.required})
 
     @property
     def error(self):

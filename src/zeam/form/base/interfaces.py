@@ -254,6 +254,8 @@ class IField(IRenderableComponent, IFieldExtractionValueSetting):
         u"Boolean indicating if the field is required")
     readonly = interface.Attribute(
         u"Boolean indicating if the field is read-only")
+    htmlAttributes = interface.Attribute(
+        u"Dictionnary with extra html attributes to add to the field")
 
     def getDefaultValue(form):
         """Return the default value.
@@ -304,6 +306,10 @@ class IWidget(IComponent):
         """Return an HTML class to mark the widget with.
         """
 
+    def htmlAttribute(name):
+        """Return the value of the given HTML attribute.
+        """
+
     def isVisible():
         """Return True if the widget will render something visible in
         the rendered HTML.
@@ -338,11 +344,12 @@ class IWidgetFactory(interface.Interface):
 class IFieldWidget(IWidget):
     """Widget for fields.
     """
-    description = interface.Attribute(u"Description of the field")
-    error = interface.Attribute(u"Field error, or None")
+    description = interface.Attribute(
+        u"Description of the field")
+    error = interface.Attribute(
+        u"Field error, or None")
     required = interface.Attribute(
         u"Boolean indicating if the field is required")
-    readonly = interface.Attribute(u"Boolean indicating if field is read-only")
 
 
 class IWidgetExtractor(interface.Interface):

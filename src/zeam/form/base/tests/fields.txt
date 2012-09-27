@@ -9,12 +9,12 @@ Field
 A field is a simple input on a form::
 
    >>> from zeam.form.base.fields import Field
-   >>> field1 = Field(u'Age')
-   >>> field1
+   >>> field = Field(u'Age')
+   >>> field
    <Field Age>
-   >>> field1.title
+   >>> field.title
    u'Age'
-   >>> field1.description
+   >>> field.description
    u''
 
 Field value
@@ -25,23 +25,23 @@ required, ``NO_VALUE`` should not be accepted as a valid value::
 
    >>> from zeam.form.base.markers import NO_VALUE
 
-   >>> field1.required
+   >>> field.required
    False
-   >>> field1.validate(NO_VALUE, None)
-   >>> field1.validate(42, None)
-   >>> field1.required = True
-   >>> field1.validate(NO_VALUE, None)
+   >>> field.validate(NO_VALUE, None)
+   >>> field.validate(42, None)
+   >>> field.required = True
+   >>> field.validate(NO_VALUE, None)
    u'Missing required value.'
-   >>> field1.validate(42, None)
+   >>> field.validate(42, None)
 
 On a field, you can set ``required`` to be a callable, that takes the
 form as parameters. That let you define more advanced condition to
 know if the field is required or not::
 
    >>> my_form = object()
-   >>> field1.required = lambda f: f is my_form
-   >>> field1.validate(NO_VALUE, None)
-   >>> field1.validate(NO_VALUE, my_form)
+   >>> field.required = lambda f: f is my_form
+   >>> field.validate(NO_VALUE, None)
+   >>> field.validate(NO_VALUE, my_form)
    u'Missing required value.'
 
 A field can provide a default value. A context (the form) is given if
@@ -50,26 +50,26 @@ the default value is computed::
    >>> class FormContext(object):
    ...    value = 51
 
-   >>> field1.getDefaultValue(FormContext())
+   >>> field.getDefaultValue(FormContext())
    <Marker NO_VALUE>
 
 You can modify the defalut value of a field by setting defaultValue to
 be it or a callable. In case of a callable it will be called each a
 new default value is needed::
 
-   >>> field1.defaultValue = 42
-   >>> field1.getDefaultValue(FormContext())
+   >>> field.defaultValue = 42
+   >>> field.getDefaultValue(FormContext())
    42
 
-   >>> field1.defaultValue = lambda f: f.value * 2
-   >>> field1.getDefaultValue(FormContext())
+   >>> field.defaultValue = lambda f: f.value * 2
+   >>> field.getDefaultValue(FormContext())
    102
 
 A Field implement IField, and is an IComponent::
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
-   >>> verifyObject(interfaces.IField, field1)
+   >>> verifyObject(interfaces.IField, field)
    True
    >>> interfaces.IField.extends(interfaces.IComponent)
    True
@@ -81,7 +81,7 @@ Fields
 Fields is a collection component used to contain Field::
 
    >>> from zeam.form.base.fields import Fields
-   >>> s1 = Fields(Field('Size'), field1)
+   >>> s1 = Fields(Field('Size'), field)
    >>> s1
    <Fields>
    >>> list(s1)
