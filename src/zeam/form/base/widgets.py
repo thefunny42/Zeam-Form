@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import warnings
+
 from grokcore import component as grok
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
@@ -17,6 +19,13 @@ def widgetId(form, component):
         (iditem for iditem in
          (str(form.prefix), component.prefix, component.identifier,)
          if iditem))
+
+
+def getWidgetExtractor(field, form, request):
+    warnings.warn(
+        u"getWidgetExtractor is deprecated in favor of "
+        u"form.widgetFactory.extractor", DeprecationWarning)
+    return form.widgetFactory.extractor(field)
 
 
 class WidgetFactory(object):
