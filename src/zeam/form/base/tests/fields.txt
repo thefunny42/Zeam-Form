@@ -21,7 +21,7 @@ Field value
 ~~~~~~~~~~~
 
 A field dispose of a validate method to validate a value. If field is
-required, ``NO_VALUE`` should not be accepted as a valid value::
+required, ``NO_VALUE`` should not be accepted as a valid value:
 
    >>> from zeam.form.base.markers import NO_VALUE
 
@@ -33,6 +33,29 @@ required, ``NO_VALUE`` should not be accepted as a valid value::
    >>> field.validate(NO_VALUE, None)
    u'Missing required value.'
    >>> field.validate(42, None)
+
+You can define a custom method to constrain the value to a test of
+your choice:
+
+   >>> field.constrainValue = lambda v: v != 51
+   >>> field.validate(42, None)
+   >>> field.validate(51, None)
+   u'The constraint failed.'
+
+Alternatively, you can use an exception:
+
+   >>> class NoRicardToday(Exception):
+   ...     def doc(self):
+   ...         return u"I don't want Ricard today!"
+
+   >>> def check_for_ricard(value):
+   ...     if value == 51:
+   ...         raise NoRicardToday()
+   ...     return True
+
+   >>> field.constrainValue = check_for_ricard
+   >>> field.validate(51, None)
+   u"I don't want Ricard today!"
 
 On a field, you can set ``required`` to be a callable, that takes the
 form as parameters. That let you define more advanced condition to
