@@ -44,10 +44,9 @@ identifier will be composed with the component on and the form prefix:
 The method render gives you the HTML to display. Our widget is an
 action, so by default you get a button:
 
-   >>> print action_widget.render()
+   >>> print action_widget.render()   #doctest: +NORMALIZE_WHITESPACE
    <input type="submit" id="form-action-do-something"
           name="form.action.do-something" value="Do Something" class="action" />
-   <BLANKLINE>
 
 You can get its HTML id as well (to render any label for instance),
 class, or retrieve random attributes, like access key (if set):
@@ -57,6 +56,23 @@ class, or retrieve random attributes, like access key (if set):
    >>> action_widget.htmlClass()
    'action'
    >>> action_widget.htmlAttribute('accesskey')
+   >>> action_widget.htmlAttribute('formnovalidate')
+
+You can set an access key and disable the HTML 5 validation:
+
+   >>> action.accesskey = 'e'
+   >>> action.html5Validation = False
+
+   >>> action_widget = component.getMultiAdapter(
+   ...         (action, form, request), interfaces.IWidget, name='input')
+   >>> action_widget.htmlAttribute('accesskey')
+   'e'
+   >>> action_widget.htmlAttribute('formnovalidate')
+   'formnovalidate'
+   >>> print action_widget.render()  #doctest: +NORMALIZE_WHITESPACE
+   <input type="submit" id="form-action-do-something"
+          name="form.action.do-something" value="Do Something" class="action"
+          accesskey="e" formnovalidate="formnovalidate" />
 
 Our widget implements IWidget, and IComponent:
 

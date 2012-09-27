@@ -5,6 +5,7 @@ from zeam.form.base.markers import NO_VALUE, DEFAULT
 
 from zope.interface import implements
 from zope.i18nmessageid import MessageFactory
+from zope.cachedescriptors.property import Lazy
 
 _ = MessageFactory('zeam.form.base')
 
@@ -16,12 +17,15 @@ class Field(Component):
     required = False
     prefix = 'field'
     readonly = False
-    htmlAttributes = {}
 
     ignoreContent = DEFAULT
     ignoreRequest = DEFAULT
     mode = DEFAULT
     defaultValue = NO_VALUE
+
+    @Lazy
+    def htmlAttributes(self):
+        return {}
 
     def available(self, form):
         return True

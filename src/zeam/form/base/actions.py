@@ -23,6 +23,7 @@ class Action(Component):
     mode = 'input'
     description = None
     accesskey = None
+    html5Validation = True
     postOnly = DEFAULT
 
     def available(self, form):

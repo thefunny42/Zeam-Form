@@ -3,6 +3,7 @@
                        value widget.title;
                        title widget.description;
                        accesskey widget.htmlAttribute('accesskey');
+                       formnovalidate widget.htmlAttribute('formnovalidate');
                        id widget.htmlId();
                        class widget.htmlClass()"
        i18n:attributes="value" />

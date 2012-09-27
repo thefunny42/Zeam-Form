@@ -227,6 +227,9 @@ class IAction(IRenderableComponent):
     """A form action.
     """
     description = interface.Attribute(u"Describe the action")
+    accesskey = interface.Attribute(u"Accesskey for the action")
+    html5Validation = interface.Attribute(
+        u"Enable HTML5 validation for this action")
 
     def validate(form):
         """Self validation of values in order to run.

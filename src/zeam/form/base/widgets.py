@@ -203,7 +203,9 @@ class ActionWidget(Widget):
     def __init__(self, component, form, request):
         super(ActionWidget, self).__init__(component, form, request)
         self.description = component.description
-        self._htmlAttributes.update({'accesskey': component.accesskey})
+        self._htmlAttributes.update({
+                'accesskey': component.accesskey,
+                'formnovalidate': not component.html5Validation})
 
     def htmlClass(self):
         return 'action'
@@ -222,8 +224,9 @@ class FieldWidget(Widget):
         self.description = component.description
         self.required = component.isRequired(form)
         self._htmlAttributes.update(component.htmlAttributes)
-        self._htmlAttributes.update({'readonly': component.readonly,
-                                     'required': self.required})
+        self._htmlAttributes.update({
+                'readonly': component.readonly,
+                'required': self.required})
 
     @property
     def error(self):
