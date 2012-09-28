@@ -323,14 +323,14 @@ value to render, they are all executed before any widget is created
 So WidgetExtractor are multiadapters, adapting the component, form and
 request, like a Widget does:
 
-   >>> e1 = component.getMultiAdapter(
+   >>> empty_extractor = component.getMultiAdapter(
    ...         (action, form, request), interfaces.IWidgetExtractor)
-   >>> e1
+   >>> empty_extractor
    <zeam.form.base.widgets.WidgetExtractor object at ...>
 
 And you can extract the widget value, and errors from the request:
 
-   >>> e1.extract()
+   >>> empty_extractor.extract()
    (<Marker NO_VALUE>, None)
 
 But our request was empty here. Let's try with a non-empty one:
@@ -338,16 +338,16 @@ But our request was empty here. Let's try with a non-empty one:
    >>> submitted_request = TestRequest(
    ...         form={'form.action.do-something': u'Do Something',
    ...                'otherfield': 42})
-   >>> e2 = component.getMultiAdapter(
+   >>> action_extractor = component.getMultiAdapter(
    ...         (action, form, submitted_request),
    ...         interfaces.IWidgetExtractor)
-   >>> e2.extract()
+   >>> action_extractor.extract()
    (u'Do Something', None)
 
 An another of the extractor is to gives the request fields used for
 the extraction:
 
-   >>> e2.extractRaw()
+   >>> action_extractor.extractRaw()
    {'form.action.do-something': u'Do Something'}
 
 This can be used by widgets to display again any non-validated data.
@@ -355,8 +355,56 @@ This can be used by widgets to display again any non-validated data.
 WidgetExtractor implements IWidgetExtractor, but inlike Widgets, not
 IComponent:
 
-   >>> verifyObject(interfaces.IWidgetExtractor, e1, e2)
+   >>> verifyObject(interfaces.IWidgetExtractor, empty_extractor, action_extractor)
    True
-   >>> interfaces.IComponent.providedBy(e1)
+   >>> interfaces.IComponent.providedBy(empty_extractor)
    False
 
+
+Field extractor and required
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If a field is required, and you extract the value out of an empty
+request, you will have NO_VALUE marker. If the value is an empty
+string, you will also get NO_VALUE:
+
+   >>> field.required = True
+   >>> field.required
+   True
+   >>> required_extractor = component.getMultiAdapter(
+   ...         (field, form, request), interfaces.IWidgetExtractor)
+   >>> required_extractor
+   <zeam.form.base.widgets.FieldWidgetExtractor object at ...>
+   >>> required_extractor.extract()
+   (<Marker NO_VALUE>, None)
+
+   >>> submitted_request = TestRequest(form={'form.field.title': u''})
+   >>> required_extractor = component.getMultiAdapter(
+   ...         (field, form, submitted_request), interfaces.IWidgetExtractor)
+   >>> required_extractor
+   <zeam.form.base.widgets.FieldWidgetExtractor object at ...>
+   >>> required_extractor.extract()
+   (<Marker NO_VALUE>, None)
+
+
+If a field is not required, and you extract the value out of an empty
+request, you will get NO_VALUE. If the value is an empty string, you
+will an empty string:
+
+   >>> field.required = False
+   >>> field.required
+   False
+   >>> required_extractor = component.getMultiAdapter(
+   ...         (field, form, request), interfaces.IWidgetExtractor)
+   >>> required_extractor
+   <zeam.form.base.widgets.FieldWidgetExtractor object at ...>
+   >>> required_extractor.extract()
+   (<Marker NO_VALUE>, None)
+
+   >>> submitted_request = TestRequest(form={'form.field.title': u''})
+   >>> required_extractor = component.getMultiAdapter(
+   ...         (field, form, submitted_request), interfaces.IWidgetExtractor)
+   >>> required_extractor
+   <zeam.form.base.widgets.FieldWidgetExtractor object at ...>
+   >>> required_extractor.extract()
+   (u'', None)

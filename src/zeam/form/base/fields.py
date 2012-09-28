@@ -5,7 +5,6 @@ from zeam.form.base.markers import NO_VALUE, DEFAULT
 
 from zope.interface import implements
 from zope.i18nmessageid import MessageFactory
-from zope.cachedescriptors.property import Lazy
 
 _ = MessageFactory('zeam.form.base')
 
@@ -18,27 +17,38 @@ class Field(Component):
     prefix = 'field'
     readonly = False
     htmlAttributes = {}
+    interface = None
     ignoreContent = DEFAULT
     ignoreRequest = DEFAULT
     mode = DEFAULT
     defaultValue = NO_VALUE
 
-    def __init__(self, title,
+    def __init__(self,
+                 title=None,
                  identifier=None,
                  description=u"",
                  required=False,
                  readonly=False,
                  defaultValue=NO_VALUE,
                  constrainValue=None,
+                 interface=None,
                  **htmlAttributes):
         super(Field, self).__init__(title, identifier)
         self.description = description
         self.required = required
         self.readonly = readonly
         self.defaultValue = defaultValue
+        self.interface = interface
         if constrainValue is not None:
             self.constrainValue = constrainValue
         self.htmlAttributes = htmlAttributes.copy()
+
+    def clone(self, new_identifier=None):
+        copy = self.__class__(title=self.title, identifier=self.identifier)
+        copy.__dict__.update(self.__dict__)
+        if new_identifier is not None:
+            copy.identifier = new_identifier
+        return copy
 
     def available(self, form):
         return True

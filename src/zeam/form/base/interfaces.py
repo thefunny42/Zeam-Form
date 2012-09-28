@@ -252,13 +252,16 @@ class IActions(ICollection):
 class IField(IRenderableComponent, IFieldExtractionValueSetting):
     """A form field.
     """
-    description = interface.Attribute(u"Field description")
+    description = interface.Attribute(
+        u"Field description")
     required = interface.Attribute(
         u"Boolean indicating if the field is required")
     readonly = interface.Attribute(
         u"Boolean indicating if the field is read-only")
     htmlAttributes = interface.Attribute(
         u"Dictionnary with extra html attributes to add to the field")
+    interface = interface.Attribute(
+        u"Optional Zope interface associated to the field")
 
     def getDefaultValue(form):
         """Return the default value.
