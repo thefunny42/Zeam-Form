@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: Tue Oct  5 14:10:42 2010\n"
+"POT-Creation-Date: Fri Sep 28 16:05:37 2012\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -24,54 +24,161 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: zope/app/locales/extract.py\n"
 
-#: zeam.form.base:/default_templates/formtemplate.cpt:35
+#: zeam.form.base:/default_templates/formtemplate.cpt:37
 #: zeam.form.composed:/default_templates/subformtemplate.cpt:32
 #: zeam.form.viewlet:/default_templates/formtemplate.cpt:31
 msgid "(required)"
 msgstr "(verplicht)"
 
-#: zeam.form.base:/fields.py:38
-msgid "Missing required value."
-msgstr "Verplichte waarde ontbreekt."
-
-#: zeam.form.base:/form.py:219
+#: zeam.form.base:/errors.py:40 zeam.form.base:/form.py:267
+#: zeam.form.ztk:/widgets/collection.py:254
 msgid "There were errors."
 msgstr "Er waren fouten."
 
-#: zeam.form.table:/actions.py:43
+#: zeam.form.base:/fields.py:74
+msgid "Missing required value."
+msgstr "Verplichte waarde ontbreekt."
+
+#: zeam.form.base:/fields.py:77 zeam.form.base:/fields.py:81
+msgid "The constraint failed."
+msgstr ""
+
+#: zeam.form.table:/actions.py:54
 msgid "You didn't select any item!"
 msgstr "U selecteerde geen enkel item!"
 
-#: zeam.form.table:/form.py:30
+#: zeam.form.table:/default_templates/subtableformtemplate.cpt:60
+msgid "required"
+msgstr ""
+
+#: zeam.form.table:/form.py:35
 msgid "There are no items."
 msgstr "Er zijn geen items."
 
-#: zeam.form.ztk:/actions.py:43
+#: zeam.form.ztk:/actions.py:40
 msgid "Modification saved."
 msgstr "Wijzigingen bewaard."
 
-#: zeam.form.ztk:/fields.py:130
+#: zeam.form.ztk:/fields.py:151
 msgid "Invalid value."
 msgstr "Foutieve waarde."
 
-#: zeam.form.ztk:/widgets/bool.py:28
+#: zeam.form.ztk:/widgets/bool.py:35
 msgid "Yes"
 msgstr "Ja"
 
-#: zeam.form.ztk:/widgets/bool.py:29
+#: zeam.form.ztk:/widgets/bool.py:36
 msgid "No"
 msgstr "Nee"
 
-#: zeam.form.ztk:/widgets/collection.py:272
+#: zeam.form.ztk:/widgets/choice.py:100
+msgid "The selected value is not among the possible choices."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/collection.py:444
 msgid "The selected value is not available."
 msgstr "The geselecteerde waarde is niet beschikbaar."
 
-#: zeam.form.ztk:/widgets/collection_templates/multigenericfieldwidget.cpt:18
-#: zeam.form.ztk:/widgets/collection_templates/multiobjectfieldwidget.cpt:36
+#: zeam.form.ztk:/widgets/collection.py:82
+msgid "There are too few items."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/collection.py:84
+msgid "There are too many items."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/collection_templates/listgenericfieldwidget.cpt:19
+#: zeam.form.ztk:/widgets/collection_templates/listobjectfieldwidget.cpt:31
+msgid "Move up"
+msgstr ""
+
+#: zeam.form.ztk:/widgets/collection_templates/listgenericfieldwidget.cpt:23
+#: zeam.form.ztk:/widgets/collection_templates/listobjectfieldwidget.cpt:35
+msgid "Move down"
+msgstr ""
+
+#: zeam.form.ztk:/widgets/collection_templates/listgenericfieldwidget.cpt:48
+#: zeam.form.ztk:/widgets/collection_templates/listobjectfieldwidget.cpt:71
+#: zeam.form.ztk:/widgets/collection_templates/multigenericfieldwidget.cpt:37
+#: zeam.form.ztk:/widgets/collection_templates/multiobjectfieldwidget.cpt:60
 msgid "Add"
 msgstr "Toevoegen"
 
-#: zeam.form.ztk:/widgets/collection_templates/multigenericfieldwidget.cpt:22
-#: zeam.form.ztk:/widgets/collection_templates/multiobjectfieldwidget.cpt:40
+#: zeam.form.ztk:/widgets/collection_templates/listgenericfieldwidget.cpt:53
+#: zeam.form.ztk:/widgets/collection_templates/listobjectfieldwidget.cpt:76
+#: zeam.form.ztk:/widgets/collection_templates/multigenericfieldwidget.cpt:42
+#: zeam.form.ztk:/widgets/collection_templates/multiobjectfieldwidget.cpt:65
 msgid "Remove"
 msgstr "Verwijderen"
+
+#. Default: ""
+#: zeam.form.ztk:/widgets/date.py:48
+msgid "This date is before the ${not_before}."
+msgstr ""
+
+#. Default: ""
+#: zeam.form.ztk:/widgets/date.py:52
+msgid "This date is after the ${not_after}."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/number.py:39
+msgid "This number is too small."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/number.py:41
+msgid "This number is too big."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/number.py:51
+msgid "This number is not a valid whole number."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/number.py:77
+msgid "This number is not a valid decimal number."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/password.py:36
+msgid "This password is too short."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/password.py:38
+msgid "This password is too long."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/text.py:37
+msgid "Not enough text was entered."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/text.py:39
+msgid "Too much text was entered."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/textline.py:36
+msgid "This text is too short."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/textline.py:38
+msgid "This text is too long."
+msgstr ""
+
+#. Default: ""
+#: zeam.form.ztk:/widgets/time.py:46
+msgid "This time is before ${not_before}."
+msgstr ""
+
+#. Default: ""
+#: zeam.form.ztk:/widgets/time.py:50
+msgid "This time is after ${not_after}."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/uri.py:47
+msgid "The URI is malformed."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/uri.py:49
+msgid "The URI is too short."
+msgstr ""
+
+#: zeam.form.ztk:/widgets/uri.py:51
+msgid "The URI is too long."
+msgstr ""
