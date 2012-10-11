@@ -184,8 +184,8 @@ Switch the readonly flag on:
    >>> field_widget.update()
    >>> print field_widget.render() #doctest: +NORMALIZE_WHITESPACE
    <input type="text" id="form-field-title" name="form.field.title"
-          class="field field-required" value="" required="required"
-          readonly="readonly" />
+          class="field field-required" value="" readonly="readonly"
+          required="required" />
 
 The field can provide some valid extra html attributes:
 
@@ -203,9 +203,8 @@ The field can provide some valid extra html attributes:
    >>> field_widget.update()
    >>> print field_widget.render() #doctest: +NORMALIZE_WHITESPACE
    <input type="text" id="form-field-title" name="form.field.title"
-          class="field field-required" value="" required="required"
-          autocomplete="autocomplete" readonly="readonly"
-          placeholder="Name ..." size="40" />
+          class="field field-required" value="" autocomplete="autocomplete"
+          readonly="readonly" required="required" placeholder="Name ..." size="40" />
 
 
 Field widget value

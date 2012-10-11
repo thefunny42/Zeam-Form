@@ -302,6 +302,12 @@ class IErrors(IMutableCollection):
 class IWidget(IComponent):
     """Display a form component on the page.
     """
+    defaultHtmlClass = interface.Attribute(
+        u"List of default html class to apply to the widget")
+    defaultHtmlAttributes = interface.Attribute(
+        u"Set of default authorized html attributes (without data- attributes)")
+    alternateLayout = interface.Attribute(
+        u"Boolean indicating if the widget can be rendered in a compact way")
 
     def htmlId():
         """Return the HTML id of the HTML component representing the
@@ -313,7 +319,11 @@ class IWidget(IComponent):
         """
 
     def htmlAttribute(name):
-        """Return the value of the given HTML attribute.
+        """Return the value of the given extra HTML attribute.
+        """
+
+    def htmlAttributes():
+        """Return a dictionary with all authorized extra HTML attributes.
         """
 
     def isVisible():

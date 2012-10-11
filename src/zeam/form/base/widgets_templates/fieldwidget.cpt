@@ -1,12 +1,6 @@
 <input type="text" id="#" name="#" class="#" value="#"
-       tal:attributes="readonly widget.htmlAttribute('readonly');
-                       required widget.htmlAttribute('required');
-                       autocomplete widget.htmlAttribute('autocomplete');
-                       maxlength widget.htmlAttribute('maxlength');
-                       pattern widget.htmlAttribute('pattern');
-                       placeholder widget.htmlAttribute('placeholder');
-                       size widget.htmlAttribute('size');
-                       name widget.identifier;
+       tal:attributes="name widget.identifier;
                        id widget.htmlId();
                        class widget.htmlClass();
-                       value widget.inputValue()" />
+                       value widget.inputValue();
+                       widget.htmlAttributes()" />

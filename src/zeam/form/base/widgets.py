@@ -110,7 +110,11 @@ class Widget(Component, grok.MultiAdapter):
     grok.implements(interfaces.IWidget)
     grok.provides(interfaces.IWidget)
 
+    defaultHtmlAttributes = set(['required', 'readonly', 'placeholder',
+                                 'autocomplete', 'size', 'maxlength',
+                                 'pattern', 'style'])
     defaultHtmlClass = ['field']
+    alternateLayout = False
 
     def __init__(self, component, form, request):
         identifier = widgetId(form, component)
@@ -133,7 +137,7 @@ class Widget(Component, grok.MultiAdapter):
             result = result + ['field-required',]
         return ' '.join(result)
 
-    def htmlAttribute(self, name):
+    def htmlAttribute(self, name=None):
         value = self._htmlAttributes.get(name)
         if value:
             # Boolean return as value the name of the property
@@ -141,6 +145,17 @@ class Widget(Component, grok.MultiAdapter):
                 return name
             return value
         return None
+
+    def htmlAttributes(self):
+        attributes = {}
+        for key, value in self._htmlAttributes.items():
+            if (value and
+                (key.startswith('data-') or key in self.defaultHtmlAttributes)):
+                if isinstance(value, bool):
+                    attributes[key] = key
+                else:
+                    attributes[key] = str(value)
+        return attributes
 
     def isVisible(self):
         return not isinstance(self.component.mode, HiddenMarker)
@@ -228,6 +243,8 @@ class ActionWidget(Widget):
         interfaces.IFieldExtractionValueSetting,
         Interface)
     grok.name('input')
+    defaultHtmlAttributes = set(['accesskey', 'formnovalidate', 'style'])
+    defaultHtmlClass = ['action']
 
     def __init__(self, component, form, request):
         super(ActionWidget, self).__init__(component, form, request)
