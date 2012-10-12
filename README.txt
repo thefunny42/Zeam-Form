@@ -41,7 +41,7 @@ and purposes with ``formlib`` or ``z3c.form`` but tries to:
 By default, it is unware of things like Zope-schema. Generating fields
 from a Zope-schema would be done with the help of ``zeam.form.ztk``.
 
-It work with Python 2.6, 2.7 (tested in Zope 2.12, 2.13 and Grok 1.4). Older
+It work with Python 2.6, 2.7 (tested in Zope 2.13 and Grok 1.5). Older
 versions works for older versions of Zope 2 and Grok.
 
 

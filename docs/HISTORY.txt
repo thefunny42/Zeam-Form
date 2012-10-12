@@ -1,10 +1,27 @@
 Changelog
 =========
 
-1.3 (unreleased)
+1.3 (2012/10/12)
 ----------------
 
-* ...
+* Fields now support more options. There is a ``constrainValue``
+  method that can be used in addition to ``validate`` (to be
+  compatible with ``zope.schema`` fields). An option ``interface`` had
+  been added as well, and can be used by other zeam.form components to
+  group fields.
+
+* Fields can be created with more options given through their
+  constructor.
+
+* Fields and widget now support extra ``htmlAttributes``. They can be
+  given to the field constructor, and are rendered automatically by
+  the widget.
+
+* Actions supports ``htmlAttributes`` too.
+
+* Update translations.
+
+* Add some backward compatiblity helpers.
 
 1.2.3 (2012/09/24)
 ------------------
