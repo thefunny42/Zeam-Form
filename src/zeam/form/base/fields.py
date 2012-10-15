@@ -1,7 +1,7 @@
 
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
-from zeam.form.base.markers import NO_VALUE, DEFAULT
+from zeam.form.base.markers import NO_VALUE, DEFAULT, Marker
 
 from zope.interface import implements
 from zope.i18nmessageid import MessageFactory
@@ -72,13 +72,14 @@ class Field(Component):
     def validate(self, value, form):
         if self.isRequired(form) and self.isEmpty(value):
             return _(u"Missing required value.")
-        try:
-            if not self.constrainValue(value):
+        if not isinstance(value, Marker):
+            try:
+                if not self.constrainValue(value):
+                    return _(u"The constraint failed.")
+            except Exception as error:
+                if hasattr(error, 'doc'):
+                    return error.doc()
                 return _(u"The constraint failed.")
-        except Exception as error:
-            if hasattr(error, 'doc'):
-                return error.doc()
-            return _(u"The constraint failed.")
         return None
 
 
