@@ -70,9 +70,10 @@ class Field(Component):
         return True
 
     def validate(self, value, form):
-        if self.isRequired(form) and self.isEmpty(value):
-            return _(u"Missing required value.")
-        if not isinstance(value, Marker):
+        if self.isEmpty(value):
+            if self.isRequired(form):
+                return _(u"Missing required value.")
+        elif not isinstance(value, Marker):
             try:
                 if not self.constrainValue(value):
                     return _(u"The constraint failed.")
