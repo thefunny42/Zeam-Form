@@ -252,6 +252,7 @@ class ActionWidget(Widget):
         self._htmlAttributes.update({
                 'accesskey': component.accesskey,
                 'formnovalidate': not component.html5Validation})
+        self._htmlAttributes.update(component.htmlAttributes)
 
     def htmlClass(self):
         return 'action'

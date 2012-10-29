@@ -25,6 +25,7 @@ class Action(Component):
     accesskey = None
     html5Validation = True
     postOnly = DEFAULT
+    htmlAttributes = {}
 
     def available(self, form):
         return True
@@ -111,13 +112,15 @@ class DecoratedAction(Action):
 
     def __init__(self, title, callback,
                  identifier=None, description=None, accesskey=None,
-                 validator=None, available=None):
+                 validator=None, available=None, htmlAttributes={}):
         super(Action, self).__init__(title, identifier)
         self._callback = callback
         self._validator = validator
         self._available = available
         self.accesskey = accesskey
         self.description = description
+        self.htmlAttributes = self.htmlAttributes.copy()
+        self.htmlAttributes.update(htmlAttributes)
 
     def validate(self, form):
         if self._validator is not None:
@@ -147,12 +150,12 @@ class ExtractedDecoratedAction(DecoratedAction):
 
 
 def action(title, identifier=None, description=None, accesskey=None,
-           validator=None, available=None, implements=None,
+           validator=None, available=None, implements=None, htmlAttributes={},
            factory=DecoratedAction, category='actions'):
     def createAction(callback):
         new_action = factory(
             title, callback, identifier, description, accesskey,
-            validator, available)
+            validator, available, htmlAttributes)
         if implements is not None:
             alsoProvides(new_action, implements)
 

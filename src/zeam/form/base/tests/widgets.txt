@@ -58,10 +58,12 @@ class, or retrieve random attributes, like access key (if set):
    >>> action_widget.htmlAttribute('accesskey')
    >>> action_widget.htmlAttribute('formnovalidate')
 
-You can set an access key and disable the HTML 5 validation:
+You can set an access key and disable the HTML 5 validation and set other
+html attributes :
 
    >>> action.accesskey = 'e'
    >>> action.html5Validation = False
+   >>> action.htmlAttributes['data-confirmation'] = 'Are you sure ?'
 
    >>> action_widget = component.getMultiAdapter(
    ...         (action, form, request), interfaces.IWidget, name='input')
@@ -69,10 +71,13 @@ You can set an access key and disable the HTML 5 validation:
    'e'
    >>> action_widget.htmlAttribute('formnovalidate')
    'formnovalidate'
+   >>> action_widget.htmlAttribute('data-confirmation')
+   'Are you sure ?'
    >>> print action_widget.render()  #doctest: +NORMALIZE_WHITESPACE
    <input type="submit" id="form-action-do-something"
           name="form.action.do-something" value="Do Something" class="action"
-          accesskey="e" formnovalidate="formnovalidate" />
+          accesskey="e" formnovalidate="formnovalidate"
+          data-confirmation="Are you sure ?" />
 
 Our widget implements IWidget, and IComponent:
 
