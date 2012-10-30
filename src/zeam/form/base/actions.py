@@ -27,6 +27,10 @@ class Action(Component):
     postOnly = DEFAULT
     htmlAttributes = {}
 
+    def __init__(self, title=None, identifier=None):
+        super(Action, self).__init__(title, identifier)
+        self.htmlAttributes = self.htmlAttributes.copy()
+
     def available(self, form):
         return True
 
@@ -112,15 +116,15 @@ class DecoratedAction(Action):
 
     def __init__(self, title, callback,
                  identifier=None, description=None, accesskey=None,
-                 validator=None, available=None, htmlAttributes={}):
-        super(Action, self).__init__(title, identifier)
+                 validator=None, available=None, htmlAttributes=None):
+        super(DecoratedAction, self).__init__(title, identifier)
         self._callback = callback
         self._validator = validator
         self._available = available
         self.accesskey = accesskey
         self.description = description
-        self.htmlAttributes = self.htmlAttributes.copy()
-        self.htmlAttributes.update(htmlAttributes)
+        if htmlAttributes is not None:
+            self.htmlAttributes.update(htmlAttributes)
 
     def validate(self, form):
         if self._validator is not None:
