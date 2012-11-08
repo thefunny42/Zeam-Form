@@ -32,8 +32,7 @@ class Field(Component):
                  defaultValue=NO_VALUE,
                  constrainValue=None,
                  interface=None,
-                 htmlAttributes={},
-                 **keywordsHtmlAttributes):
+                 **htmlAttributes):
         super(Field, self).__init__(title, identifier)
         self.description = description
         self.required = required
@@ -44,7 +43,6 @@ class Field(Component):
             self.constrainValue = constrainValue
         self.htmlAttributes = self.htmlAttributes.copy()
         self.htmlAttributes.update(htmlAttributes)
-        self.htmlAttributes.update(keywordsHtmlAttributes)
 
     def clone(self, new_identifier=None):
         copy = self.__class__(title=self.title, identifier=self.identifier)

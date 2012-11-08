@@ -116,15 +116,14 @@ class DecoratedAction(Action):
 
     def __init__(self, title, callback,
                  identifier=None, description=None, accesskey=None,
-                 validator=None, available=None, htmlAttributes=None):
+                 validator=None, available=None, **htmlAttributes):
         super(DecoratedAction, self).__init__(title, identifier)
         self._callback = callback
         self._validator = validator
         self._available = available
         self.accesskey = accesskey
         self.description = description
-        if htmlAttributes is not None:
-            self.htmlAttributes.update(htmlAttributes)
+        self.htmlAttributes.update(htmlAttributes)
 
     def validate(self, form):
         if self._validator is not None:
@@ -154,12 +153,12 @@ class ExtractedDecoratedAction(DecoratedAction):
 
 
 def action(title, identifier=None, description=None, accesskey=None,
-           validator=None, available=None, implements=None, htmlAttributes={},
-           factory=DecoratedAction, category='actions'):
+           validator=None, available=None, implements=None,
+           factory=DecoratedAction, category='actions', **htmlAttributes):
     def createAction(callback):
         new_action = factory(
             title, callback, identifier, description, accesskey,
-            validator, available, htmlAttributes)
+            validator, available, **htmlAttributes)
         if implements is not None:
             alsoProvides(new_action, implements)
 
