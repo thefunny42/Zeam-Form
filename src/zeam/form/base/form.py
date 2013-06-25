@@ -240,7 +240,7 @@ class FormData(Object):
         if cached is not None:
             return cached
         data = FieldsValues(self, fields)
-        errors = Errors()
+        self.errors = errors = Errors()
         self.__extracted[fields] = (data, errors)
 
         for field in fields:
