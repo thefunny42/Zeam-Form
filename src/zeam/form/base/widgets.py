@@ -8,7 +8,7 @@ from zeam.form.base.components import Component, Collection
 from zeam.form.base.interfaces import IModeMarker, IWidgetFactory
 from zeam.form.base.markers import NO_VALUE, getValue, HiddenMarker
 from zope import component
-from zope.interface import Interface
+from zope.interface import Interface, implementer
 from zope.pagetemplate.interfaces import IPageTemplate
 
 
@@ -28,10 +28,10 @@ def getWidgetExtractor(field, form, request):
     return form.widgetFactory.extractor(field)
 
 
+@implementer(IWidgetFactory)
 class WidgetFactory(object):
     """Generic API to create widgets and extractors.
     """
-    grok.implements(IWidgetFactory)
 
     def __init__(self, form, request):
         self.form = form
@@ -69,8 +69,8 @@ class WidgetFactory(object):
             interfaces.IWidgetExtractor)
 
 
+@implementer(interfaces.IWidgets)
 class Widgets(Collection):
-    grok.implements(interfaces.IWidgets)
 
     type = interfaces.IWidget
 
@@ -105,9 +105,9 @@ class Widgets(Collection):
             widget.update()
 
 
+@implementer(interfaces.IWidget)
 class Widget(Component, grok.MultiAdapter):
     grok.baseclass()
-    grok.implements(interfaces.IWidget)
     grok.provides(interfaces.IWidget)
 
     defaultHtmlAttributes = set(['required', 'readonly', 'placeholder',
@@ -182,8 +182,8 @@ class Widget(Component, grok.MultiAdapter):
         return template()
 
 
+@implementer(interfaces.IWidgetExtractor)
 class WidgetExtractor(grok.MultiAdapter):
-    grok.implements(interfaces.IWidgetExtractor)
     grok.provides(interfaces.IWidgetExtractor)
     grok.adapts(
         interfaces.IRenderableComponent,
@@ -258,8 +258,8 @@ class ActionWidget(Widget):
         return 'action'
 
 
+@implementer(interfaces.IFieldWidget)
 class FieldWidget(Widget):
-    grok.implements(interfaces.IFieldWidget)
     grok.adapts(
         interfaces.IField,
         interfaces.IFormData,

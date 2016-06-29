@@ -4,7 +4,10 @@ Changelog
 1.3.2 (unreleased)
 ------------------
 
+* Added the defaultFactory handling (needs testing)
+
 * ...
+
 
 1.3.1 (2012/11/19)
 ------------------
@@ -12,6 +15,7 @@ Changelog
 * Improve actions ``htmlAttributes`` to reflect fields API.
 
 * Improve and fix ``constrainValue`` validation on fields.
+
 
 1.3 (2012/10/12)
 ----------------

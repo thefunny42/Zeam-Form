@@ -8,6 +8,7 @@ from zeam.form.base.errors import Error
 from zeam.form.base.markers import NO_VALUE, NOTHING_DONE, FAILURE
 from zeam.form.base.markers import getValue, DEFAULT
 
+from zope.publisher.interfaces.http import MethodNotAllowed
 from zope.interface import implements, alsoProvides
 from zope import component
 
@@ -24,7 +25,7 @@ class Action(Component):
     description = None
     accesskey = None
     html5Validation = True
-    postOnly = DEFAULT
+    methods = None
     htmlAttributes = {}
 
     def __init__(self, title=None, identifier=None, **htmlAttributes):
@@ -56,12 +57,9 @@ class Actions(Collection):
 
             value, error = extractor.extract()
             if value is not NO_VALUE:
-                isPostOnly = getValue(action, 'postOnly', form)
-                if isPostOnly and request.method != 'POST':
-                    form.errors.append(
-                        Error('This form was not submitted properly',
-                              form.prefix))
-                    return form, None, FAILURE
+                methods = action.methods or form.methods
+                if methods and request.method.upper() not in methods:
+                    raise MethodNotAllowed(form.context, request)
                 try:
                     if action.validate(form):
                         return form, action, action(form)

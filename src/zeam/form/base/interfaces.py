@@ -4,6 +4,21 @@ from zope import interface
 from zope.publisher.interfaces.browser import IBrowserPage
 
 
+class IInvalidCSRFToken(interface.Interface):
+
+    def doc():
+        """The form submit could not be handled as the CSRF token is missing
+        or incorrect.
+        """
+
+
+@interface.implementer(IInvalidCSRFToken)
+class InvalidCSRFToken(Exception):
+    """The form submit could not be handled as the CSRF token is missing
+    or incorrect.
+    """
+
+
 class IModeMarker(interface.Interface):
     """This interface identifies a form mode and defines if it allows
     data extraction.

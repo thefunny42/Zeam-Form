@@ -29,6 +29,7 @@ class Field(Component):
                  description=u"",
                  required=False,
                  readonly=False,
+                 defaultFactory=None,
                  defaultValue=NO_VALUE,
                  constrainValue=None,
                  interface=None,
@@ -39,6 +40,7 @@ class Field(Component):
         self.readonly = readonly
         self.defaultValue = defaultValue
         self.interface = interface
+        self.defaultFactory = defaultFactory
         if constrainValue is not None:
             self.constrainValue = constrainValue
         self.htmlAttributes = self.htmlAttributes.copy()
@@ -63,6 +65,8 @@ class Field(Component):
         return value is NO_VALUE
 
     def getDefaultValue(self, form):
+        # We should take the defaultFactory into account.
+        # Not sure how yet.
         if callable(self.defaultValue):
             return self.defaultValue(form)
         return self.defaultValue

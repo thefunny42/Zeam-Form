@@ -57,6 +57,7 @@ actions to be processed and the widgets to be rendered:
 
    >>> from zope.interface.verify import verifyObject
    >>> from zeam.form.base import interfaces
+
    >>> verifyObject(interfaces.IFormData, submission)
    True
 
@@ -69,8 +70,8 @@ You have an helper function to clone them:
    False
    >>> verifyObject(interfaces.IFormData, first_clone)
    True
-   >>> first_clone.postOnly
-   True
+   >>> first_clone.methods
+   frozenset(['POST', 'GET'])
 
 Settings are cloned as well:
 
@@ -78,7 +79,7 @@ Settings are cloned as well:
    >>> first_clone.ignoreContent = False
    >>> first_clone.mode = 'carambar'
    >>> first_clone.prefix = 'form.advanced'
-   >>> first_clone.postOnly = False
+   >>> first_clone.methods = None
    >>> first_clone.parent is submission
    True
 
@@ -97,8 +98,8 @@ However you can specify a different prefix:
    'carambar'
    >>> second_clone.prefix
    'form.clone'
-   >>> second_clone.postOnly
-   False
+   >>> second_clone.methods is None
+   True
    >>> verifyObject(interfaces.IFormData, second_clone)
    True
 
@@ -276,49 +277,38 @@ identifier instead of a custom identifier.
    >>> [error.title for error in error_form.errors]
    ['Field Error', 'Main Error']
 
-By default, actions only work in the request was a POST request. If it
-was not a POST request, a main error will be created reporting this incident:
+Actions methods can be restricted at the form level:
 
    >>> get_request = TestRequest(
    ...     form={'form.action.%s' % nice_action.identifier:
    ...           nice_action.title},
    ...     REQUEST_METHOD='GET')
    >>> get_form = FormData(object(), get_request)
+   >>> get_form.methods = ('POST',)
 
    >>> nice_actions.process(get_form, get_request)
-   (..., None, <Marker FAILURE>)
+   Traceback (most recent call last):
+   ...  
+   MethodNotAllowed: ...
 
-   >>> get_form.formErrors
-   [<Error This form was not submitted properly>]
 
-If you switch the flag ``postOnly`` to False on the form, it will work:
+You can restrict at the action level, to set specific requirements:
 
    >>> working_get_form = FormData(object(), get_request)
-   >>> working_get_form.postOnly
-   True
-   >>> working_get_form.postOnly = False
+   >>> working_get_form.methods
+   frozenset(['POST', 'GET'])
+   >>> working_get_form.methods = None
 
    >>> nice_actions.process(working_get_form, get_request)
    Execute 'Make it nicer'
    (..., <MyAction Make it nicer>, <Marker SUCCESS>)
 
-   >>> working_get_form.formErrors
-   []
-
-A other solution is to set the flag ``postOnly`` only on the action:
-
-   >>> working_post_form = FormData(object(), get_request)
-   >>> working_post_form.postOnly
-   True
-
-   >>> nice_action.postOnly = False
-
+   >>> nice_actions['make-it-nicer'].methods = ('POST',)
    >>> nice_actions.process(working_get_form, get_request)
-   Execute 'Make it nicer'
-   (..., <MyAction Make it nicer>, <Marker SUCCESS>)
+   Traceback (most recent call last):
+   ...  
+   MethodNotAllowed: ...
 
-   >>> working_get_form.formErrors
-   []
 
 Interface
 ~~~~~~~~~

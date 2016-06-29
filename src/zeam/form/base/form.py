@@ -2,6 +2,7 @@
 
 import operator
 import sys
+import binascii
 
 from grokcore import component as grok
 from grokcore.view import util
@@ -13,14 +14,17 @@ from zeam.form.base.errors import Errors, Error
 from zeam.form.base.fields import Fields
 from zeam.form.base.markers import NO_VALUE, INPUT
 from zeam.form.base.widgets import Widgets, WidgetFactory
-from zeam.form.base.interfaces import ICollection, IError
+from zeam.form.base.interfaces import ICollection, IError, InvalidCSRFToken
 
 from zope import component, interface
+from zope.interface import implementer
 from zope.cachedescriptors.property import Lazy
+from zope.i18nmessageid import MessageFactory
 from zope.pagetemplate.interfaces import IPageTemplate
 from zope.publisher.browser import BrowserPage
+from zope.publisher.interfaces.http import MethodNotAllowed
 from zope.publisher.publish import mapply
-from zope.i18nmessageid import MessageFactory
+
 
 _ = MessageFactory('zeam.form.base')
 
@@ -34,6 +38,7 @@ class Object(object):
         pass
 
 
+@implementer(interfaces.IGrokViewSupport)
 class GrokViewSupport(Object):
     """Support Grok view like behavior, without inheriting of Grok
     view (not to get any grokker at all, or inherit from BrowerView,
@@ -42,7 +47,6 @@ class GrokViewSupport(Object):
     The render method support IPageTemplate in addition to Grok template.
     """
     grok.baseclass()
-    grok.implements(interfaces.IGrokViewSupport)
 
     def __init__(self, context, request):
         super(GrokViewSupport, self).__init__(context, request)
@@ -129,7 +133,7 @@ def cloneFormData(original, content=_marker, prefix=None):
     else:
         clone.prefix = prefix
     # XXX Those fields are not checked by the interface
-    clone.postOnly = original.postOnly
+    clone.methods = original.methods
     clone.widgetFactoryFactory = original.widgetFactoryFactory
     errors = original.errors.get(clone.prefix, None)
     if errors is not None:
@@ -164,12 +168,12 @@ class FieldsValues(dict):
     getDefault = getWithDefault
 
 
+@implementer(interfaces.IFormData)
 class FormData(Object):
     """This represent a submission of a form. It can be used to update
     widgets and run actions.
     """
     grok.baseclass()
-    grok.implements(interfaces.IFormData)
 
     prefix = 'form'
     parent = None
@@ -177,13 +181,13 @@ class FormData(Object):
     dataManager = ObjectDataManager
     dataValidators = []
     widgetFactoryFactory = WidgetFactory
-    postOnly = True
+    methods = frozenset(('POST', 'GET'))
 
     ignoreRequest = False
     ignoreContent = True
 
     status = u''
-
+    
     def __init__(self, context, request, content=_marker):
         super(FormData, self).__init__(context, request)
         self.context = context
@@ -282,11 +286,49 @@ class FormCanvas(GrokViewSupport, FormData):
     actions = Actions()
     fields = Fields()
 
+    protected = False
+    csrftoken = None
+    
     def __init__(self, context, request):
         super(FormCanvas, self).__init__(context, request)
         self.actionWidgets = Widgets(form=self, request=self.request)
         self.fieldWidgets = Widgets(form=self, request=self.request)
 
+    def setUpToken(self):
+        self.csrftoken = self.request.getCookies().get('__csrftoken__')
+        if self.csrftoken is None:
+            # It is possible another form, that is rendered as part of
+            # this request, already set a csrftoken. In that case we
+            # should find it in the response cookie and use that.
+            setcookie = self.request.response.getCookie('__csrftoken__')
+            if setcookie is not None:
+                self.csrftoken = setcookie['value']
+            else:
+                # Ok, nothing found, we should generate one and set
+                # it in the cookie ourselves. Note how we ``str()``
+                # the hex value of the ``os.urandom`` call here, as
+                # Python-3 will return bytes and the cookie roundtrip
+                # of a bytes values gets messed up.
+                self.csrftoken = str(binascii.hexlify(os.urandom(32)))
+                self.request.response.setCookie(
+                    '__csrftoken__',
+                    self.csrftoken,
+                    path='/',
+                    expires=None,  # equivalent to "remove on browser quit"
+                    httpOnly=True,  # no javascript access please.
+                    )
+
+    def checkToken(self):
+        cookietoken = self.request.getCookies().get('__csrftoken__')
+        if cookietoken is None:
+            # CSRF is enabled, so we really should get a token from the
+            # cookie. We didn't get it, so this submit is invalid!
+            raise InvalidCSRFToken(_('Invalid CSRF token'))
+        if cookietoken != self.request.form.get('__csrftoken__', None):
+            # The token in the cookie is different from the one in the
+            # form data. This submit is invalid!
+            raise InvalidCSRFToken(_('Invalid CSRF token'))
+        
     def extractData(self, fields=None):
         if fields is None:
             fields = self.fields
@@ -297,7 +339,11 @@ class FormCanvas(GrokViewSupport, FormData):
             operator.or_,
             [False] + map(operator.attrgetter('required'), self.fields))
 
-    def updateActions(self):
+    def updateActions(self):       
+        if self.protected:
+            # This form has CSRF protection enabled.
+            self.checkToken()
+
         return self.actions.process(self, self.request)
 
     def updateWidgets(self):
@@ -337,11 +383,11 @@ class StandaloneForm(GrokViewSupport, BrowserPage):
         return self.render()
 
 
+@implementer(interfaces.ISimpleForm)
 class Form(FormCanvas, StandaloneForm):
     """A full simple standalone form.
     """
     grok.baseclass()
-    grok.implements(interfaces.ISimpleForm)
 
 
 def extends(*forms, **opts):

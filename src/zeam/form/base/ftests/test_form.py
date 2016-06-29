@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 
+import doctest
 import unittest
 from pkg_resources import resource_listdir
-from zope.testing import doctest
 from zeam.form.base.testing import FunctionalLayer
 
 
