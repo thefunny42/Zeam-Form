@@ -5,7 +5,7 @@ import operator
 
 from pkg_resources import iter_entry_points
 from zope import component
-from zope.interface import implements
+from zope.interface import implementer
 from zope.testing import cleanup
 
 from zeam.form.base import interfaces
@@ -22,8 +22,8 @@ def createId(name):
     return identifier.encode('hex')
 
 
+@implementer(interfaces.IComponent)
 class Component(object):
-    implements(interfaces.IComponent)
 
     identifier = None
     title = None
@@ -83,10 +83,10 @@ def reloadComponents():
 cleanup.addCleanUp(reloadComponents)
 
 
+@implementer(interfaces.ICollection)
 class Collection(object):
     """Represent a collection of components.
     """
-    implements(interfaces.ICollection)
 
     type = interfaces.IComponent
     factory = None

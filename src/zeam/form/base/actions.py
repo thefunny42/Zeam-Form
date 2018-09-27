@@ -63,7 +63,7 @@ class Actions(Collection):
                 try:
                     if action.validate(form):
                         return form, action, action(form)
-                except interfaces.ActionError, error:
+                except interfaces.ActionError as error:
                     form.errors.append(Error(error.args[0], form.prefix))
                     return form, action, FAILURE
         return form, None, NOTHING_DONE
