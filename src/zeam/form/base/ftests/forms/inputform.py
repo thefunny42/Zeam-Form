@@ -12,6 +12,14 @@ We can now lookup our form by the name of its class:
   >>> from zope.publisher.browser import TestRequest
   >>> request = TestRequest()
 
+Monkeypatch i18n
+
+  >>> import zope.i18n
+  >>> import zope.i18n.config
+  >>> old_1, old_2 = zope.i18n.negotiate, zope.i18n.config.ALLOWED_LANGUAGES
+  >>> zope.i18n.negotiate = lambda context: 'en'
+  >>> zope.i18n.config.ALLOWED_LANGUAGES = ['en']
+
   >>> from zeam.form.base.ftests.forms.inputform import Context
   >>> context = Context()
 
@@ -32,7 +40,7 @@ Integration tests
   >>> root = getRootFolder()
   >>> root['content'] = context
 
-  >>> from zope.app.wsgi.testlayer import Browser
+  >>> from zope.testbrowser.wsgi import Browser
   >>> browser = Browser()
   >>> browser.handleErrors = False
 
@@ -120,7 +128,7 @@ gone (as we successfully submit the form):
   ''
   >>> browser.getControl('Job').value
   ''
-
+  >>> zope.i18n.negotiate, zope.i18n.config.ALLOWED_LANGUAGES = old_1, old_2
 
 """
 

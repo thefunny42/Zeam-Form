@@ -6,6 +6,14 @@ Let's grok our example:
   >>> from zeam.form.base.testing import grok
   >>> grok('zeam.form.base.ftests.forms.simpleform')
 
+Monkeypatch i18n
+
+  >>> import zope.i18n
+  >>> import zope.i18n.config
+  >>> old_1, old_2 = zope.i18n.negotiate, zope.i18n.config.ALLOWED_LANGUAGES
+  >>> zope.i18n.negotiate = lambda context: 'en'
+  >>> zope.i18n.config.ALLOWED_LANGUAGES = ['en']
+
 We can now lookup our form by the name of its class:
 
   >>> from zope.publisher.browser import TestRequest
@@ -55,7 +63,7 @@ Let's try to take a browser and submit that form:
   >>> root = getRootFolder()
   >>> root['test_content'] = context
 
-  >>> from zope.app.wsgi.testlayer import Browser
+  >>> from zope.testbrowser.wsgi import Browser
   >>> browser = Browser()
   >>> browser.handleErrors = False
 
@@ -69,6 +77,7 @@ Let's try to take a browser and submit that form:
   >>> 'I completely changed everything' in browser.contents
   True
 
+  >>> zope.i18n.negotiate, zope.i18n.config.ALLOWED_LANGUAGES = old_1, old_2
 """
 
 from zeam.form import base
