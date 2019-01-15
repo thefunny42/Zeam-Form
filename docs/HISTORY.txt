@@ -1,12 +1,12 @@
 Changelog
 =========
 
-1.3.2 (unreleased)
+1.3.2 (2019-01-15)
 ------------------
 
 * Added the defaultFactory handling (needs testing)
 
-* Update to newer Versions
+* Updated to newer versions of the GTK packages
 
 * Switch tests to zope.testbrowser.wsgi 
 
