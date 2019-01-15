@@ -3,14 +3,14 @@ from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection
 from zeam.form.base.markers import NO_VALUE, DEFAULT, Marker
 
-from zope.interface import implements
+from zope.interface import implementer
 from zope.i18nmessageid import MessageFactory
 
 _ = MessageFactory('zeam.form.base')
 
 
+@implementer(interfaces.IField)
 class Field(Component):
-    implements(interfaces.IField)
 
     description = u''
     required = False
@@ -89,8 +89,8 @@ class Field(Component):
         return None
 
 
+@implementer(interfaces.IFields)
 class Fields(Collection):
-    implements(interfaces.IFields)
 
     type = interfaces.IField
     factory = interfaces.IFieldFactory

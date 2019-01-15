@@ -4,9 +4,16 @@ from grokcore.component import zcml
 from zope.app.wsgi.testlayer import BrowserLayer
 from zope.configuration.config import ConfigurationMachine
 import zeam.form.base
+import zope.testbrowser.wsgi
 
 
-FunctionalLayer = BrowserLayer(zeam.form.base)
+class Layer(
+        zope.testbrowser.wsgi.TestBrowserLayer,
+        BrowserLayer):
+    pass
+
+
+FunctionalLayer = Layer(zeam.form.base, allowTearDown=True)
 
 def grok(module_name):
     config = ConfigurationMachine()
