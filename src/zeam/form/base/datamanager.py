@@ -3,7 +3,7 @@ from zeam.form.base.interfaces import IDataManager
 from zope.interface import implements, implementer
 
 
-implementer(IDataManager)
+@implementer(IDataManager)
 class BaseDataManager(object):
     """Base class for a data manager.
     """

@@ -7,9 +7,9 @@ Let's grok our example:
   >>> from zeam.form.base.testing import grok
   >>> grok('zeam.form.base.ftests.widgets.widgetnorenderortemplate')
   Traceback (most recent call last):
-    ...
-  ConfigurationExecutionError: <class 'martian.error.GrokError'>: Widget <class 'zeam.form.base.ftests.widgets.widgetnorenderortemplate.MyWidget'> has no associated template or 'render' method.
-    in:
+  ...
+  zope.configuration.config.ConfigurationExecutionError: <class 'martian.error.GrokError'>: Widget <class 'zeam.form.base.ftests.widgets.widgetnorenderortemplate.MyWidget'> has no associated template or 'render' method.
+  ...
 
 """
 

@@ -148,7 +148,7 @@ class Widget(Component, grok.MultiAdapter):
 
     def htmlAttributes(self):
         attributes = {}
-        for key, value in self._htmlAttributes.items():
+        for key, value in sorted(self._htmlAttributes.items()):
             if (value and
                 (key.startswith('data-') or key in self.defaultHtmlAttributes)):
                 if isinstance(value, bool):
@@ -205,7 +205,7 @@ class WidgetExtractor(grok.MultiAdapter):
     def extractRaw(self):
         entries = {}
         sub_identifier = self.identifier + '.'
-        for key, value in self.request.form.iteritems():
+        for key, value in self.request.form.items():
             if key.startswith(sub_identifier) or key == self.identifier:
                 entries[key] = value
         return entries

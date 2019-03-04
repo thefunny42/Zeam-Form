@@ -13,7 +13,7 @@ from zope.interface import implementer, implements, alsoProvides
 from zope import component
 
 
-implementer(interfaces.IAction)
+@implementer(interfaces.IAction)
 class Action(Component):
     """A form action.
     """
@@ -43,7 +43,7 @@ class Action(Component):
         raise NotImplementedError
 
 
-implementer(interfaces.IActions)
+@implementer(interfaces.IActions)
 class Actions(Collection):
     """A list of form action.
     """
@@ -69,7 +69,7 @@ class Actions(Collection):
         return form, None, NOTHING_DONE
 
 
-implementer(interfaces.IIterable)
+@implementer(interfaces.IIterable)
 class CompoundActions(object):
     """Compound different types of actions together.
     """

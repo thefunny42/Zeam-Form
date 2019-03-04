@@ -35,7 +35,7 @@ We can now lookup our form by the name of its class:
 
 And we can render it:
 
-  >>> print form()
+  >>> print(form())
   <html>
     <head>
     </head>

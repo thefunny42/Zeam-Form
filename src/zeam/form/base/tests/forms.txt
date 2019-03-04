@@ -97,7 +97,7 @@ Object data manager
    >>> from zeam.form.base.datamanager import ObjectDataManager
 
    >>> class MyContent(Content):
-   ...    title = u'Content'
+   ...    title = 'Content'
    ...    value = 42
    >>> mycontent = MyContent()
 
@@ -116,7 +116,7 @@ It correctly implements its interface:
 And you can use it to access content value:
 
    >>> manager.get('title')
-   u'Content'
+   'Content'
    >>> manager.get('value')
    42
 
@@ -140,13 +140,12 @@ There is a data manager which is able to work on dictionaries as well:
 
    >>> from zeam.form.base.datamanager import DictDataManager
 
-   >>> data = {'title': u'Content', 'value': 42}
+   >>> data = {'title': 'Content', 'value': 42}
    >>> dict_manager = DictDataManager(data)
    >>> dict_manager
-   <DictDataManager used for {'value': 42, 'title': u'Content'}>
+   <DictDataManager used for ...>
 
-   >>> dict_manager.getContent()
-   {'value': 42, 'title': u'Content'}
+   >>> assert dict_manager.getContent() == {'value': 42, 'title': 'Content'}
 
 It correctly implements its interface:
 
@@ -156,7 +155,7 @@ It correctly implements its interface:
 And you can use it to access content value:
 
    >>> dict_manager.get('title')
-   u'Content'
+   'Content'
    >>> dict_manager.get('value')
    42
 
@@ -202,8 +201,8 @@ Or directly a data manager:
    >>> form_data.setContentData(dict_manager)
    >>> form_data.getContentData() is dict_manager
    True
-   >>> form_data.getContent()
-   {'ready': True, 'value': 42, 'title': u'Content'}
+   >>> assert form_data.getContent() == {
+   ...     'ready': True, 'value': 42, 'title': 'Content'}
 
 Modes & extraction
 ------------------
@@ -239,7 +238,7 @@ are based on it::
   True
   >>> markers.INPUT.extractable
   True
-  >>> print markers.INPUT
+  >>> print(markers.INPUT)
   input
 
 Accordingly, the `hidden` mode matches the `input` behavior::
@@ -248,7 +247,7 @@ Accordingly, the `hidden` mode matches the `input` behavior::
   True
   >>> markers.HIDDEN.extractable
   True
-  >>> print markers.HIDDEN
+  >>> print(markers.HIDDEN)
   hidden
 
 At the contrary, the `display` mode will not be extractable, as it's
@@ -258,7 +257,7 @@ used for presentation purpose only::
   True
   >>> markers.DISPLAY.extractable
   False
-  >>> print markers.DISPLAY
+  >>> print(markers.DISPLAY)
   display
 
 Extraction
@@ -290,8 +289,10 @@ the "extractable" fields::
   >>> form.update()
   >>> data, errors = form.extractData()
 
-  >>> data
-  {'mail': <Marker NO_VALUE>, 'identifier': <Marker NO_VALUE>, 'name': 'myname'}
+  >>> from zeam.form.base.markers import NO_VALUE
+  >>> assert data == {
+  ...     'mail': NO_VALUE, 'identifier': NO_VALUE,
+  ...     'name': 'myname'}
 
 You can get the default value instead of the marker if available, None
 otherwise:
@@ -313,8 +314,7 @@ in the extraction process::
   >>> form.fields['identifier'].mode = markers.DISPLAY
   >>> form.update()
   >>> data, errors = form.extractData()
-  >>> data
-  {'mail': <Marker NO_VALUE>, 'name': 'myname'}
+  >>> assert data == {'mail': NO_VALUE, 'name': 'myname'}
 
 The `identifier` field is not extracted, as planned.
 

@@ -17,7 +17,7 @@ a given form, and request. So we need all that:
    >>> form = Form(None, request)
 
    >>> from zeam.form.base.actions import Action
-   >>> action = Action(u"Do Something")
+   >>> action = Action("Do Something")
    >>> form.actions += action
 
 So now we can get a widget for an action for instance:
@@ -37,14 +37,14 @@ identifier will be composed with the component on and the form prefix:
    >>> action_widget.identifier
    'form.action.do-something'
    >>> action.title
-   u'Do Something'
+   'Do Something'
    >>> action_widget.title
-   u'Do Something'
+   'Do Something'
 
 The method render gives you the HTML to display. Our widget is an
 action, so by default you get a button:
 
-   >>> print action_widget.render()   #doctest: +NORMALIZE_WHITESPACE
+   >>> print(action_widget.render())   #doctest: +NORMALIZE_WHITESPACE
    <input type="submit" id="form-action-do-something"
           name="form.action.do-something" value="Do Something" class="action" />
 
@@ -73,11 +73,11 @@ html attributes :
    'formnovalidate'
    >>> action_widget.htmlAttribute('data-confirmation')
    'Are you sure ?'
-   >>> print action_widget.render()  #doctest: +NORMALIZE_WHITESPACE
+   >>> print(action_widget.render())  #doctest: +NORMALIZE_WHITESPACE
    <input type="submit" id="form-action-do-something"
           name="form.action.do-something" value="Do Something" class="action"
-          accesskey="e" formnovalidate="formnovalidate"
-          data-confirmation="Are you sure ?" />
+          accesskey="e" data-confirmation="Are you sure ?"
+          formnovalidate="formnovalidate" />
 
 Our widget implements IWidget, and IComponent:
 
@@ -94,8 +94,8 @@ Like for actions, fields have widgets to be rendered. They are a bit
 more advanced:
 
    >>> from zeam.form.base.fields import Field
-   >>> field = Field(u"Title")
-   >>> field.description = u"Nice name for your field"
+   >>> field = Field("Title")
+   >>> field.description = "Nice name for your field"
    >>> field.required = True
    >>> form.fields += field
 
@@ -111,17 +111,17 @@ Like for an action, all identifier and title are set correctly:
    >>> field_widget.identifier
    'form.field.title'
    >>> field.title
-   u'Title'
+   'Title'
    >>> field_widget.title
-   u'Title'
+   'Title'
 
 Prefixes of the form and the component will alter the identifier:
 
    >>> form_prefix = Form(None, request)
-   >>> form_prefix.prefix = u"something"
+   >>> form_prefix.prefix = "something"
 
-   >>> action2 = Action(u"Some action")
-   >>> action2.prefix = u"else"
+   >>> action2 = Action("Some action")
+   >>> action2.prefix = "else"
    >>> form_prefix.actions += action2
 
    >>> widget3 = component.getMultiAdapter(
@@ -132,14 +132,14 @@ Prefixes of the form and the component will alter the identifier:
 
 If the prefixes are empty:
 
-   >>> form_prefix.prefix = u""
+   >>> form_prefix.prefix = ""
    >>> widget3 = component.getMultiAdapter(
    ...         (action2, form_prefix, request), interfaces.IWidget, name='input')
 
    >>> widget3.identifier
    'else.some-action'
 
-   >>> action2.prefix = u""
+   >>> action2.prefix = ""
    >>> widget3 = component.getMultiAdapter(
    ...         (action2, form_prefix, request), interfaces.IWidget, name='input')
 
@@ -150,7 +150,7 @@ For convinience, the description and required is also available on the
 widget (to be used while rendering that last one):
 
    >>> field_widget.description
-   u'Nice name for your field'
+   'Nice name for your field'
    >>> field_widget.required
    True
 
@@ -169,7 +169,7 @@ via the widget:
 Widget are views that can be that can be renderered:
 
    >>> field_widget.update()
-   >>> print field_widget.render() #doctest: +NORMALIZE_WHITESPACE
+   >>> print(field_widget.render())  #doctest: +NORMALIZE_WHITESPACE
    <input type="text" id="form-field-title" name="form.field.title"
           class="field field-required" value="" required="required" />
 
@@ -187,7 +187,7 @@ Switch the readonly flag on:
    >>> field_widget.htmlAttribute('readonly')
    'readonly'
    >>> field_widget.update()
-   >>> print field_widget.render() #doctest: +NORMALIZE_WHITESPACE
+   >>> print(field_widget.render())  #doctest: +NORMALIZE_WHITESPACE
    <input type="text" id="form-field-title" name="form.field.title"
           class="field field-required" value="" readonly="readonly"
           required="required" />
@@ -206,10 +206,11 @@ The field can provide some valid extra html attributes:
    >>> field_widget.htmlAttribute('autocomplete')
    'autocomplete'
    >>> field_widget.update()
-   >>> print field_widget.render() #doctest: +NORMALIZE_WHITESPACE
+   >>> print(field_widget.render())  #doctest: +NORMALIZE_WHITESPACE
    <input type="text" id="form-field-title" name="form.field.title"
           class="field field-required" value="" autocomplete="autocomplete"
-          readonly="readonly" required="required" placeholder="Name ..." size="40" />
+          placeholder="Name ..." readonly="readonly" required="required"
+          size="40" />
 
 
 Field widget value
@@ -228,7 +229,7 @@ Our widget implement IFieldWidget, which extend the default widget interface:
    >>> verifyObject(interfaces.IFieldWidget, action_widget)
    Traceback (most recent call last):
      ...
-   DoesNotImplement: An object does not implement interface <InterfaceClass zeam.form.base.interfaces.IFieldWidget>
+   zope.interface.exceptions.DoesNotImplement: An object does not implement interface <InterfaceClass zeam.form.base.interfaces.IFieldWidget>
    >>> verifyObject(interfaces.IFieldWidget, field_widget)
    True
    >>> interfaces.IFieldWidget.extends(interfaces.IWidget)
@@ -296,7 +297,7 @@ Of course you cannot extend it with anything else than components:
    >>> widgets.extend(42)
    Traceback (most recent call last):
      ...
-   TypeError: (u'Invalid type', 42)
+   TypeError: ('Invalid type', 42)
 
 But you can directly add an already created widget:
 
@@ -340,19 +341,19 @@ And you can extract the widget value, and errors from the request:
 But our request was empty here. Let's try with a non-empty one:
 
    >>> submitted_request = TestRequest(
-   ...         form={'form.action.do-something': u'Do Something',
+   ...         form={'form.action.do-something': 'Do Something',
    ...                'otherfield': 42})
    >>> action_extractor = component.getMultiAdapter(
    ...         (action, form, submitted_request),
    ...         interfaces.IWidgetExtractor)
    >>> action_extractor.extract()
-   (u'Do Something', None)
+   ('Do Something', None)
 
 An another of the extractor is to gives the request fields used for
 the extraction:
 
    >>> action_extractor.extractRaw()
-   {'form.action.do-something': u'Do Something'}
+   {'form.action.do-something': 'Do Something'}
 
 This can be used by widgets to display again any non-validated data.
 
@@ -382,7 +383,7 @@ string, you will also get NO_VALUE:
    >>> required_extractor.extract()
    (<Marker NO_VALUE>, None)
 
-   >>> submitted_request = TestRequest(form={'form.field.title': u''})
+   >>> submitted_request = TestRequest(form={'form.field.title': ''})
    >>> required_extractor = component.getMultiAdapter(
    ...         (field, form, submitted_request), interfaces.IWidgetExtractor)
    >>> required_extractor
@@ -405,10 +406,10 @@ will an empty string:
    >>> required_extractor.extract()
    (<Marker NO_VALUE>, None)
 
-   >>> submitted_request = TestRequest(form={'form.field.title': u''})
+   >>> submitted_request = TestRequest(form={'form.field.title': ''})
    >>> required_extractor = component.getMultiAdapter(
    ...         (field, form, submitted_request), interfaces.IWidgetExtractor)
    >>> required_extractor
    <zeam.form.base.widgets.FieldWidgetExtractor object at ...>
    >>> required_extractor.extract()
-   (u'', None)
+   ('', None)

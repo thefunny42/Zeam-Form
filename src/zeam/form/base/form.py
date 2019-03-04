@@ -335,9 +335,10 @@ class FormCanvas(GrokViewSupport, FormData):
         return super(FormCanvas, self).extractData(fields)
 
     def haveRequiredFields(self):
-        return reduce(
-            operator.or_,
-            [False] + map(operator.attrgetter('required'), self.fields))
+        for field in self.fields:
+            if field.required:
+                return True
+        return False
 
     def updateActions(self):       
         if self.protected:

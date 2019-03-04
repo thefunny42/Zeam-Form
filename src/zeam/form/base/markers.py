@@ -19,7 +19,7 @@ class Marker(object):
         return '<Marker %s>' % (self.name.upper())
 
 
-implementer(IModeMarker)
+@implementer(IModeMarker)
 class ModeMarker(Marker):
     """A Marker defining a form mode. It has a specific attribute,
     extractable, that defines if the mode allows the data extraction

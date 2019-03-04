@@ -29,7 +29,7 @@ So now should be to lookup our widget:
 
 And we are able now to call its render method:
 
-  >>> print widget.render()
+  >>> print(widget.render())
   <p>Nice template for Cool Template Test</p>
 
 

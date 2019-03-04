@@ -33,7 +33,7 @@ Of course you need to implement your own action:
 
    >>> class MyAction(Action):
    ...    def __call__(self, submission):
-   ...        print u"Execute '%s'" % self.title
+   ...        print(f"Execute '{self.title}'")
    ...        return SUCCESS
 
    >>> myaction1 = MyAction("I like it")
@@ -70,8 +70,7 @@ You have an helper function to clone them:
    False
    >>> verifyObject(interfaces.IFormData, first_clone)
    True
-   >>> first_clone.methods
-   frozenset(['POST', 'GET'])
+   >>> assert first_clone.methods == {'GET', 'POST'}
 
 Settings are cloned as well:
 
@@ -214,7 +213,7 @@ action like that:
 
    >>> class MyFailingAction(Action):
    ...     def __call__(self, submission):
-   ...         raise interfaces.ActionError, "I can't take it anymore"
+   ...         raise interfaces.ActionError("I can't take it anymore")
 
    >>> failing_action = MyFailingAction("Do it")
    >>> failing_actions = Actions(failing_action)
@@ -238,7 +237,7 @@ submission:
    >>> failing_action(failing_request)
    Traceback (most recent call last):
      ...
-   ActionError: I can't take it anymore
+   zeam.form.base.interfaces.ActionError: I can't take it anymore
    >>> failing_actions.process(failing_form, failing_request)
    (..., <MyFailingAction Do it>, <Marker FAILURE>)
 
@@ -289,14 +288,13 @@ Actions methods can be restricted at the form level:
    >>> nice_actions.process(get_form, get_request)
    Traceback (most recent call last):
    ...  
-   MethodNotAllowed: ...
+   zope.publisher.interfaces.http.MethodNotAllowed: ...
 
 
 You can restrict at the action level, to set specific requirements:
 
    >>> working_get_form = FormData(object(), get_request)
-   >>> working_get_form.methods
-   frozenset(['POST', 'GET'])
+   >>> assert working_get_form.methods == {'GET', 'POST'}
    >>> working_get_form.methods = None
 
    >>> nice_actions.process(working_get_form, get_request)
@@ -307,7 +305,7 @@ You can restrict at the action level, to set specific requirements:
    >>> nice_actions.process(working_get_form, get_request)
    Traceback (most recent call last):
    ...  
-   MethodNotAllowed: ...
+   zope.publisher.interfaces.http.MethodNotAllowed: ...
 
 
 Interface
@@ -331,9 +329,9 @@ the Actions list located on the form class:
    >>> from zeam.form.base.form import Form
 
    >>> class MyForm(Form):
-   ...   @action(u"Change")
+   ...   @action("Change")
    ...   def change(self):
-   ...       self.status = u"Just kidding"
+   ...       self.status = "Just kidding"
    ...       return SUCCESS
 
    >>> MyForm.actions
@@ -356,5 +354,5 @@ This is like a regular action, but run the method when you call it:
    >>> d1(f3)
    <Marker SUCCESS>
    >>> f3.status
-   u'Just kidding'
+   'Just kidding'
 
