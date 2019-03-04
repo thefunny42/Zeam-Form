@@ -1,12 +1,12 @@
 
 from zeam.form.base.interfaces import IDataManager
-from zope.interface import implements
+from zope.interface import implements, implementer
 
 
+implementer(IDataManager)
 class BaseDataManager(object):
     """Base class for a data manager.
     """
-    implements(IDataManager)
 
     def __init__(self, content):
         self.content = content

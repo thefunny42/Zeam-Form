@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from zeam.form.base.interfaces import IModeMarker
-from zope.interface import implements
+from zope.interface import implements, implementer
 
 
 class Marker(object):
@@ -19,11 +19,11 @@ class Marker(object):
         return '<Marker %s>' % (self.name.upper())
 
 
+implementer(IModeMarker)
 class ModeMarker(Marker):
     """A Marker defining a form mode. It has a specific attribute,
     extractable, that defines if the mode allows the data extraction
     """
-    implements(IModeMarker)
 
     def __init__(self, name, extractable=True):
         Marker.__init__(self, name)

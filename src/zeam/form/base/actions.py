@@ -9,14 +9,14 @@ from zeam.form.base.markers import NO_VALUE, NOTHING_DONE, FAILURE
 from zeam.form.base.markers import getValue, DEFAULT
 
 from zope.publisher.interfaces.http import MethodNotAllowed
-from zope.interface import implements, alsoProvides
+from zope.interface import implementer, implements, alsoProvides
 from zope import component
 
 
+implementer(interfaces.IAction)
 class Action(Component):
     """A form action.
     """
-    implements(interfaces.IAction)
 
     prefix = 'action'
     # By default an action is always in input mode (there is not much
@@ -43,10 +43,10 @@ class Action(Component):
         raise NotImplementedError
 
 
+implementer(interfaces.IActions)
 class Actions(Collection):
     """A list of form action.
     """
-    implements(interfaces.IActions)
 
     type = interfaces.IAction
 
@@ -69,10 +69,10 @@ class Actions(Collection):
         return form, None, NOTHING_DONE
 
 
+implementer(interfaces.IIterable)
 class CompoundActions(object):
     """Compound different types of actions together.
     """
-    implements(interfaces.IIterable)
 
     def __init__(self, *new_actions):
         self.__actions = []

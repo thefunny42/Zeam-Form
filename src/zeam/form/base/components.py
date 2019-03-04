@@ -14,6 +14,9 @@ from zeam.form.base import interfaces
 _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 _default_sort_key = operator.attrgetter('order')
 
+def cmp(x, y):
+    return (x > y) - (x < y)
+
 def createId(name):
     # Create a valid id from any string.
     identifier = unicode(name).strip().encode('utf-8').replace(' ', '-')
