@@ -29,6 +29,14 @@ from zope.publisher.publish import mapply
 _ = MessageFactory('zeam.form.base')
 
 
+PY3 = sys.version_info[0] == 3
+
+if PY3:
+    string_types = str
+else:
+    string_types = basestring
+
+
 class Object(object):
     """Python object that takes argument to its __init__, in order to
     use super. This is required by Python 2.6.
@@ -76,7 +84,7 @@ class GrokViewSupport(Object):
         """Return string for the URL based on the obj and name. The data
         argument is used to form a CGI query string.
         """
-        if isinstance(obj, basestring):
+        if isinstance(obj, string_types):
             if name is not None:
                 raise TypeError(
                     'url() takes either obj argument, obj, string arguments, '
