@@ -308,7 +308,7 @@ class FieldWidget(Widget):
         return self.prepareContentValue(value)
 
     def valueToUnicode(self, value):
-        return unicode(value)
+        return value
 
     def prepareRequestValue(self, value, extractor):
         return value
