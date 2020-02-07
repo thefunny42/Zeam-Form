@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import warnings
 
 from grokcore import component as grok
@@ -29,7 +27,7 @@ def getWidgetExtractor(field, form, request):
 
 
 @implementer(IWidgetFactory)
-class WidgetFactory(object):
+class WidgetFactory:
     """Generic API to create widgets and extractors.
     """
 

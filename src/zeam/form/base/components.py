@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import re
 import operator
 import binascii
@@ -15,11 +13,8 @@ from zeam.form.base import interfaces
 _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 _default_sort_key = operator.attrgetter('order')
 
-def cmp(x, y):
-    return (x > y) - (x < y)
 
-
-def createId(name):
+def createId(name) -> str:
     # Create a valid id from any string.
     name = str(name)
     identifier = name.strip().replace(' ', '-')
@@ -29,7 +24,7 @@ def createId(name):
 
 
 @implementer(interfaces.IComponent)
-class Component(object):
+class Component:
 
     identifier = None
     title = None
@@ -90,7 +85,7 @@ cleanup.addCleanUp(reloadComponents)
 
 
 @implementer(interfaces.ICollection)
-class Collection(object):
+class Collection:
     """Represent a collection of components.
     """
 

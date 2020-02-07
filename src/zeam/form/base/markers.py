@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 from zeam.form.base.interfaces import IModeMarker
 from zope.interface import implements, implementer
 
 
-class Marker(object):
+class Marker:
     """Marker object, designed to be used as singleton (like None,
     True, False).
     """

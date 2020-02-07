@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import operator
 import sys
 import binascii
@@ -29,25 +27,8 @@ from zope.publisher.publish import mapply
 _ = MessageFactory('zeam.form.base')
 
 
-PY3 = sys.version_info[0] == 3
-
-if PY3:
-    string_types = str
-else:
-    string_types = basestring
-
-
-class Object(object):
-    """Python object that takes argument to its __init__, in order to
-    use super. This is required by Python 2.6.
-    """
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-
 @implementer(interfaces.IGrokViewSupport)
-class GrokViewSupport(Object):
+class GrokViewSupport:
     """Support Grok view like behavior, without inheriting of Grok
     view (not to get any grokker at all, or inherit from BrowerView,
     BrowserPage).
@@ -177,7 +158,7 @@ class FieldsValues(dict):
 
 
 @implementer(interfaces.IFormData)
-class FormData(Object):
+class FormData:
     """This represent a submission of a form. It can be used to update
     widgets and run actions.
     """
@@ -195,9 +176,8 @@ class FormData(Object):
     ignoreContent = True
 
     status = u''
-    
+
     def __init__(self, context, request, content=_marker):
-        super(FormData, self).__init__(context, request)
         self.context = context
         self.request = request
         self.errors = Errors()
@@ -296,7 +276,7 @@ class FormCanvas(GrokViewSupport, FormData):
 
     protected = False
     csrftoken = None
-    
+
     def __init__(self, context, request):
         super(FormCanvas, self).__init__(context, request)
         self.actionWidgets = Widgets(form=self, request=self.request)
@@ -336,7 +316,7 @@ class FormCanvas(GrokViewSupport, FormData):
             # The token in the cookie is different from the one in the
             # form data. This submit is invalid!
             raise InvalidCSRFToken(_('Invalid CSRF token'))
-        
+
     def extractData(self, fields=None):
         if fields is None:
             fields = self.fields
@@ -348,7 +328,7 @@ class FormCanvas(GrokViewSupport, FormData):
                 return True
         return False
 
-    def updateActions(self):       
+    def updateActions(self):
         if self.protected:
             # This form has CSRF protection enabled.
             self.checkToken()

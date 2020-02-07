@@ -70,7 +70,7 @@ class Actions(Collection):
 
 
 @implementer(interfaces.IIterable)
-class CompoundActions(object):
+class CompoundActions:
     """Compound different types of actions together.
     """
 
