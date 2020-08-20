@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import operator
 import sys
 import binascii
@@ -29,17 +27,8 @@ from zope.publisher.publish import mapply
 _ = MessageFactory('zeam.form.base')
 
 
-class Object(object):
-    """Python object that takes argument to its __init__, in order to
-    use super. This is required by Python 2.6.
-    """
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-
 @implementer(interfaces.IGrokViewSupport)
-class GrokViewSupport(Object):
+class GrokViewSupport:
     """Support Grok view like behavior, without inheriting of Grok
     view (not to get any grokker at all, or inherit from BrowerView,
     BrowserPage).
@@ -76,7 +65,7 @@ class GrokViewSupport(Object):
         """Return string for the URL based on the obj and name. The data
         argument is used to form a CGI query string.
         """
-        if isinstance(obj, basestring):
+        if isinstance(obj, string_types):
             if name is not None:
                 raise TypeError(
                     'url() takes either obj argument, obj, string arguments, '
@@ -169,7 +158,7 @@ class FieldsValues(dict):
 
 
 @implementer(interfaces.IFormData)
-class FormData(Object):
+class FormData:
     """This represent a submission of a form. It can be used to update
     widgets and run actions.
     """
@@ -187,9 +176,8 @@ class FormData(Object):
     ignoreContent = True
 
     status = u''
-    
+
     def __init__(self, context, request, content=_marker):
-        super(FormData, self).__init__(context, request)
         self.context = context
         self.request = request
         self.errors = Errors()
@@ -288,7 +276,7 @@ class FormCanvas(GrokViewSupport, FormData):
 
     protected = False
     csrftoken = None
-    
+
     def __init__(self, context, request):
         super(FormCanvas, self).__init__(context, request)
         self.actionWidgets = Widgets(form=self, request=self.request)
@@ -328,18 +316,19 @@ class FormCanvas(GrokViewSupport, FormData):
             # The token in the cookie is different from the one in the
             # form data. This submit is invalid!
             raise InvalidCSRFToken(_('Invalid CSRF token'))
-        
+
     def extractData(self, fields=None):
         if fields is None:
             fields = self.fields
         return super(FormCanvas, self).extractData(fields)
 
     def haveRequiredFields(self):
-        return reduce(
-            operator.or_,
-            [False] + map(operator.attrgetter('required'), self.fields))
+        for field in self.fields:
+            if field.required:
+                return True
+        return False
 
-    def updateActions(self):       
+    def updateActions(self):
         if self.protected:
             # This form has CSRF protection enabled.
             self.checkToken()

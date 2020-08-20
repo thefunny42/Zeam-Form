@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import re
 import operator
+import binascii
 
 from pkg_resources import iter_entry_points
 from zope import component
@@ -14,16 +13,18 @@ from zeam.form.base import interfaces
 _valid_identifier = re.compile('[A-Za-z][A-Za-z0-9_-]*$')
 _default_sort_key = operator.attrgetter('order')
 
-def createId(name):
+
+def createId(name) -> str:
     # Create a valid id from any string.
-    identifier = unicode(name).strip().encode('utf-8').replace(' ', '-')
+    name = str(name)
+    identifier = name.strip().replace(' ', '-')
     if _valid_identifier.match(identifier):
         return identifier.lower()
-    return identifier.encode('hex')
+    return bytes(identifier, 'utf-8').hex()
 
 
 @implementer(interfaces.IComponent)
-class Component(object):
+class Component:
 
     identifier = None
     title = None
@@ -84,7 +85,7 @@ cleanup.addCleanUp(reloadComponents)
 
 
 @implementer(interfaces.ICollection)
-class Collection(object):
+class Collection:
     """Represent a collection of components.
     """
 
@@ -106,8 +107,8 @@ class Collection(object):
         self.__components = [c for c in reversed(self.__components)]
         self.__ids = [c.identifier for c in self.__components]
 
-    def sort(self, cmp=cmp, key=_default_sort_key, reverse=False):
-        self.__components.sort(cmp=cmp, key=key, reverse=reverse)
+    def sort(self, key=_default_sort_key, reverse=False):
+        self.__components.sort(key=key, reverse=reverse)
         self.__ids = [c.identifier for c in self.__components]
 
     def clear(self):
@@ -115,6 +116,7 @@ class Collection(object):
         self.__components = []
 
     def get(self, id, default=_marker):
+        id = str(id)
         try:
             return self.__components[self.__ids.index(id)]
         except ValueError:

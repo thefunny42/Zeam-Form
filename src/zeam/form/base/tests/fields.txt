@@ -9,13 +9,13 @@ Field
 A field is a simple input on a form::
 
    >>> from zeam.form.base.fields import Field
-   >>> field = Field(u'Age')
+   >>> field = Field('Age')
    >>> field
    <Field Age>
    >>> field.title
-   u'Age'
+   'Age'
    >>> field.description
-   u''
+   ''
 
 Field value
 ~~~~~~~~~~~
@@ -31,7 +31,7 @@ required, ``NO_VALUE`` should not be accepted as a valid value:
    >>> field.validate(42, None)
    >>> field.required = True
    >>> field.validate(NO_VALUE, None)
-   u'Missing required value.'
+   'Missing required value.'
    >>> field.validate(42, None)
 
 You can define a custom method to constrain the value to a test of
@@ -40,13 +40,13 @@ your choice:
    >>> field.constrainValue = lambda v: v != 51
    >>> field.validate(42, None)
    >>> field.validate(51, None)
-   u'The constraint failed.'
+   'The constraint failed.'
 
 Alternatively, you can use an exception:
 
    >>> class NoRicardToday(Exception):
    ...     def doc(self):
-   ...         return u"I don't want Ricard today!"
+   ...         return "I don't want Ricard today!"
 
    >>> def check_for_ricard(value):
    ...     if value == 51:
@@ -55,7 +55,7 @@ Alternatively, you can use an exception:
 
    >>> field.constrainValue = check_for_ricard
    >>> field.validate(51, None)
-   u"I don't want Ricard today!"
+   "I don't want Ricard today!"
 
 On a field, you can set ``required`` to be a callable, that takes the
 form as parameters. That let you define more advanced condition to
@@ -65,7 +65,7 @@ know if the field is required or not::
    >>> field.required = lambda f: f is my_form
    >>> field.validate(NO_VALUE, None)
    >>> field.validate(NO_VALUE, my_form)
-   u'Missing required value.'
+   'Missing required value.'
 
 A field can provide a default value. A context (the form) is given if
 the default value is computed::
@@ -126,14 +126,14 @@ another component it need to be a Field::
    >>> s1.extend(Action("Apply"))
    Traceback (most recent call last):
       ...
-   TypeError: (u'Invalid type', <Action Apply>)
+   TypeError: ('Invalid type', <Action Apply>)
 
    >>> s1.extend(Actions(Action("Apply")))
    Traceback (most recent call last):
       ...
-   TypeError: (u'Invalid type', <Action Apply>)
+   TypeError: ('Invalid type', <Action Apply>)
 
    >>> s1.extend(42)
    Traceback (most recent call last):
       ...
-   TypeError: (u'Invalid type', 42)
+   TypeError: ('Invalid type', 42)
