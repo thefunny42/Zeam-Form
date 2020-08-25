@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.4.1 (2020-08-25)
+------------------
+
+* Fixed 'url' method as it was faulty. Added tests accordingly.
+
+
 1.4.0 (2020-08-20)
 ------------------
 
