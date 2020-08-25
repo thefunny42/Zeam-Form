@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from zeam.form.base import interfaces
 from zeam.form.base.components import Component, Collection, _marker
 from zope.interface import implementer, implements, directlyProvides

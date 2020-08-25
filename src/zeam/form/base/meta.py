@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import martian
 import grokcore.view
 import grokcore.component

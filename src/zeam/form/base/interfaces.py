@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from zope import interface
 from zope.publisher.interfaces.browser import IBrowserPage
 

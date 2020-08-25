@@ -65,7 +65,7 @@ class GrokViewSupport:
         """Return string for the URL based on the obj and name. The data
         argument is used to form a CGI query string.
         """
-        if isinstance(obj, string_types):
+        if isinstance(obj, str):
             if name is not None:
                 raise TypeError(
                     'url() takes either obj argument, obj, string arguments, '

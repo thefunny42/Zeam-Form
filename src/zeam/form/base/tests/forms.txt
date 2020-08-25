@@ -3,15 +3,11 @@ zeam.form.base
 
 Forms are class, registered like views:
 
-   >>> def unicode(v, *args, **kwargs):
-   ...     return v
+   >>> class Content:
+   ...     pass
 
    >>> from zeam.form.base.form import Form
    >>> from zope.publisher.browser import TestRequest
-
-   >>> class Content(object):
-   ...     def __repr__(self):
-   ...         return '<%s object>' % self.__class__.__name__
 
    >>> request = TestRequest()
    >>> context = Content()
@@ -103,10 +99,10 @@ Object data manager
 
    >>> manager = ObjectDataManager(mycontent)
    >>> manager
-   <ObjectDataManager used for <MyContent object>>
+   <ObjectDataManager used for <MyContent ...>>
 
    >>> manager.getContent()
-   <MyContent object>
+   <MyContent ...>
 
 It correctly implements its interface:
 
@@ -184,7 +180,7 @@ By default you will get a data manager for the context:
 
    >>> form_manager = form_data.getContentData()
    >>> form_manager
-   <ObjectDataManager used for <Content object>>
+   <ObjectDataManager used for <Content ...>>
    >>> form_manager.content is context
    True
 
@@ -192,9 +188,9 @@ However you modify it and give directly a content:
 
    >>> form_data.setContentData(mycontent)
    >>> form_data.getContentData()
-   <ObjectDataManager used for <MyContent object>>
+   <ObjectDataManager used for <MyContent ...>>
    >>> form_data.getContent()
-   <MyContent object>
+   <MyContent ...>
 
 Or directly a data manager:
 
@@ -318,8 +314,8 @@ in the extraction process::
 
 The `identifier` field is not extracted, as planned.
 
-Usefull methods
----------------
+Useful methods
+--------------
 
 A method on the form tells if the form have any required fields:
 
@@ -339,3 +335,67 @@ identify the form (computed from the prefix):
   >>> form.prefix = 'form.settings.network'
   >>> form.htmlId()
   'form-settings-network'
+
+
+URL computing
+-------------
+
+   >>> from zope.traversing.testing import contained, Contained
+   >>> from zope.interface import implementer, Interface
+   >>> from zope.location import ILocation
+
+   >>> class IRoot(Interface):
+   ...     pass
+
+   >>> @implementer(IRoot)
+   ... class Root(Contained):
+   ...     pass
+
+   >>> from zope.component import adapter, provideAdapter
+   >>> from zope.traversing.testing import browserView
+   >>> from zope.traversing.browser.interfaces import IAbsoluteURL
+   >>> from zope.traversing.browser import AbsoluteURL, SiteAbsoluteURL
+
+  >>> browserView(None, 'absolute_url', AbsoluteURL)
+  >>> browserView(IRoot, 'absolute_url', SiteAbsoluteURL)
+  >>> browserView(None, '', AbsoluteURL, providing=IAbsoluteURL)
+  >>> browserView(IRoot, '', SiteAbsoluteURL, providing=IAbsoluteURL)
+
+  >>> @implementer(ILocation)
+  ... @adapter(Content)
+  ... class ContentLocation:
+  ...
+  ...     def __init__(self, context):
+  ...         self.context = context
+  ...         self.__name__ = getattr(self.context, '__name__', 'foo')
+  ...
+  ...     @property
+  ...     def __parent__(self):
+  ...         return contained(Content(), Root(), name='bar')
+  ...
+  ...     def __repr__(self):
+  ...         return '<%s object>' % self.__class__.__name__
+
+  >>> provideAdapter(ContentLocation)
+
+  >>> form.url()
+  'http://127.0.0.1/bar/foo'
+
+  >>> form.url(name='something')
+  'http://127.0.0.1/bar/foo/something'
+
+  >>> form.url(name='something', data={'toto': 1})
+  'http://127.0.0.1/bar/foo/something?toto=1'
+
+  >>> other_content = Content()
+  >>> other_content.__name__ = 'other'
+  >>> form.url(obj=other_content, name='something', data={'toto': 1})
+  'http://127.0.0.1/bar/other/something?toto=1'
+
+  >>> form.url(obj='someurl')
+  'http://127.0.0.1/bar/foo/someurl'
+
+  >>> form.url(obj='someurl', name='oops')
+  Traceback (most recent call last):
+  ...
+  TypeError: url() takes either obj argument, obj, string arguments, or string argument
